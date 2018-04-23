@@ -1,7 +1,11 @@
 # The Bloop language
 
-Minimal abstraction, massively parallel compile, fast execution. Non-memory safe
-(at first). Rust compatible. C compatible.
+Minimal abstraction, massively parallel compile, fast execution. Memory safe
+Rust compatible. C compatible.
+
+In usus a custom parallel parser, all pases are parallel, incremental,
+typechecking on demand, and consider the full complitaion dag. Code lowering is
+delaid until after the entire dag is typechecked
 
 Bloop features:
 
@@ -200,25 +204,63 @@ newmod Foo(bar); // type that inherits it's inner behavior
 
 `mod` is sugar for `type`
 
-## Trains
+## Traits
 
 All funtions are UCF traits
 
-mod Foo {
+mod Foo;
+
+trait Foo {
 	fn foo() { }
 }
 
-can be imported as Foo::foo and called as Foo::foo() or foo()
+can be imported as Foo.foo and called as Foo.foo() or foo()
+
+atraits can be defined on types
+
+type Foo;
+
+trait Foo {
+    fn foo(^self)
+}
+
+on alone
+
+trait Bar {
+    fn foo(^self)
+}
+
+traits are limitede such that they can e dispatched dynamicall, statically or interpreted
+
+fn foo(bar: ^(Foo + Bar)) { }
+
+by default they are dispatched dynamically, C-like
+
+static dispatch: fns (foo[d]: ^(Foo Bar) { }
+
+or interpreted: fni (foo[i]: ^(Foo Bar) { }
+
+or dynamic: fnd ^(Foo Bar) { }
+
+functions can define their dispatch preference: fn (foo[s]: ^T) { }
+
+fn foo(bar:
 
 ## Upward references
 
 ^foo denotes a reference up the stack. They cannot be returned and there is no lifetime notion
+
+There are no down-stack references yet.
 
 ## Comments
 
 // line comments
 /// Markdown comments
 //! Inner markdown comments
+
+## Indexing
+
+There is no indexing syntax - indexables ipmlement tha `Call` trait on Ranges.
 
 ## About the name "Bloop"
 
@@ -227,6 +269,75 @@ Bloop is short for BlipBloop, which stands for "Binary LIPBLOP".
 The LIPBLOP algorithm is rarely seen today, but was widely
 celebrated on initial publication in the March 1968, etc.
 
+Exhaustive and non-exhaustive enums
+
 ## TODO
 
-look into that video game language what is it called omg
+look into that video game language jai
+
+## keywords
+
+if
+let
+while
+loop
+move
+match
+return
+continue
+break
+pub
+
+## tokens
+
+{ } [ ] < >
+
++ - / * = <= >= <. >. !
+
+.. .._
+
+. method / model delimiter
+/ newmod top level escape
+
+; terminator
+
+^ downward pointer
+* unsafe poitner, unsafe deferecnce
+
+_ - wildcard match
+
+<-
+->
+
+//
+///
+
+"strings"
+
+'c'
+
+r#"strungs#
+
+b"strings"
+
+b'c'
+
+#macros
+
+procuderal
+
+foo!(..)* {
+    token tree
+}
+
+in-code atrubute
+
+!foo( toml )
+
+item attributes
+
+![ toml ]!
+
+outer item attributes
+
+[! toml !]
