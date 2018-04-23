@@ -1,11 +1,18 @@
 # The Bloop language
 
-Minimal abstraction, massively parallel compile, fast execution. Memory safe
-Rust compatible. C compatible.
+Minimal abstraction, massively parallel compile, fast execution, linear and
+affine types. Memory safe. Rust compatible. C compatible.
 
 In usus a custom parallel parser, all pases are parallel, incremental,
-typechecking on demand, and consider the full complitaion dag. Code lowering is
-delaid until after the entire dag is typechecked
+typechecking, resolution, and parsing, on demand, and considers the full
+complitaion dag. Code lowering is delaid until after the entire dag is
+typechecked. Code generation is with Cretonne.
+
+There is minimal library integration, and the library stack is completely
+seperate and well layered. The language knows nothing about allocators or
+standard libraries.
+
+There is no GC, local heaps for non-Send kinds.
 
 Bloop features:
 
