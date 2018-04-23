@@ -1,9 +1,9 @@
-# The Blop language
+# The Bloop language
 
 Minimal abstraction, massively parallel compile, fast execution. Non-memory safe
 (at first). Rust compatible. C compatible.
 
-Blop features:
+Bloop features:
 
 * fast development, fast code
 * ahead-of-time compile or jit compile
@@ -55,7 +55,7 @@ Blop features:
 
 ## Tour
 
-A Blop program:
+A Bloop program:
 
 ```blop
 import std;
@@ -70,7 +70,7 @@ fn main() {
 
 ## Compile / execution model
 
-I should say, the "compilesecution" model of Blop, rather.
+I should say, the "compilesecution" model of Bloop, rather.
 
 ## Architecture
 
@@ -220,9 +220,9 @@ can be imported as Foo::foo and called as Foo::foo() or foo()
 /// Markdown comments
 //! Inner markdown comments
 
-## About the name "Blop"
+## About the name "Bloop"
 
-Blop is short for BlipBlop, which stands for "Binary LIPBLOP".
+Bloop is short for BlipBloop, which stands for "Binary LIPBLOP".
 
 The LIPBLOP algorithm is rarely seen today, but was widely
 celebrated on initial publication in the March 1968, etc.
