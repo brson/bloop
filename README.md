@@ -329,17 +329,13 @@ b"strings"
 
 b'c'
 
-#macros
+# macros
 
 procuderal
 
 foo!(..)* {
     token tree
 }
-
-in-code atrubute
-
-!foo( toml )
 
 item attributes
 
