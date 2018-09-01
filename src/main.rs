@@ -20,11 +20,13 @@ fn main() {
 }
 
 fn run() -> Result<()> {
-    let file = env::args().next().ok_or_else(|| err_msg("missing arg"))?;
+    let file = env::args().skip(1).next().ok_or_else(|| err_msg("missing arg"))?;
     let mut file = File::open(file)?;
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
+    lexer2::lex(&contents);
+    
     Ok(())
 }
     

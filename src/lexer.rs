@@ -3,41 +3,6 @@
 use std::cell::Cell;
 use std::collections::HashMap;
 
-struct TokenTree(Vec<Token>);
-
-struct Token {
-    offset: usize,
-    ty: TokenType,
-}
-
-enum TokenType {
-    Ident(String),
-    Keyword(String),
-    BracedTree(TokenTree),
-    BracketedTree(TokenTree),
-    AngledTree(TokenTree),
-    Toml(String),
-    SimpleToken(String),
-}
-
-enum Keyword {
-    Break,
-    Continue,
-    If,
-    Let,
-    Loop,
-    Ty,
-}
-
-static KEYWORDS: &[&str] = &[
-    "break",
-    "continue",
-    "if",
-    "let",
-    "loop",
-    "ty",
-];
-
 static MATCHED_TOKENS: &[(&str, &str)] = &[
     ("{", "}"),
     ("[", "]"),
@@ -80,10 +45,20 @@ static CHAR_DELIM: &str = "'";
 static DOC_COMMENT: &str = "///";
 static COMMENT: &str = "//";
 
-fn tokenize(src: &str) -> () {
-    let i = Cell::new(0);
+enum State {
+    Newline,
+}
 
+pub fn lex(src: &str) -> () {
+
+    let mut state = State::Newline;
+
+    //let brace_stack = vec![];
     
-    
+    for (i, c) in src.char_indices() {
+        if c.is_whitespace() {
+            continue;
+        }
+    }
 }
 

@@ -1,5 +1,5 @@
 [package]
-name = "blobc"
+name = "bloop"
 version = "0.1.0"
 authors = ["Brian Anderson <andersrb@gmail.com>"]
 
@@ -12,6 +12,15 @@ fst-regex = "0.2.0"
 pest = "1.0.6"
 pest_derive = "1.0.7"
 rayon = "1.0.1"
+cretonne = "0.6.0"
+cretonne-frontend = "0.6.0"
+cretonne-reader = "0.6.0"
+cretonne-faerie = "0.6.0"
+cretonne-module = "0.6.0"
+cretonne-simplejit = "0.6.0"
+cretonne-entity = "0.6.0"
+cretonne-codegen = "0.6.0"
+faerie = "0.2.0"
 
 [build-dependencies]
 lalrpop = "0.14.0"

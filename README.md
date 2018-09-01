@@ -14,7 +14,7 @@ standard libraries.
 
 There is no GC, local heaps for non-Send kinds.
 
-Bloop features:
+Bloop design goals:
 
 * fast development, fast code
 * ahead-of-time compile or jit compile
