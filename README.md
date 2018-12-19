@@ -188,7 +188,7 @@ Bloop design goals:
 A Bloop program:
 
 ```bloop
-import std;
+im std;
 
 ty World;
 
@@ -207,8 +207,8 @@ I should say, the "compilesecution" model of Bloop, rather.
 
 ```
 // unit types
-ty TypeX;
-ty TypeY;
+ty TypeX.;
+ty TypeY.;
 
 // named-tuple types
 ty Foo(TypeX, TypeY);
@@ -221,11 +221,11 @@ ty Bar {
 
 // enum type
 ty Blahz {
-    TypeX,
-	TypeY,
+    A,
+	B,
 };
 
-// nested type declaration
+// nested structs
 ty Wut {
     // Wut::A
     a: ty A {
@@ -240,29 +240,73 @@ ty Wut {
 // union of tuple-structs
 ty Baz {
     // Baz::A
-    ty A(TypeX),
+    A(TypeX),
 	// Baz::B
-	ty B(TypeY),
+	B(TypeY),
 };
 
 // union of structs
 ty Qux {
     // Qux::A
-    ty A {
+    A {
 	    x: TypeX,
 	},
 	// Qux::B
-	ty B {
+	B {
 	    y: TypeY,
 	},
 };
 
 // mixed struct / union
-ty Woah {
-   a: ty A(TypeX),
-   b: ty B(TypeY),
-   ty A(TypeX),
-   ty B(TypeY),
+//
+// fields are type references by default
+// or type constructors with the `tc` keyword
+//
+// tuple items are type references by default
+// or type constructors with the `tc` keyword
+//
+// enum alternates are type constructors by
+// default or type references with the `tr` keyword
+tc Woah {
+   x: TypeX,
+   y: TypeY,
+   a: tc A(TypeX),
+   b: tc B { y: TypeY },
+   C(TypeX),
+   D(tc TypeY2),
+   tr TypeX,
+   tr TypeY,
+}
+```
+
+// fields are priv by default,
+// alts are pub by default,
+```
+tc Woah {
+   x: TypeX, // priv
+   pub y: TypeY,
+   a: tc A(TypeX), // priv
+   pub b: tc B { y: TypeY },
+   priv C(TypeX), // p
+   priv D(tc TypeY2),
+   tr TypeX,
+   tr TypeY,
+}
+```
+
+// tcpe constructors in fields and alts
+// have the same visibility as their
+// field or alt.
+```
+tc Woah {
+   x: TypeX,
+   pub y: TypeY,
+   a: tc A(TypeX),
+   pub b: tc B { y: TypeY },
+   C(TypeX),
+   D(tc TypeY2),
+   tr TypeX,
+   tr TypeY,
 }
 ```
 
@@ -294,10 +338,8 @@ ty U32(prim_u32);
 ty U64(prim_u64);
 ty F32(prim_f32);
 ty F64(prim_f64);
-ty Isz(prim_isz); "iz"
-ty Usz(prim_usz); "uz"
-ty Int(prim_u32); ?
-ty Uint(prim_u32); ?
+ty Iz(prim_iz);
+ty Uz(prim_uz);
 ```
 
 I don't want code to end up using isize by default everywhere, like it so often
@@ -320,7 +362,7 @@ Which is usually written as
 fn foo(a: TypeA) -> Usz? { ... }
 ```
 
-Existentials have 4 translation strategies that can be controlled
+Existentials have 3 translation strategies that can be controlled
 per call-site: monomorphization, dynamic dispatch, enumeration
 
 ## Panic handling

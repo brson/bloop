@@ -26,8 +26,6 @@ close_meta = { "]!" }
 open_punct = { open_brace | open_bracket | open_angle | open_meta }
 close_punct = { close_brace | close_bracket | close_angle | close_meta }
 
-inner_span = { (matched_span | ident | punct | number | whitespace)* }
+matched_span = { open_punct ~ close_punct }
 
-matched_span = { open_punct ~ inner_span ~ close_punct }
-
-document = { (ident | number)* }
+document = { ident | number }
