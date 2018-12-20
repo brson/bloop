@@ -1,3 +1,5 @@
+#![allow(unused_imports)]
+
 extern crate failure;
 extern crate pest;
 #[macro_use]
@@ -23,7 +25,7 @@ fn run() -> Result<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    lexer2::lex(&contents);
+    let _ = lexer2::lex(&contents);
     
     Ok(())
 }
