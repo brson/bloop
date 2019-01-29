@@ -20,13 +20,17 @@ Bloop design goals:
 * fast development, fast code, <1s compilation times
 - Bare metal, no C dependencies in std
 - Rust but with alternate hindsight priorities
-
+- Fine-grained incremental builds
+- Oriented toward the strengths of compilers
+  - syntax maps clearly to ebpf
+  - maps clearly to cranelift and llvm
+- Like Rust buf for C instead of C++
+- More dynamic dispatch, less monomorphization
 * use best-in-class language tooling in Rust
-  - lalrpop
+  - lalrpop / pest
   - cranelift
   - datafrog / chalk / differential-dataflow
   - specs
-
 * ahead-of-time compile or jit compile
 * explicit unsafe, mostly unsafe (for now)
 * tunable tradeoffs for generic translation and dispatch, error
@@ -34,18 +38,19 @@ Bloop design goals:
   - preference toward dynamic dispatch, less mental overhead,
     less code overhead
 * opinionated error handling
+- Simple unwinding, oom unwinding
 * limited region checking
 * parallel parsing
 * parallel pipeline
 - distributed pipeline
-- ECS compiler design (specs)?
+- ECS compiler design (specs / dataflow)?
 - differential dataflow compiler design?
 
 - parser via formal grammar
 
 * unified declaration for structs and enums
   - modules have speceial syntex? for when they are in another file
-* unified funcion call syntax, unified traits and impls
+* unified funcion call syntax, unified traits and impls (?)
 
 * owned value types
 * algebraic data types and matching
@@ -66,7 +71,7 @@ Bloop design goals:
 * whole-program analysis
 * existentials with known (union) size
 * integrated package manager
-* two-way package-manager integration
+* two-way package-manager integration (?)
 * global optional unwinding
 
 * custom allocators
@@ -131,6 +136,8 @@ Bloop design goals:
 - borrowing
   - local bendings are ref by default
   - argument bindings are move by default
+  - maybe the opposite - bindings move, args ref
+  - maybe args ref, bindings ref
   - explicit moves?
 
 - error handling
@@ -153,7 +160,8 @@ Bloop design goals:
   - either type
 
 - arch
-  - bloop is rustc + cargo + cargo --test + goma + swappable code generators
+  - bloop is rustc + cargo + cargo --test + goma (?) + swappable code generators
+    - compile to bpf
   - integrated package manager, communicates to compiler-service via rpc
   - incremental builds and reporting, language service built-in, communicates via rpc
   - integrated testing, benchmarking and doc testing, via rpc
@@ -169,11 +177,12 @@ Bloop design goals:
   - consider ecs _runtime_ model
     - maybe an ecs datatype, kind of like jai's auto-soa
 	- no global allocators - allocation is done via ecs
-  - synta choices: <> ambiguity
+  - synta choices: no <> ambiguity
   - :: as namespace separator
   - closures
   - exhaustive and non-exhaustive enums
   - allocator - local heaps. auto-Send analysis
+  - type anotations
 
 - wishlist
   - async i/o, futures, async / await
@@ -368,6 +377,8 @@ per call-site: monomorphization, dynamic dispatch, enumeration
 ## Panic handling
 
 Panic types are @Error types. No boxing if @Error is known-size.
+
+Panic on out of stack, somehow. Panic on oom, somehow.
 
 abort/unwind
 

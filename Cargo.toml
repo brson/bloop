@@ -18,6 +18,8 @@ cranelift-faerie = "0.26.0"
 cranelift-module = "0.26.0"
 cranelift-simplejit = "0.26.0"
 faerie = "0.6.0"
+specs = "0.14.1"
+specs-derive = "0.3.0"
 
 [build-dependencies]
 lalrpop = "0.16.2"

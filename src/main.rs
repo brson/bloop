@@ -5,6 +5,9 @@ extern crate failure;
 extern crate pest;
 #[macro_use]
 extern crate pest_derive;
+extern crate specs;
+#[macro_use]
+extern crate specs_derive;
 
 mod lexer;
 mod lexer2;
@@ -31,45 +34,7 @@ fn run() -> Result<()> {
     Ok(())
 }
 
-#[allow(unused)]
 mod compiler {
-    use std::path::Path;
-    use crate::Result;
-
-    pub type DateTime = ::chrono::DateTime<::chrono::Utc>;
-    pub type Duration = ::chrono::Duration;
-    pub type Ident = String;
-    pub type Name = Vec<Ident>;
-
-    pub struct Ast;
-
-    pub enum MomentTime {
-        Precise(DateTime),
-        After(String, Duration),
-        Whenever,
-    }
-
-    pub struct Moment {
-        name: Name,
-        time: MomentTime,
-        preqs: Vec<Name>,
-    }
-
-    pub fn parse(path: &Path) -> Result<Ast> {
-        panic!()
-    }
-
-    pub fn ast_to_moments(ast: &Ast) -> Result<Vec<Moment>> {
-        panic!()
-    }
-
-    pub fn id_moments(moments: Vec<Moment>) -> Result<Vec<Moment>> {
-        panic!()
-    }
-
-    pub fn sort_moments(moments: Vec<Moment>) -> Result<Vec<Moment>> {
-        panic!()
-    }
 }
 
 mod runtime {
