@@ -11,20 +11,37 @@ struct Lexer;
 use crate::Result;
 
 pub fn lex(src: &str) -> Result<()> {
-    let pairs = Lexer::parse(Rule::field, src)
+    println!("source:\n{}", src);
+
+    let mut pairs = Lexer::parse(Rule::file, src)
         .context(format!("parsing source"))?;
 
-    print!("num_pars: {}", pairs.clone().count());
+    println!("num_pars: {}", pairs.clone().count());
+    assert!(pairs.clone().count() == 1); // FIXME
 
-    for pair in pairs {
+    let file = pairs.next().unwrap();
 
-        let span = pair.clone().into_span();
-        // A pair is a combination of the rule which matched and a span of input
-        println!("Rule:    {:?}", pair.as_rule());
-        println!("Span:    {:?}", span);
-        println!("Text:    {}", span.as_str());
-        
+    let mut num_records = 0;
+    let mut field_sum = 0.0;
+    for record in file.into_inner() {
+        println!("foo");
+        match record.as_rule() {
+            Rule::record => {
+                num_records += 1;
+
+                for field in record.into_inner() {
+                    println!("bar");
+                    field_sum += field.as_str().parse::<f64>()
+                        .context("parsing number")?;
+                }
+            },
+            Rule::EOI => { }
+            e => { panic!("bad record: {:?}", e); }
+        }
     }
+
+    println!("num_records: {}", num_records);
+    println!("field_sum: {}", field_sum);
 
     Ok(())
 }

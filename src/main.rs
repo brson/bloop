@@ -22,8 +22,10 @@ type Result<T> = StdResult<T, Error>;
 fn main() -> StdResult<(), i32> {
     if let Err(e) = run() {
         println!("error: {}", e);
+        println!("# {:#?}", e);
         for cause in e.iter_chain() {
-            println!("  caused by: {}", cause);
+            println!("  caused by: {}. i.e. \n", cause);
+            println!("# {:#?}", cause);
         }
         Err(1)
     } else {
