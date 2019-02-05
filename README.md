@@ -274,7 +274,7 @@ ty Qux {
 // tuple items are type references by default
 // or type constructors with the `tc` keyword
 //
-// enum alternates are type constructors by
+// enum variants are type constructors by
 // default or type references with the `tr` keyword
 tc Woah {
    x: TypeX,
@@ -356,7 +356,7 @@ does in rust because of painful conversions. Lossless conversions will be
 everywhere, perhaps with an (optional) single-char coercion op.
 
 ## Error handling
-
+o
 Error type is an existential type. It can be 
 
 ```
@@ -439,9 +439,9 @@ fn foo(bar: @(Foo, Bar)) { }
 
 by default they are dispatched dynamically, C-like
 
-static dispatch: fns (foo[s]: @(Foo, Bar) { }
+static dispatch: fns (foo[s]: @(Foo+Bar) { }
 
-or interpreted: fni (foo[i]: @(Foo, Bar) { }
+or interpreted: fni (foo[i]: @(Foo+Bar) { }
 
 or dynamic: fnd (foo: @(Foo Bar)) { }
 

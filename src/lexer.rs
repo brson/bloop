@@ -1,64 +1,30 @@
-#![allow(unused)]
+use pest;
 
-use std::cell::Cell;
-use std::collections::HashMap;
+use failure::err_msg;
+use failure::ResultExt;
+use pest::Parser;
 
-static MATCHED_TOKENS: &[(&str, &str)] = &[
-    ("{", "}"),
-    ("[", "]"),
-    ("<", ">"),
-    ("![", "]!"), // TOML delimiters
-];
+#[derive(Parser)]
+#[grammar = "lexer.pest"]
+struct Lexer;
 
-static TOKENS: &[&str] = &[
-    ";",
-    ".",
-    "-",
-    "+",
-    "/",
-    "*",
-    "<-",
-    "->",
-    "=",
-    "<=",
-    ">=",
-    "<.",
-    ">.",
-    "!",
-];
+use crate::Result;
 
-static IDENT_CHARS: &[char] = &[
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    '_'
-];
+pub fn lex(src: &str) -> Result<()> {
+    let pairs = Lexer::parse(Rule::field, src)
+        .context(format!("parsing source"))?;
 
-static NON_LEADING_IDENT_CHARS: &[char] = &[
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
-];
+    print!("num_pars: {}", pairs.clone().count());
 
-static PRIME_IDENT_TRAILER: &str = "'";
-static STRING_DELIM: &str = "\"";
-static CHAR_DELIM: &str = "'";
-static DOC_COMMENT: &str = "///";
-static COMMENT: &str = "//";
+    for pair in pairs {
 
-enum State {
-    Newline,
-}
-
-pub fn lex(src: &str) -> () {
-
-    let mut state = State::Newline;
-
-    //let brace_stack = vec![];
-    
-    for (i, c) in src.char_indices() {
-        if c.is_whitespace() {
-            continue;
-        }
+        let span = pair.clone().into_span();
+        // A pair is a combination of the rule which matched and a span of input
+        println!("Rule:    {:?}", pair.as_rule());
+        println!("Span:    {:?}", span);
+        println!("Text:    {}", span.as_str());
+        
     }
-}
 
+    Ok(())
+}
