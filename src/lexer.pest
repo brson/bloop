@@ -1,8 +1,23 @@
 file = { SOI ~ (thing_or_subtree)* ~ EOI }
 
-thing_or_subtree = _{ thing | subtree }
+thing_or_subtree = _{ subtree | thing }
 
-thing = @{ ASCII_ALPHANUMERIC+ }
+thing = { ident | number }
+ident = @{ ident_leader ~ ident_remainder* }
+
+ident_leader = { ASCII_ALPHA | "_" }
+ident_remainder = { ASCII_ALPHANUMERIC | "_" }
+
+number = { float | int }
+
+float = _{ float_uz }
+float_uz = @{ float_span }
+
+int = _{ int_b10_uz }
+int_b10_uz = @{ digit_span }
+
+float_span = _{ ASCII_DIGIT+ ~ ("."? ~ ASCII_DIGIT+)? }
+digit_span = _{ ASCII_DIGIT+ }
 
 subtree = { (paren_subtree | brace_subtree | square_subtree | angle_subtree ) }
 paren_subtree = { "(" ~ (thing_or_subtree)* ~ ")" }
