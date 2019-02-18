@@ -1,4 +1,4 @@
-#![allow(unused_imports)]
+#![allow(unused)]
 
 #[macro_use]
 extern crate pest_derive;
@@ -37,7 +37,12 @@ fn main() -> StdResult<(), i32> {
 }
 
 fn run() -> Result<()> {
-    env_logger::init();
+    use env_logger::Builder;
+
+    Builder::from_default_env()
+        .default_format_timestamp(false)
+        .init();
+
     let opts = Opts::from_args();
     dispatch_command(opts)?;
     Ok(())

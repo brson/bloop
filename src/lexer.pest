@@ -1,3 +1,6 @@
-field = { (ASCII_DIGIT | "." | "-")+ }
-record = { field ~ ("," ~ field)* }
-file = { SOI ~ (record ~ ("\r\n" | "\n"))* ~ EOI }
+file = { SOI ~ (thing_or_braced)* ~ EOI }
+thing_or_braced = _{ thing | braced_expr }
+thing = @{ ASCII_ALPHANUMERIC+ }
+braced_expr = { "{" ~ (thing)* ~ "}" }
+
+WHITESPACE = { " " | "\n" | "\r\n" }

@@ -3,6 +3,8 @@ use pest;
 use failure::err_msg;
 use failure::ResultExt;
 use pest::Parser;
+use pest::iterators::{Pairs, Pair};
+use std::iter;
 
 #[derive(Parser)]
 #[grammar = "lexer.pest"]
@@ -11,37 +13,51 @@ struct Lexer;
 use crate::Result;
 
 pub fn lex(src: &str) -> Result<()> {
-    debug!("source:\n{}", src);
+    debug!("source:\n{}\n", src);
 
-    let mut pairs = Lexer::parse(Rule::file, src)
+    let pairs = Lexer::parse(Rule::file, src)
         .context(format!("parsing source"))?;
 
-    debug!("num_pars: {}", pairs.clone().count());
-    assert!(pairs.clone().count() == 1); // FIXME
+    debug!("lexed:");
 
-    let file = pairs.next().unwrap();
+    enum Phase<'a> {
+        Pre(usize, Pair<'a, Rule>),
+        Post(usize),
+    };
 
-    let mut num_records = 0;
-    let mut field_sum = 0.0;
-    for record in file.into_inner() {
-        debug!("foo");
-        match record.as_rule() {
-            Rule::record => {
-                num_records += 1;
+    let mut pair_stack = vec![];
 
-                for field in record.into_inner() {
-                    debug!("bar");
-                    field_sum += field.as_str().parse::<f64>()
-                        .context("parsing number")?;
+    for pair in pairs {
+        pair_stack.push(Phase::Pre(0, pair));
+    }
+
+    while let Some(this_phase) = pair_stack.pop() {
+        match this_phase {
+            Phase::Pre(lvl, this_pair) => {
+
+                let pad = iter::repeat(' ').take(lvl).collect::<String>();
+                let mut src = this_pair.as_str().to_string();
+                src.truncate(20);
+                debug!("{}{:?}: {}", pad, this_pair.as_rule(), src);
+
+                let mut next_pair_queue = vec![];
+                next_pair_queue.push((Phase::Post(lvl)));
+
+                for next_pair in this_pair.into_inner() {
+                    next_pair_queue.push((Phase::Pre(lvl + 1, next_pair)));
                 }
-            },
-            Rule::EOI => { }
-            e => { panic!("bad record: {:?}", e); }
+
+                let mut next_pair_stack = next_pair_queue;
+                next_pair_stack.reverse();
+                pair_stack.append(&mut next_pairs_stack);
+            }
+            Phase::Post(..) => {
+            }
         }
     }
 
-    debug!("num_records: {}", num_records);
-    debug!("field_sum: {}", field_sum);
+    debug!("... lexed.");
 
     Ok(())
 }
+
