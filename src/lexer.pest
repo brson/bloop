@@ -1,6 +1,14 @@
-file = { SOI ~ (thing_or_braced)* ~ EOI }
-thing_or_braced = _{ thing | braced_expr }
-thing = @{ ASCII_ALPHANUMERIC+ }
-braced_expr = { "{" ~ (thing)* ~ "}" }
+file = { SOI ~ (thing_or_subtree)* ~ EOI }
 
-WHITESPACE = { " " | "\n" | "\r\n" }
+thing_or_subtree = _{ thing | subtree }
+
+thing = @{ ASCII_ALPHANUMERIC+ }
+
+subtree = { (paren_subtree | brace_subtree | square_subtree | angle_subtree ) }
+paren_subtree = { "(" ~ (thing_or_subtree)* ~ ")" }
+brace_subtree = { "{" ~ (thing_or_subtree)* ~ "}" }
+square_subtree = { "[" ~ (thing_or_subtree)* ~ "]" }
+angle_subtree = { "<" ~ (thing_or_subtree)* ~ ">" }
+
+
+WHITESPACE = _{ " " | "\n" | "\r\n" }

@@ -38,6 +38,8 @@ pub fn lex(src: &str) -> Result<()> {
                 let pad = iter::repeat(' ').take(lvl).collect::<String>();
                 let mut src = this_pair.as_str().to_string();
                 src.truncate(20);
+                let src = src.replace("\n", " ");
+                let src = src.replace("\r\n", " ");
                 debug!("{}{:?}: {}", pad, this_pair.as_rule(), src);
 
                 let mut next_pair_queue = vec![];
@@ -49,12 +51,14 @@ pub fn lex(src: &str) -> Result<()> {
 
                 let mut next_pair_stack = next_pair_queue;
                 next_pair_stack.reverse();
-                pair_stack.append(&mut next_pairs_stack);
+                pair_stack.append(&mut next_pair_stack);
             }
             Phase::Post(..) => {
             }
         }
     }
+
+    assert!(pair_stack.is_empty());
 
     debug!("... lexed.");
 
