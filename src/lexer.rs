@@ -11,12 +11,12 @@ struct Lexer;
 use crate::Result;
 
 pub fn lex(src: &str) -> Result<()> {
-    println!("source:\n{}", src);
+    debug!("source:\n{}", src);
 
     let mut pairs = Lexer::parse(Rule::file, src)
         .context(format!("parsing source"))?;
 
-    println!("num_pars: {}", pairs.clone().count());
+    debug!("num_pars: {}", pairs.clone().count());
     assert!(pairs.clone().count() == 1); // FIXME
 
     let file = pairs.next().unwrap();
@@ -24,13 +24,13 @@ pub fn lex(src: &str) -> Result<()> {
     let mut num_records = 0;
     let mut field_sum = 0.0;
     for record in file.into_inner() {
-        println!("foo");
+        debug!("foo");
         match record.as_rule() {
             Rule::record => {
                 num_records += 1;
 
                 for field in record.into_inner() {
-                    println!("bar");
+                    debug!("bar");
                     field_sum += field.as_str().parse::<f64>()
                         .context("parsing number")?;
                 }
@@ -40,8 +40,8 @@ pub fn lex(src: &str) -> Result<()> {
         }
     }
 
-    println!("num_records: {}", num_records);
-    println!("field_sum: {}", field_sum);
+    debug!("num_records: {}", num_records);
+    debug!("field_sum: {}", field_sum);
 
     Ok(())
 }
