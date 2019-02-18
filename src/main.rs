@@ -1,13 +1,14 @@
 #![allow(unused_imports)]
 
-extern crate chrono;
-extern crate failure;
-extern crate pest;
 #[macro_use]
 extern crate pest_derive;
-extern crate specs;
 #[macro_use]
 extern crate specs_derive;
+#[macro_use]
+extern crate structopt;
+#[macro_use]
+extern crate log;
+extern crate env_logger;
 
 mod lexer;
 
@@ -15,17 +16,19 @@ use failure::{err_msg, Error};
 use std::env;
 use std::fs::File;
 use std::io::Read;
+use std::path::PathBuf;
 use std::result::Result as StdResult;
+use structopt::StructOpt;
 
 type Result<T> = StdResult<T, Error>;
 
 fn main() -> StdResult<(), i32> {
     if let Err(e) = run() {
         println!("error: {}", e);
-        println!("# {:#?}", e);
+        println!("# {}", e);
         for cause in e.iter_chain() {
             println!("  caused by: {}. i.e. \n", cause);
-            println!("# {:#?}", cause);
+            println!("# {}", cause);
         }
         Err(1)
     } else {
@@ -34,8 +37,22 @@ fn main() -> StdResult<(), i32> {
 }
 
 fn run() -> Result<()> {
-    let file = env::args().skip(1).next().ok_or_else(|| err_msg("missing arg"))?;
-    let mut file = File::open(file)?;
+    env_logger::init();
+    let opts = Opts::from_args();
+    dispatch_command(opts)?;
+    Ok(())
+}
+
+fn dispatch_command(opts: Opts) -> Result<()> {
+    debug!("command line options: {:#?}", opts);
+
+    match opts.mode {
+        Mode::Debug(m) => run_debug(m),
+    }
+}
+
+fn run_debug(opts: DebugOpts) -> Result<()> {
+    let mut file = File::open(&opts.root_path)?;
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
@@ -44,19 +61,22 @@ fn run() -> Result<()> {
     Ok(())
 }
 
-/*struct UnresolvedWorldSeed;
-struct WorldSeed;
-struct WorldPrototype;
+#[derive(Debug, StructOpt)]
+#[structopt(name = "bloop")]
+struct Opts {
+    #[structopt(subcommand)]
+    mode: Mode,
+}
 
-fn compile() -> Result<()> {
-    let seed = UnresolvedWorldSeed;
-    let seed: WorldSeed = resolve_seed(seed);
-    let world_proto = resolve_world_proto(seed);
+#[derive(Debug, StructOpt)]
+enum Mode {
+    #[structopt(name = "debug")]
+    Debug(DebugOpts),
+}
 
-    let seed_tokens  lex_seed(seed);
-    let seed_mod = parse_seed_mod(seed_tokens);
-    let seed_mod_mapped = map_seed_mod_names(seed_mod);
-    let main_tokens = get_main_tokens(seed_mod_mapped);
-
-    let main = compile(world_proto);
-}*/
+#[derive(Debug, StructOpt)]
+struct DebugOpts {
+    #[structopt(name = "file")]
+    root_path: PathBuf,
+}
+    
