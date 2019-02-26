@@ -52,13 +52,13 @@ fn dispatch_command(opts: Opts) -> Result<()> {
     debug!("command line options: {:#?}", opts);
 
     match opts.mode {
-        Mode::Debug(m) => run_debug(m),
+        Mode::DoThing(m) => run_do_thing(m),
     }
 }
 
 mod dataflow;
 
-fn run_debug(opts: DebugOpts) -> Result<()> {
+fn run_do_thing(opts: DoThingOpts) -> Result<()> {
     dataflow::do_your_thing()?;
     return Ok(());
     let mut file = File::open(&opts.root_path)?;
@@ -79,12 +79,12 @@ struct Opts {
 
 #[derive(Debug, StructOpt)]
 enum Mode {
-    #[structopt(name = "debug")]
-    Debug(DebugOpts),
+    #[structopt(name = "dothing")]
+    DoThing(DoThingOpts),
 }
 
 #[derive(Debug, StructOpt)]
-struct DebugOpts {
+struct DoThingOpts {
     #[structopt(name = "file")]
     root_path: PathBuf,
 }
