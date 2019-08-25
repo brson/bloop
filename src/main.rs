@@ -12,6 +12,7 @@ extern crate env_logger;
 
 mod lexer;
 mod token_tree;
+mod ast;
 
 use failure::{err_msg, Error};
 use std::env;

@@ -487,6 +487,13 @@ return
 continue
 break
 pub
+priv
+fn
+type
+typedef
+newtype
+impl
+
 
 ## tokens
 
