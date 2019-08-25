@@ -16,7 +16,7 @@ float_uz = @{ float_span }
 int = _{ int_b10_uz }
 int_b10_uz = @{ digit_span }
 
-float_span = _{ ASCII_DIGIT+ ~ ("."? ~ ASCII_DIGIT+)? }
+float_span = _{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+) }
 digit_span = _{ ASCII_DIGIT+ }
 
 punctuation = { "." | "!" | "::" | ":" | ";" |

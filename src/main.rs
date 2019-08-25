@@ -60,7 +60,7 @@ mod dataflow;
 
 fn run_do_thing(opts: DoThingOpts) -> Result<()> {
     dataflow::do_your_thing()?;
-    return Ok(());
+
     let mut file = File::open(&opts.root_path)?;
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
