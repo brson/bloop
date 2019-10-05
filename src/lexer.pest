@@ -1,6 +1,12 @@
-file = { SOI ~ (subtree_or_thing)* ~ EOI }
+file = { SOI ~ (tree_or_thing)* ~ EOI }
 
-subtree_or_thing = _{ subtree | thing }
+tree_or_thing = _{ tree | thing }
+
+tree = { (paren_tree | brace_tree | square_tree | angle_tree ) }
+paren_tree = { "(" ~ (tree_or_thing)* ~ ")" }
+brace_tree = { "{" ~ (tree_or_thing)* ~ "}" }
+square_tree = { "[" ~ (tree_or_thing)* ~ "]" }
+angle_tree = { "<" ~ (tree_or_thing)* ~ ">" }
 
 thing = { ident | number | punctuation }
 ident = @{ ident_leader ~ ident_remainder* }
@@ -13,8 +19,8 @@ number = { float | int }
 float = _{ float_64 }
 float_64 = @{ float_span }
 
-int = _{ int_b10_up }
-int_b10_up = @{ digit_span }
+int = _{ int_u32_base10 }
+int_u32_base10 = @{ digit_span }
 
 float_span = _{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+) }
 digit_span = _{ ASCII_DIGIT+ }
@@ -24,12 +30,5 @@ punctuation = { "..." | ".." | "." |
                 "|" | "+" | "-" | "/" | "*" |
 				"#" | "~" | "`" | "$" |
 				"==" | "=" | "," | "@" | "?" }
-
-subtree = { (paren_subtree | brace_subtree | square_subtree | angle_subtree ) }
-paren_subtree = { "(" ~ (subtree_or_thing)* ~ ")" }
-brace_subtree = { "{" ~ (subtree_or_thing)* ~ "}" }
-square_subtree = { "[" ~ (subtree_or_thing)* ~ "]" }
-angle_subtree = { "<" ~ (subtree_or_thing)* ~ ">" }
-
 
 WHITESPACE = _{ " " | "\n" | "\r\n" }

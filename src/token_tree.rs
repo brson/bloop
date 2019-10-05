@@ -1,7 +1,7 @@
 struct TokenTree(TreeOrThing);
 
 enum TreeOrThing {
-    Tree(Tree),
+    Tree(Tree, Box<TreeOrThing>),
     Thing(Thing),
 }
 
@@ -11,10 +11,6 @@ enum Tree {
     SquareTree,
     AngleTree,
 }
-
-struct ParenTree(Box<TreeOrThing>);
-struct BraceTree(Box<TreeOrThing>);
-struct SquareTree(Box<TreeOrThing>);
 
 enum Thing {
     Ident(Ident),
@@ -30,7 +26,7 @@ enum Number {
 }
 
 struct Float(f64);
-struct Int(u64);
+struct Int(u32);
 
 enum Punctuation {
     TripleDot,
