@@ -1,4 +1,4 @@
-file = { SOI ~ (tree_or_thing)* ~ EOI }
+module = { SOI ~ (tree_or_thing)* ~ EOI }
 
 tree_or_thing = _{ tree | thing }
 

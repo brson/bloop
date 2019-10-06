@@ -5,6 +5,9 @@ use failure::ResultExt;
 use pest::Parser;
 use pest::iterators::{Pairs, Pair};
 use std::iter;
+use crate::token_tree::{
+    TokenTree, TreeOrThing, Tree, Thing, Ident, Number, Float, Int, Punctuation,
+};
 
 #[derive(Parser)]
 #[grammar = "lexer.pest"]
@@ -12,10 +15,10 @@ struct Lexer;
 
 use crate::Result;
 
-pub fn lex(src: &str) -> Result<()> {
+pub fn lex(src: &str) -> Result<TokenTree> {
     debug!("source:\n{}\n", src);
 
-    let pairs = Lexer::parse(Rule::file, src)
+    let pairs = Lexer::parse(Rule::module, src)
         .context(format!("parsing source"))?;
 
     debug!("lexed:");
@@ -42,6 +45,12 @@ pub fn lex(src: &str) -> Result<()> {
                 let src = src.replace("\r\n", " ");
                 debug!("{}{:?}: {}", pad, this_pair.as_rule(), src);
 
+                match this_pair.as_rule() {
+                    Rule::module => {
+                    }
+                    _ => { }
+                }
+
                 let mut next_pair_queue = vec![];
                 next_pair_queue.push((Phase::Post(lvl)));
 
@@ -62,6 +71,6 @@ pub fn lex(src: &str) -> Result<()> {
 
     debug!("... lexed.");
 
-    Ok(())
+    panic!();
 }
 

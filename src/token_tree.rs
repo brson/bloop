@@ -1,34 +1,36 @@
-struct TokenTree(TreeOrThing);
+pub struct Module(Vec<TreeOrThing>);
 
-enum TreeOrThing {
-    Tree(Tree, Box<TreeOrThing>),
-    Thing(Thing),
+pub struct TokenTree(TreeOrThing);
+
+pub enum TreeOrThing {
+    Tree(Tree, Vec<TreeOrThing>),
+    Thing(Vec<Thing>),
 }
 
-enum Tree {
+pub enum Tree {
     ParenTree,
     BraceTree,
     SquareTree,
     AngleTree,
 }
 
-enum Thing {
+pub enum Thing {
     Ident(Ident),
     Number(Number),
     Punctuation(Punctuation),
 }
 
-struct Ident(String);
+pub struct Ident(String);
 
-enum Number {
+pub enum Number {
     Float(Float),
     Int(Int),
 }
 
-struct Float(f64);
-struct Int(u32);
+pub struct Float(f64);
+pub struct Int(u32);
 
-enum Punctuation {
+pub enum Punctuation {
     TripleDot,
     DoubleDot,
     Dot,
