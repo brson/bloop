@@ -1,12 +1,14 @@
-module = { SOI ~ (tree_or_thing)* ~ EOI }
+file = { SOI ~ token_tree ~ EOI }
+
+token_tree = { (tree_or_thing)* }
 
 tree_or_thing = _{ tree | thing }
 
 tree = { (paren_tree | brace_tree | square_tree | angle_tree ) }
-paren_tree = { "(" ~ (tree_or_thing)* ~ ")" }
-brace_tree = { "{" ~ (tree_or_thing)* ~ "}" }
-square_tree = { "[" ~ (tree_or_thing)* ~ "]" }
-angle_tree = { "<" ~ (tree_or_thing)* ~ ">" }
+paren_tree = { "(" ~ token_tree ~ ")" }
+brace_tree = { "{" ~ token_tree ~ "}" }
+square_tree = { "[" ~ token_tree ~ "]" }
+angle_tree = { "<" ~ token_tree ~ ">" }
 
 thing = { ident | number | punctuation }
 ident = @{ ident_leader ~ ident_remainder* }
@@ -14,13 +16,13 @@ ident = @{ ident_leader ~ ident_remainder* }
 ident_leader = { ASCII_ALPHA | "_" }
 ident_remainder = { ASCII_ALPHANUMERIC | "_" }
 
-number = { float | int }
+number = { float | uint }
 
 float = _{ float_64 }
 float_64 = @{ float_span }
 
-int = _{ int_u32_base10 }
-int_u32_base10 = @{ digit_span }
+uint = _{ uint_u32_base10 }
+uint_u32_base10 = @{ digit_span }
 
 float_span = _{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+) }
 digit_span = _{ ASCII_DIGIT+ }
@@ -29,6 +31,8 @@ punctuation = { "..." | ".." | "." |
 			    "!" | "::" | ":" | ";" |
                 "|" | "+" | "-" | "/" | "*" |
 				"#" | "~" | "`" | "$" |
-				"==" | "=" | "," | "@" | "?" }
+				"==" | "=" | punct_comma | "@" | "?" }
+
+punct_comma = { "," }
 
 WHITESPACE = _{ " " | "\n" | "\r\n" }

@@ -6,7 +6,7 @@ use pest::Parser;
 use pest::iterators::{Pairs, Pair};
 use std::iter;
 use crate::token_tree::{
-    TokenTree, TreeOrThing, Tree, Thing, Ident, Number, Float, Int, Punctuation,
+    TokenTree, TreeOrThing, Tree, Thing, Ident, Number, Float, UInt, Punctuation,
 };
 
 #[derive(Parser)]
@@ -18,15 +18,21 @@ use crate::Result;
 pub fn lex(src: &str) -> Result<TokenTree> {
     debug!("source:\n{}\n", src);
 
-    let pairs = Lexer::parse(Rule::module, src)
+    let pairs = Lexer::parse(Rule::file, src)
         .context(format!("parsing source"))?;
 
     debug!("lexed:");
 
     enum Phase<'a> {
         Pre(usize, Pair<'a, Rule>),
-        Post(usize),
+        Post(usize, PostState),
     };
+
+    enum PostState {
+        TokenTree,
+        Thing(Thing),
+        Unimpl,
+    }
 
     let mut pair_stack = vec![];
 
@@ -53,18 +59,35 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                     debug!("{}{:?}: {}", pad, this_pair.as_rule(), src);
                 }
 
+                let next_move;
+
                 match this_pair.as_rule() {
-                    Rule::module => {
+                    Rule::token_tree => {
+                        next_move = PostState::TokenTree;
                     }
-                    _ => { }
+                    Rule::uint_u32_base10 => {
+                        let s = this_pair.as_str().to_string();
+                        next_move = PostState::Thing(
+                            Thing::Number(Number::UInt(UInt(s)))
+                        );
+                    }
+                    Rule::punct_comma => {
+                        next_move = PostState::Thing(
+                            Thing::Punctuation(Punctuation::Comma)
+                        );
+                    }
+                    _ => {
+                        next_move = PostState::Unimpl;
+                    }
                 }
+
+                pair_stack.push(Phase::Post(lvl, next_move));
 
                 {
                     let mut next_pair_queue = vec![];
-                    next_pair_queue.push((Phase::Post(lvl)));
 
                     for next_pair in this_pair.into_inner() {
-                        next_pair_queue.push((Phase::Pre(lvl + 1, next_pair)));
+                        next_pair_queue.push(Phase::Pre(lvl + 1, next_pair));
                     }
 
                     let mut next_pair_stack = next_pair_queue;
@@ -83,4 +106,3 @@ pub fn lex(src: &str) -> Result<TokenTree> {
 
     panic!();
 }
-

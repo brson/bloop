@@ -1,10 +1,8 @@
-pub struct Module(Vec<TreeOrThing>);
-
-pub struct TokenTree(TreeOrThing);
+pub struct TokenTree(Vec<TreeOrThing>);
 
 pub enum TreeOrThing {
-    Tree(Tree, Vec<TreeOrThing>),
-    Thing(Vec<Thing>),
+    Tree(Tree, TokenTree),
+    Thing(Thing),
 }
 
 pub enum Tree {
@@ -24,11 +22,11 @@ pub struct Ident(String);
 
 pub enum Number {
     Float(Float),
-    Int(Int),
+    UInt(UInt),
 }
 
-pub struct Float(f64);
-pub struct Int(u32);
+pub struct Float(pub String);
+pub struct UInt(pub String);
 
 pub enum Punctuation {
     TripleDot,
