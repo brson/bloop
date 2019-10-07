@@ -26,6 +26,7 @@ enum Phase<'a> {
 #[derive(Debug)]
 enum PostState {
     TokenTree,
+    Tree(Tree),
     TreeOrThing(TreeOrThing),
     Unimpl,
 }
@@ -39,7 +40,6 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     debug!("lexed:");
 
     let mut pair_stack = vec![];
-    let mut last_token_tree = None;
     let mut tree_or_thing_list = vec![];
 
     push_next_pairs(&mut pair_stack, pairs, 0);
@@ -61,9 +61,12 @@ pub fn lex(src: &str) -> Result<TokenTree> {
 
                 match post_state {
                     PostState::TokenTree => {
-                        assert!(last_token_tree.is_none());
-                        last_token_tree = Some(TokenTree(tree_or_thing_list));
+                    }
+                    PostState::Tree(tree) => {
+                        let inner_things = tree_or_thing_list;
+                        let tot = TreeOrThing::Tree(tree, TokenTree(inner_things));
                         tree_or_thing_list = vec![];
+                        tree_or_thing_list.push(tot);
                     }
                     PostState::TreeOrThing(tot) => {
                         tree_or_thing_list.push(tot);
@@ -75,16 +78,10 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     }
 
     assert!(pair_stack.is_empty());
-    assert!(tree_or_thing_list.is_empty());
-    assert!(last_token_tree.is_some());
 
     debug!("... lexed.");
 
-    if let Some(tt) = last_token_tree {
-        Ok(tt)
-    } else {
-        panic!("lexing didn't produce a token tree");
-    }
+    Ok(TokenTree(tree_or_thing_list))
 }
 
 fn push_next_pairs<'a>(pair_stack: &mut Vec<Phase<'a>>,
@@ -105,6 +102,9 @@ fn get_post_state(rule: Rule, s: &str) -> PostState {
     match rule {
         Rule::token_tree => {
             PostState::TokenTree
+        }
+        Rule::paren_tree => {
+            PostState::Tree(Tree::ParenTree)
         }
         Rule::uint => {
             PostState::TreeOrThing(TreeOrThing::Thing(
