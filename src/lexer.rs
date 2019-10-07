@@ -106,6 +106,11 @@ fn get_post_state(rule: Rule, s: &str) -> PostState {
         Rule::paren_tree => {
             PostState::Tree(Tree::ParenTree)
         }
+        Rule::ident => {
+            PostState::TreeOrThing(TreeOrThing::Thing(
+                Thing::Ident(Ident(s.to_string()))
+            ))
+        }
         Rule::uint => {
             PostState::TreeOrThing(TreeOrThing::Thing(
                 Thing::Number(Number::UInt(UInt(s.to_string())))
