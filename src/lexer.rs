@@ -40,7 +40,7 @@ pub fn lex(src: &str) -> Result<TokenTree> {
 
     let mut pair_stack = vec![];
     let mut last_token_tree = None;
-    let mut tree_or_thing_stack = vec![];
+    let mut tree_or_thing_list = vec![];
 
     push_next_pairs(&mut pair_stack, pairs, 0);
 
@@ -62,13 +62,11 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                 match post_state {
                     PostState::TokenTree => {
                         assert!(last_token_tree.is_none());
-                        // pop the "tot" stack completely
-                        tree_or_thing_stack.reverse();
-                        last_token_tree = Some(TokenTree(tree_or_thing_stack));
-                        tree_or_thing_stack = vec![];
+                        last_token_tree = Some(TokenTree(tree_or_thing_list));
+                        tree_or_thing_list = vec![];
                     }
                     PostState::TreeOrThing(tot) => {
-                        tree_or_thing_stack.push(tot);
+                        tree_or_thing_list.push(tot);
                     }
                     PostState::Unimpl => { }
                 }
@@ -77,7 +75,7 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     }
 
     assert!(pair_stack.is_empty());
-    assert!(tree_or_thing_stack.is_empty());
+    assert!(tree_or_thing_list.is_empty());
     assert!(last_token_tree.is_some());
 
     debug!("... lexed.");
