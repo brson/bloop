@@ -1,4 +1,4 @@
-file = { SOI ~ token_tree ~ EOI }
+buffer = { SOI ~ token_tree ~ EOI }
 
 token_tree = { (tree_or_thing)* }
 
@@ -18,11 +18,9 @@ ident_remainder = { ASCII_ALPHANUMERIC | "_" }
 
 number = { float | uint }
 
-float = _{ float_64 }
-float_64 = @{ float_span }
+float = @{ float_span }
 
-uint = _{ uint_u32_base10 }
-uint_u32_base10 = @{ digit_span }
+uint = @{ digit_span }
 
 float_span = _{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+) }
 digit_span = _{ ASCII_DIGIT+ }

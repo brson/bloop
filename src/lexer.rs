@@ -18,7 +18,7 @@ use crate::Result;
 pub fn lex(src: &str) -> Result<TokenTree> {
     debug!("source:\n{}\n", src);
 
-    let pairs = Lexer::parse(Rule::file, src)
+    let pairs = Lexer::parse(Rule::buffer, src)
         .context(format!("parsing source"))?;
 
     debug!("lexed:");
@@ -46,6 +46,9 @@ pub fn lex(src: &str) -> Result<TokenTree> {
         pair_stack.extend(next_pair_stack.into_iter());
     }
 
+    let mut last_token_tree = None;
+    let mut tree_or_thing_accum = vec![];
+
     while let Some(this_phase) = pair_stack.pop() {
         match this_phase {
             Phase::Pre(lvl, this_pair) => {
@@ -65,7 +68,7 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                     Rule::token_tree => {
                         next_move = PostState::TokenTree;
                     }
-                    Rule::uint_u32_base10 => {
+                    Rule::uint => {
                         let s = this_pair.as_str().to_string();
                         next_move = PostState::TreeOrThing(
                             TreeOrThing::Thing(
@@ -102,8 +105,13 @@ pub fn lex(src: &str) -> Result<TokenTree> {
             Phase::Post(_lvl, post_state) => {
                 match post_state {
                     PostState::TokenTree => {
+                        tree_or_thing_accum.reverse();
+                        assert!(last_token_tree.is_none());
+                        last_token_tree = Some(TokenTree(tree_or_thing_accum));
+                        tree_or_thing_accum = vec![];
                     }
                     PostState::TreeOrThing(tot) => {
+                        tree_or_thing_accum.push(tot);
                     }
                     PostState::Unimpl => { }
                 }
@@ -115,5 +123,9 @@ pub fn lex(src: &str) -> Result<TokenTree> {
 
     debug!("... lexed.");
 
-    panic!();
+    if let Some(tt) = last_token_tree {
+        Ok(tt)
+    } else {
+        panic!("lexing didn't produce a token tree");
+    }
 }
