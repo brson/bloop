@@ -1,5 +1,6 @@
 use pest;
 
+use std::collections::VecDeque;
 use failure::err_msg;
 use failure::ResultExt;
 use pest::Parser;
@@ -35,19 +36,20 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     debug!("lexed:");
 
     let mut pair_stack = vec![];
+    let mut last_token_tree = None;
+    let mut tree_or_thing_stack = vec![];
 
     {
-        let mut next_pair_queue = vec![];
-        for pair in pairs {
-            next_pair_queue.push(Phase::Pre(0, pair));
+        // collect new pairs in forward order
+        let mut next_pairs = VecDeque::new();
+        for next_pair in pairs {
+            next_pairs.push_back(Phase::Pre(0, next_pair));
         }
-        let mut next_pair_stack = next_pair_queue;
-        next_pair_stack.reverse();
-        pair_stack.extend(next_pair_stack.into_iter());
+        // push them on the stack in reverse order so they
+        // can be popped in forward order later
+        let next_pairs = next_pairs.into_iter().rev();
+        pair_stack.extend(next_pairs);
     }
-
-    let mut last_token_tree = None;
-    let mut tree_or_thing_accum = vec![];
 
     while let Some(this_phase) = pair_stack.pop() {
         match this_phase {
@@ -67,27 +69,25 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                 pair_stack.push(Phase::Post(lvl, next_move));
 
                 {
-                    let mut next_pair_queue = vec![];
-
+                    let mut next_pairs = VecDeque::new();
                     for next_pair in this_pair.into_inner() {
-                        next_pair_queue.push(Phase::Pre(lvl + 1, next_pair));
+                        next_pairs.push_back(Phase::Pre(lvl + 1, next_pair));
                     }
-
-                    let mut next_pair_stack = next_pair_queue;
-                    next_pair_stack.reverse();
-                    pair_stack.extend(next_pair_stack.into_iter());
+                    let next_pairs = next_pairs.into_iter().rev();
+                    pair_stack.extend(next_pairs);
                 }
             }
             Phase::Post(_lvl, post_state) => {
                 match post_state {
                     PostState::TokenTree => {
-                        tree_or_thing_accum.reverse();
                         assert!(last_token_tree.is_none());
-                        last_token_tree = Some(TokenTree(tree_or_thing_accum));
-                        tree_or_thing_accum = vec![];
+                        // pop the "tot" stack completely
+                        tree_or_thing_stack.reverse();
+                        last_token_tree = Some(TokenTree(tree_or_thing_stack));
+                        tree_or_thing_stack = vec![];
                     }
                     PostState::TreeOrThing(tot) => {
-                        tree_or_thing_accum.push(tot);
+                        tree_or_thing_stack.push(tot);
                     }
                     PostState::Unimpl => { }
                 }
@@ -96,6 +96,8 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     }
 
     assert!(pair_stack.is_empty());
+    assert!(tree_or_thing_stack.is_empty());
+    assert!(last_token_tree.is_some());
 
     debug!("... lexed.");
 
