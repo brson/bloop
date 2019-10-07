@@ -19,9 +19,10 @@ use crate::Result;
 
 enum Phase<'a> {
     Pre(u32, Pair<'a, Rule>),
-    Post(u32, PostState),
+    Post(u32, Rule, PostState),
 }
 
+#[derive(Debug)]
 enum PostState {
     TokenTree,
     TreeOrThing(TreeOrThing),
@@ -52,17 +53,27 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                     src.truncate(20);
                     let src = src.replace("\n", " ");
                     let src = src.replace("\r\n", " ");
-                    debug!("{}{:?}: {}", pad, this_pair.as_rule(), src);
+                    debug!("^ {}{:?}: {}", pad, this_pair.as_rule(), src);
                 }
 
                 let next_move = get_post_state(this_pair.as_rule(), this_pair.as_str());
 
-                pair_stack.push(Phase::Post(lvl, next_move));
+                pair_stack.push(Phase::Post(lvl, this_pair.as_rule(), next_move));
 
                 let next_lvl = lvl.checked_add(1).expect("level exceeds u32 capacity");
                 push_next_pairs(&mut pair_stack, this_pair.into_inner(), next_lvl);
             }
-            Phase::Post(_lvl, post_state) => {
+            Phase::Post(lvl, rule, post_state) => {
+                {
+                    let spaces = usize::try_from(lvl).expect("lvl does not fit in usize");
+                    let pad = iter::repeat(' ').take(spaces).collect::<String>();
+                    let mut src = format!("{:?}", post_state);
+                    src.truncate(20);
+                    let src = src.replace("\n", " ");
+                    let src = src.replace("\r\n", " ");
+                    debug!("v {}{:?}: {}", pad, rule, src);
+                }
+
                 match post_state {
                     PostState::TokenTree => {
                         assert!(last_token_tree.is_none());
@@ -99,7 +110,7 @@ fn push_next_pairs<'a>(pair_stack: &mut Vec<Phase<'a>>,
     // collect new pairs in forward order
     let mut next_pair_stack = vec![];
     for next_pair in next_pairs {
-        next_pair_stack.push(Phase::Pre(0, next_pair));
+        next_pair_stack.push(Phase::Pre(lvl, next_pair));
     }
     // push them on the stack in reverse order so they
     // can be popped in forward order later
