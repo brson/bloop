@@ -1,5 +1,6 @@
 use pest;
 
+use std::cmp;
 use std::convert::TryFrom;
 use std::collections::VecDeque;
 use failure::err_msg;
@@ -46,15 +47,7 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     while let Some(this_phase) = pair_stack.pop() {
         match this_phase {
             Phase::Pre(lvl, this_pair) => {
-                {
-                    let spaces = usize::try_from(lvl).expect("lvl does not fit in usize");
-                    let pad = iter::repeat(' ').take(spaces).collect::<String>();
-                    let mut src = this_pair.as_str().to_string();
-                    src.truncate(20);
-                    let src = src.replace("\n", " ");
-                    let src = src.replace("\r\n", " ");
-                    debug!("^ {}{:?}: {}", pad, this_pair.as_rule(), src);
-                }
+                print_phase_debug(PhaseName::Pre, lvl, this_pair.as_rule(), this_pair.as_str());
 
                 let next_move = get_post_state(this_pair.as_rule(), this_pair.as_str());
 
@@ -64,15 +57,7 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                 push_next_pairs(&mut pair_stack, this_pair.into_inner(), next_lvl);
             }
             Phase::Post(lvl, rule, post_state) => {
-                {
-                    let spaces = usize::try_from(lvl).expect("lvl does not fit in usize");
-                    let pad = iter::repeat(' ').take(spaces).collect::<String>();
-                    let mut src = format!("{:?}", post_state);
-                    src.truncate(20);
-                    let src = src.replace("\n", " ");
-                    let src = src.replace("\r\n", " ");
-                    debug!("v {}{:?}: {}", pad, rule, src);
-                }
+                print_phase_debug(PhaseName::Post, lvl, rule, &format!("{:?}", post_state));
 
                 match post_state {
                     PostState::TokenTree => {
@@ -137,4 +122,20 @@ fn get_post_state(rule: Rule, s: &str) -> PostState {
             PostState::Unimpl
         }
     }
+}
+
+enum PhaseName { Pre, Post }
+
+fn print_phase_debug(phase: PhaseName, lvl: u32, rule: Rule, s: &str) {
+    let sign = match phase {
+        PhaseName::Pre => "^",
+        PhaseName::Post => "v",
+    };
+    let spaces = usize::try_from(lvl).expect("lvl does not fit in usize");
+    let pad = iter::repeat(' ').take(spaces).collect::<String>();
+    let s = &s[..cmp::min(20, s.len())];
+    let s = s.to_string();
+    let s = s.replace("\n", " ");
+    let s = s.replace("\r\n", " ");
+    debug!("{} {}{:?}: {}", sign, pad, rule, s);
 }
