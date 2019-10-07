@@ -40,20 +40,6 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     let mut last_token_tree = None;
     let mut tree_or_thing_stack = vec![];
 
-    fn push_next_pairs<'a>(pair_stack: &mut Vec<Phase<'a>>,
-                           mut next_pairs: Pairs<'a, Rule>,
-                           lvl: u32) {
-        // collect new pairs in forward order
-        let mut next_pair_stack = vec![];
-        for next_pair in next_pairs {
-            next_pair_stack.push(Phase::Pre(0, next_pair));
-        }
-        // push them on the stack in reverse order so they
-        // can be popped in forward order later
-        let next_pair_stack = next_pair_stack.into_iter().rev();
-        pair_stack.extend(next_pair_stack);
-    }
-
     push_next_pairs(&mut pair_stack, pairs, 0);
 
     while let Some(this_phase) = pair_stack.pop() {
@@ -105,6 +91,20 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     } else {
         panic!("lexing didn't produce a token tree");
     }
+}
+
+fn push_next_pairs<'a>(pair_stack: &mut Vec<Phase<'a>>,
+                       mut next_pairs: Pairs<'a, Rule>,
+                       lvl: u32) {
+    // collect new pairs in forward order
+    let mut next_pair_stack = vec![];
+    for next_pair in next_pairs {
+        next_pair_stack.push(Phase::Pre(0, next_pair));
+    }
+    // push them on the stack in reverse order so they
+    // can be popped in forward order later
+    let next_pair_stack = next_pair_stack.into_iter().rev();
+    pair_stack.extend(next_pair_stack);
 }
 
 fn get_post_state(rule: Rule, s: &str) -> PostState {
