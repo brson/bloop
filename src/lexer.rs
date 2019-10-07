@@ -1,5 +1,6 @@
 use pest;
 
+use std::convert::TryFrom;
 use std::collections::VecDeque;
 use failure::err_msg;
 use failure::ResultExt;
@@ -17,8 +18,8 @@ struct Lexer;
 use crate::Result;
 
 enum Phase<'a> {
-    Pre(usize, Pair<'a, Rule>),
-    Post(usize, PostState),
+    Pre(u32, Pair<'a, Rule>),
+    Post(u32, PostState),
 }
 
 enum PostState {
@@ -39,25 +40,28 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     let mut last_token_tree = None;
     let mut tree_or_thing_stack = vec![];
 
-    // FIXME: deduplicate this block of code from the one below
-    {
+    fn push_next_pairs<'a>(pair_stack: &mut Vec<Phase<'a>>,
+                           mut next_pairs: Pairs<'a, Rule>,
+                           lvl: u32) {
         // collect new pairs in forward order
-        let mut next_pairs = vec![];
-        for next_pair in pairs {
-            next_pairs.push(Phase::Pre(0, next_pair));
+        let mut next_pair_stack = vec![];
+        for next_pair in next_pairs {
+            next_pair_stack.push(Phase::Pre(0, next_pair));
         }
         // push them on the stack in reverse order so they
         // can be popped in forward order later
-        let next_pairs = next_pairs.into_iter().rev();
-        pair_stack.extend(next_pairs);
+        let next_pair_stack = next_pair_stack.into_iter().rev();
+        pair_stack.extend(next_pair_stack);
     }
+
+    push_next_pairs(&mut pair_stack, pairs, 0);
 
     while let Some(this_phase) = pair_stack.pop() {
         match this_phase {
             Phase::Pre(lvl, this_pair) => {
-
                 {
-                    let pad = iter::repeat(' ').take(lvl).collect::<String>();
+                    let spaces = usize::try_from(lvl).expect("lvl does not fit in usize");
+                    let pad = iter::repeat(' ').take(spaces).collect::<String>();
                     let mut src = this_pair.as_str().to_string();
                     src.truncate(20);
                     let src = src.replace("\n", " ");
@@ -69,14 +73,8 @@ pub fn lex(src: &str) -> Result<TokenTree> {
 
                 pair_stack.push(Phase::Post(lvl, next_move));
 
-                {
-                    let mut next_pairs = vec![];
-                    for next_pair in this_pair.into_inner() {
-                        next_pairs.push(Phase::Pre(lvl + 1, next_pair));
-                    }
-                    let next_pairs = next_pairs.into_iter().rev();
-                    pair_stack.extend(next_pairs);
-                }
+                let next_lvl = lvl.checked_add(1).expect("level exceeds u32 capacity");
+                push_next_pairs(&mut pair_stack, this_pair.into_inner(), next_lvl);
             }
             Phase::Post(_lvl, post_state) => {
                 match post_state {
