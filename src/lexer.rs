@@ -39,11 +39,12 @@ pub fn lex(src: &str) -> Result<TokenTree> {
     let mut last_token_tree = None;
     let mut tree_or_thing_stack = vec![];
 
+    // FIXME: deduplicate this block of code from the one below
     {
         // collect new pairs in forward order
-        let mut next_pairs = VecDeque::new();
+        let mut next_pairs = vec![];
         for next_pair in pairs {
-            next_pairs.push_back(Phase::Pre(0, next_pair));
+            next_pairs.push(Phase::Pre(0, next_pair));
         }
         // push them on the stack in reverse order so they
         // can be popped in forward order later
@@ -69,9 +70,9 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                 pair_stack.push(Phase::Post(lvl, next_move));
 
                 {
-                    let mut next_pairs = VecDeque::new();
+                    let mut next_pairs = vec![];
                     for next_pair in this_pair.into_inner() {
-                        next_pairs.push_back(Phase::Pre(lvl + 1, next_pair));
+                        next_pairs.push(Phase::Pre(lvl + 1, next_pair));
                     }
                     let next_pairs = next_pairs.into_iter().rev();
                     pair_stack.extend(next_pairs);
