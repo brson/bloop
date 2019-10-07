@@ -30,7 +30,7 @@ pub fn lex(src: &str) -> Result<TokenTree> {
 
     enum PostState {
         TokenTree,
-        Thing(Thing),
+        TreeOrThing(TreeOrThing),
         Unimpl,
     }
 
@@ -67,13 +67,17 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                     }
                     Rule::uint_u32_base10 => {
                         let s = this_pair.as_str().to_string();
-                        next_move = PostState::Thing(
-                            Thing::Number(Number::UInt(UInt(s)))
+                        next_move = PostState::TreeOrThing(
+                            TreeOrThing::Thing(
+                                Thing::Number(Number::UInt(UInt(s)))
+                            )
                         );
                     }
                     Rule::punct_comma => {
-                        next_move = PostState::Thing(
-                            Thing::Punctuation(Punctuation::Comma)
+                        next_move = PostState::TreeOrThing(
+                            TreeOrThing::Thing(
+                                Thing::Punctuation(Punctuation::Comma)
+                            )
                         );
                     }
                     _ => {
@@ -95,7 +99,14 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                     pair_stack.extend(next_pair_stack.into_iter());
                 }
             }
-            Phase::Post(..) => {
+            Phase::Post(_lvl, post_state) => {
+                match post_state {
+                    PostState::TokenTree => {
+                    }
+                    PostState::TreeOrThing(tot) => {
+                    }
+                    PostState::Unimpl => { }
+                }
             }
         }
     }
