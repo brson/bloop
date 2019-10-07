@@ -15,6 +15,17 @@ struct Lexer;
 
 use crate::Result;
 
+enum Phase<'a> {
+    Pre(usize, Pair<'a, Rule>),
+    Post(usize, PostState),
+}
+
+enum PostState {
+    TokenTree,
+    TreeOrThing(TreeOrThing),
+    Unimpl,
+}
+
 pub fn lex(src: &str) -> Result<TokenTree> {
     debug!("source:\n{}\n", src);
 
@@ -22,17 +33,6 @@ pub fn lex(src: &str) -> Result<TokenTree> {
         .context(format!("parsing source"))?;
 
     debug!("lexed:");
-
-    enum Phase<'a> {
-        Pre(usize, Pair<'a, Rule>),
-        Post(usize, PostState),
-    };
-
-    enum PostState {
-        TokenTree,
-        TreeOrThing(TreeOrThing),
-        Unimpl,
-    }
 
     let mut pair_stack = vec![];
 
@@ -62,31 +62,7 @@ pub fn lex(src: &str) -> Result<TokenTree> {
                     debug!("{}{:?}: {}", pad, this_pair.as_rule(), src);
                 }
 
-                let next_move;
-
-                match this_pair.as_rule() {
-                    Rule::token_tree => {
-                        next_move = PostState::TokenTree;
-                    }
-                    Rule::uint => {
-                        let s = this_pair.as_str().to_string();
-                        next_move = PostState::TreeOrThing(
-                            TreeOrThing::Thing(
-                                Thing::Number(Number::UInt(UInt(s)))
-                            )
-                        );
-                    }
-                    Rule::punct_comma => {
-                        next_move = PostState::TreeOrThing(
-                            TreeOrThing::Thing(
-                                Thing::Punctuation(Punctuation::Comma)
-                            )
-                        );
-                    }
-                    _ => {
-                        next_move = PostState::Unimpl;
-                    }
-                }
+                let next_move = get_post_state(this_pair.as_rule(), this_pair.as_str());
 
                 pair_stack.push(Phase::Post(lvl, next_move));
 
@@ -127,5 +103,26 @@ pub fn lex(src: &str) -> Result<TokenTree> {
         Ok(tt)
     } else {
         panic!("lexing didn't produce a token tree");
+    }
+}
+
+fn get_post_state(rule: Rule, s: &str) -> PostState {
+    match rule {
+        Rule::token_tree => {
+            PostState::TokenTree
+        }
+        Rule::uint => {
+            PostState::TreeOrThing(TreeOrThing::Thing(
+                Thing::Number(Number::UInt(UInt(s.to_string())))
+            ))
+        }
+        Rule::punct_comma => {
+            PostState::TreeOrThing(TreeOrThing::Thing(
+                Thing::Punctuation(Punctuation::Comma)
+            ))
+        }
+        _ => {
+            PostState::Unimpl
+        }
     }
 }
