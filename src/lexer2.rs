@@ -31,7 +31,7 @@ impl<'a> Walk for Lexer<'a> {
     type FrameState = FrameState;
     type FrameResult = FrameResult;
     
-    fn enter_frame(node: Self::Node) -> Result<Self::FrameState> {
+    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Self::FrameState> {
         panic!()
     }
 
