@@ -38,25 +38,47 @@ pub struct Uint(pub String);
 
 #[derive(Debug)]
 pub enum Punctuation {
-    TripleDot,
-    DoubleDot,
+    RightArrow,
+    LeftArrow,
+    FatRightArrow,
+    FatLeftArrow,
+
+    DotDotEquals,
+    DotDotDot,
+    DoteDot,
     Dot,
-    Bang,
-    DoubleColon,
+
+    ColonEquals,
+    ColonColon,
     Colon,
+
     SemiColon,
+    Comma,
+
+    BarBar,
     Bar,
+    AndAnd,
+    And,
+
     Plus,
-    Minus,
+    Dash,
     Slash,
     Star,
-    Spider,
-    Twiddle,
-    Tick,
-    Dollar,
-    DoubleEquals,
+
+    PlusEquals,
+    MinusEquals,
+    SlashEquals,
+    StarEquals,
+
+    EqualsEquals,
     Equals,
-    Comma,
+
+    Backtick,
     At,
-    Huh,
+    Spider,
+    Dollar,
+    Twiddle,
+    Bang,
+    What,
+    Backslash,
 }
