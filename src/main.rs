@@ -15,6 +15,7 @@ mod lexer2;
 mod token_tree;
 mod tree_walker;
 mod ast;
+mod global_defs;
 
 use failure::{err_msg, Error};
 use std::env;

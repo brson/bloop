@@ -54,6 +54,8 @@ There is no GC, local heaps for non-Send kinds. Local ECS registries maybe.
 
 ### Standard library
 
+- Non-pointer size indexes
+
 
 Bloop design goals:
 
