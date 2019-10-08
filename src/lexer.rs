@@ -41,6 +41,15 @@ impl<'a> Walk for Lexer<'a> {
             Rule::paren_tree => {
                 Some(TreeOrThing::Tree(Tree::Paren, TokenTree(vec![])))
             }
+            Rule::brace_tree => {
+                Some(TreeOrThing::Tree(Tree::Brace, TokenTree(vec![])))
+            }
+            Rule::square_tree => {
+                Some(TreeOrThing::Tree(Tree::Square, TokenTree(vec![])))
+            }
+            Rule::angle_tree => {
+                Some(TreeOrThing::Tree(Tree::Angle, TokenTree(vec![])))
+            }
             Rule::ident => {
                 Some(TreeOrThing::Thing(Thing::Ident(Ident(S(s)))))
             }
