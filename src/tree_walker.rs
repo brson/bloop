@@ -10,11 +10,11 @@ pub trait Walk {
 
     fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Self::FrameState>;
 
-    fn handle_child(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
+    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
 
     fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult>;
     
-    fn run<I>(nodes: I) -> Result<Self::FrameResult>
+    fn run<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>
     {
         let nodes = nodes.into_iter();
@@ -23,6 +23,7 @@ pub trait Walk {
         let mut result_stack: Vec<Vec<Self::FrameResult>> = vec![];
 
         push_next_children(&mut state_stack, nodes, 0);
+        result_stack.push(vec![]);
 
         while let Some(this_phase) = state_stack.pop() {
             match this_phase {
@@ -44,17 +45,25 @@ pub trait Walk {
                         result_stack.push(vec![]);
                     }
                 }
-                Phase::Leave(lvl, frame_state) => {
-                    
+                Phase::Leave(lvl, mut frame_state) => {
+                    let child_results = result_stack.pop().expect("no results for child nodes");
+
+                    for result in child_results {
+                        frame_state = Self::handle_child_result(frame_state, result)?;
+                    }
+
+                    let new_result = Self::leave_frame(frame_state)?;
+                    let peer_results = result_stack.last_mut().expect("no vec for node result");
+                    peer_results.push(new_result);
                 }
             }
         }
 
-        panic!()
-    }
+        assert!(state_stack.is_empty());
+        let result = result_stack.pop().expect("result stack empty");
+        assert!(state_stack.is_empty());
 
-    fn register_child(node: Self::Node) {
-        panic!()
+        Ok(result)
     }
 }
 
