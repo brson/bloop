@@ -52,7 +52,7 @@ pub enum Punctuation {
     ColonColon,
     Colon,
 
-    SemiColon,
+    Semicolon,
     Comma,
 
     BarBar,

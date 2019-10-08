@@ -28,27 +28,27 @@ digit_span = _{ ASCII_DIGIT+ }
 
 punctuation = {
 
-  "->"
-| "<-"
-| "=>"
-| "<="
+  punct_right_arrow
+| punct_left_arrow
+| punct_fat_right_arrow
+| punct_fat_left_arrow
 
-| "..="
-| "..."
-| ".."
-| "."
+| punct_dot_dot_equals
+| punct_dot_dot_dot
+| punct_dot_dot
+| punct_dot
 
-| ":="
-| "::"
-| ":"
+| punct_colon_equals
+| punct_colon_colon
+| punct_colon
 
-| ";"
+| punct_semicolon
 | punct_comma
 
-| "||"
-| "|"
-| "&&"
-| "&"
+| punct_bar_bar
+| punct_bar
+| punct_and_and
+| punct_and
 
 | "+"
 | "-"
@@ -76,6 +76,26 @@ punctuation = {
 
 }
 
+punct_right_arrow = { "->" }
+punct_left_arrow = { "<-" }
+punct_fat_right_arrow = { "=>" }
+punct_fat_left_arrow = { "<=" }
+
+punct_dot_dot_equals = { "..=" }
+punct_dot_dot_dot = { "..." }
+punct_dot_dot = { ".." }
+punct_dot = { "." }
+
+punct_colon_equals = { ":=" }
+punct_colon_colon = { "::" }
+punct_colon = { ":" }
+
+punct_semicolon = { ";" }
 punct_comma = { "," }
+
+punct_bar_bar = { "||" }
+punct_bar = { "|" }
+punct_and_and = { "&&" }
+punct_and = { "&" }
 
 WHITESPACE = _{ " " | "\n" | "\r\n" }
