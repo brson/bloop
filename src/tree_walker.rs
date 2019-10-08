@@ -8,7 +8,7 @@ pub trait Walk {
     type FrameState;
     type FrameResult;
 
-    // FIXME: this only returns Option because I can't figure out how to make
+    // FIXME: this returns Option only because I can't figure out how to make
     // pest not visit EOI
     fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>>;
 
