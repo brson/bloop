@@ -10,7 +10,7 @@ pub trait Walk {
 
     fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Self::FrameState>;
 
-    fn visit_child(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
+    fn handle_child(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
 
     fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult>;
     
@@ -45,6 +45,7 @@ pub trait Walk {
                     }
                 }
                 Phase::Leave(lvl, frame_state) => {
+                    
                 }
             }
         }

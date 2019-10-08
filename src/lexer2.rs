@@ -35,7 +35,7 @@ impl<'a> Walk for Lexer<'a> {
         panic!()
     }
 
-    fn visit_child(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState> {
+    fn handle_child(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState> {
         panic!()
     }
 
