@@ -71,7 +71,7 @@ fn run_do_thing(opts: DoThingOpts) -> Result<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    let token_tree = lexer::lex(&contents)?;
+    let token_tree = lexer2::lex(&contents)?;
 
     debug!("tt: {:#?}", token_tree);
     

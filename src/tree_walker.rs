@@ -14,7 +14,7 @@ pub trait Walk {
 
     fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult>;
     
-    fn run<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    fn walk<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>
     {
         let nodes = nodes.into_iter();

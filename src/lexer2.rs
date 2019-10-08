@@ -21,6 +21,13 @@ struct PestLexer;
 
 use crate::Result;
 
+pub fn lex(src: &str) -> Result<TokenTree> {
+    let pairs = PestLexer::parse(Rule::buffer, src)
+        .context(format!("parsing source"))?;
+
+    Ok(TokenTree(Lexer::walk(pairs)?))
+}
+
 pub struct Lexer<'a>(PhantomData<&'a ()>);
 
 impl<'a> Walk for Lexer<'a> {
