@@ -9,10 +9,10 @@ pub enum TreeOrThing {
 
 #[derive(Debug)]
 pub enum Tree {
-    ParenTree,
-    BraceTree,
-    SquareTree,
-    AngleTree,
+    Paren,
+    Brace,
+    Square,
+    Angle,
 }
 
 #[derive(Debug)]
@@ -28,13 +28,13 @@ pub struct Ident(pub String);
 #[derive(Debug)]
 pub enum Number {
     Float(Float),
-    UInt(UInt),
+    Uint(Uint),
 }
 
 #[derive(Debug)]
 pub struct Float(pub String);
 #[derive(Debug)]
-pub struct UInt(pub String);
+pub struct Uint(pub String);
 
 #[derive(Debug)]
 pub enum Punctuation {

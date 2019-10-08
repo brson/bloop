@@ -9,7 +9,7 @@ use pest::Parser;
 use pest::iterators::{Pairs, Pair};
 use std::iter;
 use crate::token_tree::{
-    TokenTree, TreeOrThing, Tree, Thing, Ident, Number, Float, UInt, Punctuation,
+    TokenTree, TreeOrThing, Tree, Thing, Ident, Number, Float, Uint, Punctuation,
 };
 
 #[derive(Parser)]
@@ -104,7 +104,7 @@ fn get_post_state(rule: Rule, s: &str) -> PostState {
             PostState::TokenTree
         }
         Rule::paren_tree => {
-            PostState::Tree(Tree::ParenTree)
+            PostState::Tree(Tree::Paren)
         }
         Rule::ident => {
             PostState::TreeOrThing(TreeOrThing::Thing(
@@ -113,7 +113,7 @@ fn get_post_state(rule: Rule, s: &str) -> PostState {
         }
         Rule::uint => {
             PostState::TreeOrThing(TreeOrThing::Thing(
-                Thing::Number(Number::UInt(UInt(s.to_string())))
+                Thing::Number(Number::Uint(Uint(s.to_string())))
             ))
         }
         Rule::punct_comma => {
