@@ -15,6 +15,46 @@ standard libraries.
 
 There is no GC, local heaps for non-Send kinds. Local ECS registries maybe.
 
+## Rust concepts to fix
+
+- Fast compilation
+- C-style polymorphism over C++ (dynamic over static)
+- Callsite dispatch strategy
+
+### Allocation
+
+- Fallable allocations always
+- Local allocators
+- Optional cycle-detecting RC
+- Optional GC, global, or thread-local
+- Tracable types
+- Extensible effects
+- Placement new
+
+### Parsing
+
+- Token trees
+- Minimal HLL
+- Procedural macros only
+
+### Compilation model
+
+- Responsive by default
+- Distributed by default
+- Built-in package management
+- Frictionless package creation
+
+### Runtime interface
+
+- Well-specified per-platform codegen RT (compiler-rt)
+- > #[cfg(cgrt(needs(some_rt_math_fn)))]
+  > #[cgrt(fn(some_rt_math_fn))]
+- Lang items for everything
+- No built-in types
+
+### Standard library
+
+
 Bloop design goals:
 
 * fast development, fast code, <1s compilation times

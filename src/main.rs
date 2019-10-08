@@ -11,7 +11,9 @@ extern crate log;
 extern crate env_logger;
 
 mod lexer;
+mod lexer2;
 mod token_tree;
+mod tree_walker;
 mod ast;
 
 use failure::{err_msg, Error};
