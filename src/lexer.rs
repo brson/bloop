@@ -1,5 +1,8 @@
 use pest;
 
+use crate::big_s::S;
+use std::marker::PhantomData;
+use crate::tree_walker::Walk;
 use std::cmp;
 use std::convert::TryFrom;
 use std::collections::VecDeque;
@@ -14,131 +17,63 @@ use crate::token_tree::{
 
 #[derive(Parser)]
 #[grammar = "lexer.pest"]
-struct Lexer;
+struct PestLexer;
 
 use crate::Result;
 
-enum Phase<'a> {
-    Pre(u32, Pair<'a, Rule>),
-    Post(u32, Rule, PostState),
-}
-
-#[derive(Debug)]
-enum PostState {
-    TokenTree,
-    Tree(Tree),
-    TreeOrThing(TreeOrThing),
-    Unimpl,
-}
-
 pub fn lex(src: &str) -> Result<TokenTree> {
-    debug!("source:\n{}\n", src);
-
-    let pairs = Lexer::parse(Rule::buffer, src)
+    let pairs = PestLexer::parse(Rule::buffer, src)
         .context(format!("parsing source"))?;
 
-    debug!("lexed:");
+    Ok(TokenTree(Lexer::walk(pairs)?))
+}
 
-    let mut pair_stack = vec![];
-    let mut tree_or_thing_list = vec![];
+pub struct Lexer<'a>(PhantomData<&'a ()>);
 
-    push_next_pairs(&mut pair_stack, pairs, 0);
-
-    while let Some(this_phase) = pair_stack.pop() {
-        match this_phase {
-            Phase::Pre(lvl, this_pair) => {
-                print_phase_debug(PhaseName::Pre, lvl, this_pair.as_rule(), this_pair.as_str());
-
-                let next_move = get_post_state(this_pair.as_rule(), this_pair.as_str());
-
-                pair_stack.push(Phase::Post(lvl, this_pair.as_rule(), next_move));
-
-                let next_lvl = lvl.checked_add(1).expect("level exceeds u32 capacity");
-                push_next_pairs(&mut pair_stack, this_pair.into_inner(), next_lvl);
+impl<'a> Walk for Lexer<'a> {
+    type Node = Pair<'a, Rule>;
+    type FrameState = TreeOrThing;
+    type FrameResult = TreeOrThing;
+    
+    fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>> {
+        let s = node.as_str();
+        let state = match node.as_rule() {
+            Rule::paren_tree => {
+                Some(TreeOrThing::Tree(Tree::Paren, TokenTree(vec![])))
             }
-            Phase::Post(lvl, rule, post_state) => {
-                print_phase_debug(PhaseName::Post, lvl, rule, &format!("{:?}", post_state));
-
-                match post_state {
-                    PostState::TokenTree => {
-                    }
-                    PostState::Tree(tree) => {
-                        let inner_things = tree_or_thing_list;
-                        let tot = TreeOrThing::Tree(tree, TokenTree(inner_things));
-                        tree_or_thing_list = vec![];
-                        tree_or_thing_list.push(tot);
-                    }
-                    PostState::TreeOrThing(tot) => {
-                        tree_or_thing_list.push(tot);
-                    }
-                    PostState::Unimpl => { }
-                }
+            Rule::ident => {
+                Some(TreeOrThing::Thing(Thing::Ident(Ident(S(s)))))
             }
+            Rule::uint => {
+                Some(TreeOrThing::Thing(Thing::Number(Number::Uint(Uint(S(s))))))
+            }
+            Rule::punct_comma => {
+                Some(TreeOrThing::Thing(Thing::Punctuation(Punctuation::Comma)))
+            }
+            Rule::EOI => {
+                None
+            }
+            r => panic!("unimplemented {:?}", r)
+        };
+
+        for pair in node.into_inner() {
+            push_child(pair);
         }
+
+        Ok(state)
     }
 
-    assert!(pair_stack.is_empty());
-
-    debug!("... lexed.");
-
-    Ok(TokenTree(tree_or_thing_list))
-}
-
-fn push_next_pairs<'a>(pair_stack: &mut Vec<Phase<'a>>,
-                       mut next_pairs: Pairs<'a, Rule>,
-                       lvl: u32) {
-    // collect new pairs in forward order
-    let mut next_pair_stack = vec![];
-    for next_pair in next_pairs {
-        next_pair_stack.push(Phase::Pre(lvl, next_pair));
+    fn handle_child_result(mut frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState> {
+        if let TreeOrThing::Tree(_, ref mut tt) = frm {
+            tt.0.push(ch);
+        } else {
+            panic!("non-tree has children");
+        }
+        
+        Ok(frm)
     }
-    // push them on the stack in reverse order so they
-    // can be popped in forward order later
-    let next_pair_stack = next_pair_stack.into_iter().rev();
-    pair_stack.extend(next_pair_stack);
-}
 
-fn get_post_state(rule: Rule, s: &str) -> PostState {
-    match rule {
-        Rule::token_tree => {
-            PostState::TokenTree
-        }
-        Rule::paren_tree => {
-            PostState::Tree(Tree::Paren)
-        }
-        Rule::ident => {
-            PostState::TreeOrThing(TreeOrThing::Thing(
-                Thing::Ident(Ident(s.to_string()))
-            ))
-        }
-        Rule::uint => {
-            PostState::TreeOrThing(TreeOrThing::Thing(
-                Thing::Number(Number::Uint(Uint(s.to_string())))
-            ))
-        }
-        Rule::punct_comma => {
-            PostState::TreeOrThing(TreeOrThing::Thing(
-                Thing::Punctuation(Punctuation::Comma)
-            ))
-        }
-        _ => {
-            PostState::Unimpl
-        }
+    fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult> {
+        Ok(frm)
     }
-}
-
-enum PhaseName { Pre, Post }
-
-fn print_phase_debug(phase: PhaseName, lvl: u32, rule: Rule, s: &str) {
-    let sign = match phase {
-        PhaseName::Pre => "^",
-        PhaseName::Post => "v",
-    };
-    let spaces = usize::try_from(lvl).expect("lvl does not fit in usize");
-    let pad = iter::repeat(' ').take(spaces).collect::<String>();
-    let s = &s[..cmp::min(20, s.len())];
-    let s = s.to_string();
-    let s = s.replace("\n", " ");
-    let s = s.replace("\r\n", " ");
-    debug!("{} {}{:?}: {}", sign, pad, rule, s);
 }

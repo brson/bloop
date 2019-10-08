@@ -8,7 +8,9 @@ pub trait Walk {
     type FrameState;
     type FrameResult;
 
-    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Self::FrameState>;
+    // FIXME: this only returns Option because I can't figure out how to make
+    // pest not visit EOI
+    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>>;
 
     fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
 
@@ -34,7 +36,11 @@ pub trait Walk {
                             children.push(child);
                         };
                         let next_state = Self::enter_frame(node, push_child)?;
-                        state_stack.push(Phase::Leave(lvl, next_state));
+                        if let Some(next_state) = next_state {
+                            state_stack.push(Phase::Leave(lvl, next_state));
+                        } else {
+                            continue;
+                        }
                     }
                     {
                         let next_lvl = lvl.checked_add(1).expect("level exceeds capacity");

@@ -1,22 +1,22 @@
-buffer = { SOI ~ token_tree ~ EOI }
+buffer = _{ SOI ~ token_tree ~ EOI }
 
-token_tree = { (tree_or_thing)* }
+token_tree = _{ (tree_or_thing)* }
 
 tree_or_thing = _{ tree | thing }
 
-tree = { (paren_tree | brace_tree | square_tree | angle_tree ) }
+tree = _{ (paren_tree | brace_tree | square_tree | angle_tree ) }
 paren_tree = { "(" ~ token_tree ~ ")" }
 brace_tree = { "{" ~ token_tree ~ "}" }
 square_tree = { "[" ~ token_tree ~ "]" }
 angle_tree = { "<" ~ token_tree ~ ">" }
 
-thing = { ident | number | punctuation }
+thing = _{ ident | number | punctuation }
 ident = @{ ident_leader ~ ident_remainder* }
 
-ident_leader = { ASCII_ALPHA | "_" }
-ident_remainder = { ASCII_ALPHANUMERIC | "_" }
+ident_leader = _{ ASCII_ALPHA | "_" }
+ident_remainder = _{ ASCII_ALPHANUMERIC | "_" }
 
-number = { float | uint }
+number = _{ float | uint }
 
 float = @{ float_span }
 

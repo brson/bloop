@@ -11,7 +11,6 @@ extern crate log;
 extern crate env_logger;
 
 mod lexer;
-mod lexer2;
 mod token_tree;
 mod tree_walker;
 mod ast;
@@ -71,7 +70,7 @@ fn run_do_thing(opts: DoThingOpts) -> Result<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    let token_tree = lexer2::lex(&contents)?;
+    let token_tree = lexer::lex(&contents)?;
 
     debug!("tt: {:#?}", token_tree);
     
