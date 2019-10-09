@@ -36,34 +36,7 @@ impl<'a> Walk for Lexer<'a> {
     type FrameResult = TreeOrThing;
     
     fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>> {
-        let s = node.as_str();
-        let state = match node.as_rule() {
-            Rule::paren_tree => {
-                Some(TreeOrThing::Tree(Tree::Paren, TokenTree(vec![])))
-            }
-            Rule::brace_tree => {
-                Some(TreeOrThing::Tree(Tree::Brace, TokenTree(vec![])))
-            }
-            Rule::square_tree => {
-                Some(TreeOrThing::Tree(Tree::Square, TokenTree(vec![])))
-            }
-            Rule::angle_tree => {
-                Some(TreeOrThing::Tree(Tree::Angle, TokenTree(vec![])))
-            }
-            Rule::ident => {
-                Some(TreeOrThing::Thing(Thing::Ident(Ident(S(s)))))
-            }
-            Rule::uint => {
-                Some(TreeOrThing::Thing(Thing::Number(Number::Uint(Uint(S(s))))))
-            }
-            Rule::punct_comma => {
-                Some(TreeOrThing::Thing(Thing::Punctuation(Punctuation::Comma)))
-            }
-            Rule::EOI => {
-                None
-            }
-            r => panic!("unimplemented {:?}", r)
-        };
+        let state = pair_to_tree_or_thing(&node);
 
         for pair in node.into_inner() {
             push_child(pair);
@@ -85,4 +58,37 @@ impl<'a> Walk for Lexer<'a> {
     fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult> {
         Ok(frm)
     }
+}
+
+fn pair_to_tree_or_thing(p: &Pair<Rule>) -> Option<TreeOrThing> {
+    let s = p.as_str();
+    let tot = match p.as_rule() {
+        Rule::paren_tree => {
+            Some(TreeOrThing::Tree(Tree::Paren, TokenTree(vec![])))
+        }
+        Rule::brace_tree => {
+            Some(TreeOrThing::Tree(Tree::Brace, TokenTree(vec![])))
+        }
+        Rule::square_tree => {
+            Some(TreeOrThing::Tree(Tree::Square, TokenTree(vec![])))
+        }
+        Rule::angle_tree => {
+            Some(TreeOrThing::Tree(Tree::Angle, TokenTree(vec![])))
+        }
+        Rule::ident => {
+            Some(TreeOrThing::Thing(Thing::Ident(Ident(S(s)))))
+        }
+        Rule::uint => {
+            Some(TreeOrThing::Thing(Thing::Number(Number::Uint(Uint(S(s))))))
+        }
+        Rule::punct_comma => {
+            Some(TreeOrThing::Thing(Thing::Punctuation(Punctuation::Comma)))
+        }
+        Rule::EOI => {
+            None
+        }
+        r => panic!("unimplemented {:?}", r)
+    };
+
+    tot
 }
