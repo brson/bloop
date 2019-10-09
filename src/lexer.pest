@@ -52,20 +52,27 @@ punctuation = _{
 | punct_and_and
 | punct_and
 
-| punct_plus
-| punct_dash
-| punct_slash
-| punct_star
+| punct_plus_plus
+| punct_dash_dash
+| punct_slash_slash
+| punct_star_star
 
 | punct_plus_equals
 | punct_dash_equals
 | punct_slash_equals
 | punct_star_equals
 
+| punct_plus
+| punct_dash
+| punct_slash
+| punct_star
+
 | punct_equals_equals
 | punct_equals
 
-| punct_backtick // TODO use this for backtick strings?
+| punct_quote
+| punct_dquote
+| punct_backtick
 | punct_at
 | punct_spider
 | punct_dollar
@@ -100,19 +107,26 @@ punct_bar = { "|" }
 punct_and_and = { "&&" }
 punct_and = { "&" }
 
-punct_plus = { "+" }
-punct_dash = { "-" }
-punct_slash = { "/" }
-punct_star = { "*" }
+punct_plus_plus = { "++" }
+punct_dash_dash = { "--" }
+punct_slash_slash = { "//" }
+punct_star_star = { "**" }
 
 punct_plus_equals = { "+=" }
 punct_dash_equals = { "-=" }
 punct_slash_equals = { "/=" }
 punct_star_equals = { "*=" }
 
+punct_plus = { "+" }
+punct_dash = { "-" }
+punct_slash = { "/" }
+punct_star = { "*" }
+
 punct_equals_equals = { "==" }
 punct_equals = { "=" }
 
+punct_quote = { "'" }
+punct_dquote = { "\"" }
 punct_backtick = { "`" }
 punct_at = { "@" }
 punct_spider = { "#" }

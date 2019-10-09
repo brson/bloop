@@ -62,19 +62,26 @@ pub enum Punctuation {
     AndAnd,
     And,
 
-    Plus,
-    Dash,
-    Slash,
-    Star,
+    PlusPlus,
+    DashDash,
+    SlashSlash,
+    StarStar,
 
     PlusEquals,
     DashEquals,
     SlashEquals,
     StarEquals,
 
+    Plus,
+    Dash,
+    Slash,
+    Star,
+
     EqualsEquals,
     Equals,
 
+    Quote,
+    DQuote,
     Backtick,
     At,
     Spider,
