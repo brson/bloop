@@ -20,6 +20,7 @@ There is no GC, local heaps for non-Send kinds. Local ECS registries maybe.
 - Fast compilation
 - C-style polymorphism over C++ (dynamic over static)
 - Callsite dispatch strategy
+- Path stuttering
 
 ### Allocation
 
