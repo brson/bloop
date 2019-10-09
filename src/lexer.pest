@@ -3,9 +3,9 @@
 buffer = _{ SOI ~ token_tree ~ EOI }
 
 // TODO should be thing_or_tree
-token_tree = _{ (tree_or_thing)* }
+token_tree = _{ (thing_or_tree)* }
 
-tree_or_thing = _{ tree | thing }
+thing_or_tree = _{ tree | thing }
 
 tree = _{ (paren_tree | brace_tree | square_tree | angle_tree ) }
 paren_tree = { "(" ~ token_tree ~ ")" }

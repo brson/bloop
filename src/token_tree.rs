@@ -1,10 +1,10 @@
 // NB: Keep the ordering here the same as in lexer.pest
 
 #[derive(Debug)]
-pub struct TokenTree(pub Vec<TreeOrThing>);
+pub struct TokenTree(pub Vec<ThingOrTree>);
 
 #[derive(Debug)]
-pub enum TreeOrThing {
+pub enum ThingOrTree {
     Tree(Tree, TokenTree),
     Thing(Thing),
 }

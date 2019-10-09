@@ -12,7 +12,7 @@ use pest::Parser;
 use pest::iterators::{Pairs, Pair};
 use std::iter;
 use crate::token_tree::{
-    TokenTree, TreeOrThing, Tree, Thing, Ident, Number, Float, Uint, Punctuation,
+    TokenTree, ThingOrTree, Tree, Thing, Ident, Number, Float, Uint, Punctuation,
 };
 
 #[derive(Parser)]
@@ -32,8 +32,8 @@ pub struct Lexer<'a>(PhantomData<&'a ()>);
 
 impl<'a> Walk for Lexer<'a> {
     type Node = Pair<'a, Rule>;
-    type FrameState = TreeOrThing;
-    type FrameResult = TreeOrThing;
+    type FrameState = ThingOrTree;
+    type FrameResult = ThingOrTree;
     
     fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>> {
         let state = pair_to_tree_or_thing(&node);
@@ -46,7 +46,7 @@ impl<'a> Walk for Lexer<'a> {
     }
 
     fn handle_child_result(mut frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState> {
-        if let TreeOrThing::Tree(_, ref mut tt) = frm {
+        if let ThingOrTree::Tree(_, ref mut tt) = frm {
             tt.0.push(ch);
         } else {
             panic!("non-tree has children");
@@ -60,29 +60,29 @@ impl<'a> Walk for Lexer<'a> {
     }
 }
 
-fn pair_to_tree_or_thing(p: &Pair<Rule>) -> Option<TreeOrThing> {
+fn pair_to_tree_or_thing(p: &Pair<Rule>) -> Option<ThingOrTree> {
     let s = p.as_str();
     let tot = match p.as_rule() {
         Rule::paren_tree => {
-            Some(TreeOrThing::Tree(Tree::Paren, TokenTree(vec![])))
+            Some(ThingOrTree::Tree(Tree::Paren, TokenTree(vec![])))
         }
         Rule::brace_tree => {
-            Some(TreeOrThing::Tree(Tree::Brace, TokenTree(vec![])))
+            Some(ThingOrTree::Tree(Tree::Brace, TokenTree(vec![])))
         }
         Rule::square_tree => {
-            Some(TreeOrThing::Tree(Tree::Square, TokenTree(vec![])))
+            Some(ThingOrTree::Tree(Tree::Square, TokenTree(vec![])))
         }
         Rule::angle_tree => {
-            Some(TreeOrThing::Tree(Tree::Angle, TokenTree(vec![])))
+            Some(ThingOrTree::Tree(Tree::Angle, TokenTree(vec![])))
         }
         Rule::ident => {
-            Some(TreeOrThing::Thing(Thing::Ident(Ident(S(s)))))
+            Some(ThingOrTree::Thing(Thing::Ident(Ident(S(s)))))
         }
         Rule::uint => {
-            Some(TreeOrThing::Thing(Thing::Number(Number::Uint(Uint(S(s))))))
+            Some(ThingOrTree::Thing(Thing::Number(Number::Uint(Uint(S(s))))))
         }
         Rule::punct_comma => {
-            Some(TreeOrThing::Thing(Thing::Punctuation(Punctuation::Comma)))
+            Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::Comma)))
         }
         Rule::EOI => {
             None
