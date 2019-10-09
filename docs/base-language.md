@@ -14,10 +14,11 @@ This is the minimal high-level language that the compiler understands. It is not
 // Allow various shorthand attribute syntax, like omitting
 // the `bloop` namespace, omitting `value =`, and interpreting
 // paths as strings.
-#![require(value = "bloop::attribute_desugaring")]
+#![bloop::require(value = "bloop::attribute_desugaring")]
+#![bloop::attribute_desugaring(default_namespace = "bloop")]
 
 // Interpret `//!` comments as doc attributes
-#![require(bloop::doc_comments)]
+#![require(doc_comments)]
 
 import bloop::cmp;
 import bloop::cmp::Ord;
