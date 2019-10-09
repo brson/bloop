@@ -28,7 +28,7 @@ uint = @{ digit_span }
 float_span = _{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+) }
 digit_span = _{ ASCII_DIGIT+ }
 
-punctuation = {
+punctuation = _{
 
   punct_right_arrow
 | punct_left_arrow
