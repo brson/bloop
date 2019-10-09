@@ -1,3 +1,5 @@
+// NB: Keep the ordering here the same as in lexer.pest
+
 #[derive(Debug)]
 pub struct TokenTree(pub Vec<TreeOrThing>);
 
@@ -66,7 +68,7 @@ pub enum Punctuation {
     Star,
 
     PlusEquals,
-    MinusEquals,
+    DashEquals,
     SlashEquals,
     StarEquals,
 
@@ -77,6 +79,8 @@ pub enum Punctuation {
     At,
     Spider,
     Dollar,
+    Percent,
+    UpArrow,
     Twiddle,
     Bang,
     What,

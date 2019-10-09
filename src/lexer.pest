@@ -1,3 +1,5 @@
+// NB: Keep the ordering here the same as in token_tree.rs
+
 buffer = _{ SOI ~ token_tree ~ EOI }
 
 // TODO should be thing_or_tree
@@ -50,29 +52,29 @@ punctuation = {
 | punct_and_and
 | punct_and
 
-| "+"
-| "-"
-| "/"
-| "*"
+| punct_plus
+| punct_dash
+| punct_slash
+| punct_star
 
-| "+="
-| "-="
-| "/="
-| "*="
+| punct_plus_equals
+| punct_dash_equals
+| punct_slash_equals
+| punct_star_equals
 
-| "=="
-| "="
+| punct_equals_equals
+| punct_equals
 
-| "`"
-| "@"
-| "#"
-| "$"
-| "%"
-| "^"
-| "~"
-| "!"
-| "?"
-| "\\"
+| punct_backtick
+| punct_at
+| punct_spider
+| punct_dollar
+| punct_percent
+| punct_up_arrow
+| punct_twiddle
+| punct_bang
+| punct_what
+| punct_backslash
 
 }
 
@@ -97,5 +99,29 @@ punct_bar_bar = { "||" }
 punct_bar = { "|" }
 punct_and_and = { "&&" }
 punct_and = { "&" }
+
+punct_plus = { "+" }
+punct_dash = { "-" }
+punct_slash = { "/" }
+punct_star = { "*" }
+
+punct_plus_equals = { "+=" }
+punct_dash_equals = { "-=" }
+punct_slash_equals = { "/=" }
+punct_star_equals = { "*=" }
+
+punct_equals_equals = { "==" }
+punct_equals = { "=" }
+
+punct_backtick = { "`" }
+punct_at = { "@" }
+punct_spider = { "#" }
+punct_dollar = { "$" }
+punct_percent = { "%" }
+punct_up_arrow = { "^" }
+punct_twiddle = { "~" }
+punct_bang = { "!" }
+punct_what = { "?" }
+punct_backslash = { "\\" }
 
 WHITESPACE = _{ " " | "\n" | "\r\n" }
