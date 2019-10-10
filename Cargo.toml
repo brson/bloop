@@ -1,46 +1,14 @@
-[package]
-name = "bloop"
-version = "0.1.0"
-edition = "2018"
-authors = ["Brian Anderson <andersrb@gmail.com>"]
+[workspace]
+members = [
+    "src/big_s",
+    "src/error",
+    "src/global_defs",
+    "src/lexer",
+    "src/scratch-driver",
+    "src/token_tree",
+    "src/tree_walker",
+]
 
-[dependencies]
-
-# basics
-chrono = "0.4.7"
-failure = "0.1.5"
-regex = "1.2.1"
-string_cache = "0.7.3"
-
-# command line parsing
-clap = "2.33.0"
-structopt = "0.2.18"
-
-# logging
-log = "0.4.8"
-env_logger = "0.6.2"
-
-# architecture
-differential-dataflow = "0.10.0"
-timely = "0.10.0"
-rayon = "1.1.0"
-specs = "0.15.0"
-specs-derive = "0.4.0"
-
-# lexing
-pest = "2.1.1"
-pest_derive = "2.1.0"
-
-# codegen
-cranelift = "0.40.0"
-cranelift-frontend = "0.40.0"
-cranelift-reader = "0.40.0"
-cranelift-faerie = "0.40.0"
-cranelift-module = "0.40.0"
-cranelift-simplejit = "0.40.0"
-faerie = "0.10.2"
-
-[build-dependencies]
-
-# parsing
-lalrpop = "0.17.2"
+default-members = [
+    "src/scratch-driver"
+]

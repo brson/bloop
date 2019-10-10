@@ -1,27 +1,27 @@
+#[macro_use]
+extern crate pest_derive;
+
 use pest;
 
-use crate::big_s::S;
+use b_big_s::S;
 use std::marker::PhantomData;
-use crate::tree_walker::Walk;
-use std::cmp;
-use std::convert::TryFrom;
-use std::collections::VecDeque;
-use failure::err_msg;
-use failure::ResultExt;
+use b_tree_walker::Walk;
 use pest::Parser;
-use pest::iterators::{Pairs, Pair};
-use std::iter;
-use crate::token_tree::{
-    TokenTree, ThingOrTree, Tree, Thing, Ident, Number, Float, Uint, Punctuation,
+use pest::iterators::Pair;
+use b_token_tree::{
+    TokenTree, ThingOrTree, Tree, Thing, Ident, Number, Uint, Punctuation,
 };
+use b_error::{BResult, ResultExt};
 
+// FIXME: lexer.pest is located in src/ because pest expects it to be there. I
+// would rather it not.
+//
+// re https://github.com/pest-parser/pest/issues/325
 #[derive(Parser)]
 #[grammar = "lexer.pest"]
 struct PestLexer;
 
-use crate::Result;
-
-pub fn lex(src: &str) -> Result<TokenTree> {
+pub fn lex(src: &str) -> BResult<TokenTree> {
     let pairs = PestLexer::parse(Rule::buffer, src)
         .context(format!("parsing source"))?;
 
@@ -35,7 +35,7 @@ impl<'a> Walk for Lexer<'a> {
     type FrameState = ThingOrTree;
     type FrameResult = ThingOrTree;
     
-    fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>> {
+    fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>> {
         let state = pair_to_tree_or_thing(&node);
 
         for pair in node.into_inner() {
@@ -45,7 +45,7 @@ impl<'a> Walk for Lexer<'a> {
         Ok(state)
     }
 
-    fn handle_child_result(mut frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState> {
+    fn handle_child_result(mut frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState> {
         if let ThingOrTree::Tree(_, ref mut tt) = frm {
             tt.0.push(ch);
         } else {
@@ -55,7 +55,7 @@ impl<'a> Walk for Lexer<'a> {
         Ok(frm)
     }
 
-    fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult> {
+    fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult> {
         Ok(frm)
     }
 }

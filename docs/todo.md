@@ -1,0 +1,3 @@
+- finish lexer
+- introduce test suite
+- auto-generate Cargo.tomls

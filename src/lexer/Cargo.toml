@@ -1,0 +1,17 @@
+[package]
+name = "b_lexer"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "lexer.rs"
+
+[dependencies]
+b_big_s = { path = "../big_s" }
+b_error = { path = "../error" }
+b_token_tree = { path = "../token_tree" }
+b_tree_walker = { path = "../tree_walker" }
+
+pest = "2.1.1"
+pest_derive = "2.1.0"

@@ -1,7 +1,6 @@
-use crate::global_defs::Usp;
+use b_global_defs::Usp;
 use std::iter::IntoIterator;
-
-use crate::Result;
+use b_error::BResult;
 
 pub trait Walk {
     type Node;
@@ -10,13 +9,13 @@ pub trait Walk {
 
     // FIXME: this returns Option only because I can't figure out how to make
     // pest not visit EOI
-    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>>;
+    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>>;
 
-    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
+    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState>;
 
-    fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult>;
+    fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult>;
     
-    fn walk<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    fn walk<I>(nodes: I) -> BResult<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>
     {
         let nodes = nodes.into_iter();
@@ -51,7 +50,7 @@ pub trait Walk {
                         result_stack.push(vec![]);
                     }
                 }
-                Phase::Leave(lvl, mut frame_state) => {
+                Phase::Leave(_lvl, mut frame_state) => {
                     let child_results = result_stack.pop().expect("no results for child nodes");
 
                     for result in child_results {
@@ -78,7 +77,7 @@ enum Phase<TNode, TFrameState> {
     Leave(Usp, TFrameState),
 }
 
-fn push_next_children<I, N, S>(state_stack: &mut Vec<Phase<N, S>>, mut next_nodes: I, lvl: Usp)
+fn push_next_children<I, N, S>(state_stack: &mut Vec<Phase<N, S>>, next_nodes: I, lvl: Usp)
 where I: IntoIterator<Item = N>
 {
     // Collect next nodes in forward order

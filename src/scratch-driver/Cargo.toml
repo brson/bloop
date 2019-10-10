@@ -1,0 +1,17 @@
+[package]
+name = "b_scratch_driver"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[[bin]]
+name = "bloop-scratch"
+path = "scratch_driver.rs"
+
+[dependencies]
+b_error = { path = "../error" }
+b_lexer = { path = "../lexer" }
+
+env_logger = "0.6.2"
+log = "0.4.8"
+structopt = "0.2.18"

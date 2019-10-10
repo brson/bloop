@@ -1,31 +1,15 @@
-#![allow(unused)]
-
-#[macro_use]
-extern crate pest_derive;
-#[macro_use]
-extern crate specs_derive;
-#[macro_use]
-extern crate structopt;
 #[macro_use]
 extern crate log;
 extern crate env_logger;
 
-mod lexer;
-mod token_tree;
-mod tree_walker;
-mod ast;
-mod global_defs;
-mod big_s;
+use b_lexer;
+use b_error::BResult;
 
-use failure::{err_msg, Error};
-use std::env;
 use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
 use std::result::Result as StdResult;
 use structopt::StructOpt;
-
-type Result<T> = StdResult<T, Error>;
 
 fn main() -> StdResult<(), i32> {
     if let Err(e) = run() {
@@ -41,7 +25,7 @@ fn main() -> StdResult<(), i32> {
     }
 }
 
-fn run() -> Result<()> {
+fn run() -> BResult<()> {
     use env_logger::Builder;
 
     Builder::from_default_env()
@@ -53,7 +37,7 @@ fn run() -> Result<()> {
     Ok(())
 }
 
-fn dispatch_command(opts: Opts) -> Result<()> {
+fn dispatch_command(opts: Opts) -> BResult<()> {
     debug!("command line options: {:#?}", opts);
 
     match opts.mode {
@@ -61,16 +45,12 @@ fn dispatch_command(opts: Opts) -> Result<()> {
     }
 }
 
-mod dataflow;
-
-fn run_do_thing(opts: DoThingOpts) -> Result<()> {
-    dataflow::do_your_thing()?;
-
+fn run_do_thing(opts: DoThingOpts) -> BResult<()> {
     let mut file = File::open(&opts.root_path)?;
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    let token_tree = lexer::lex(&contents)?;
+    let token_tree = b_lexer::lex(&contents)?;
 
     debug!("tt: {:#?}", token_tree);
     
