@@ -41,18 +41,18 @@ fn dispatch_command(opts: Opts) -> BResult<()> {
     debug!("command line options: {:#?}", opts);
 
     match opts.mode {
-        Mode::DoThing(m) => run_do_thing(m),
+        Mode::LexDump(m) => run_lex_dump(m),
     }
 }
 
-fn run_do_thing(opts: DoThingOpts) -> BResult<()> {
-    let mut file = File::open(&opts.root_path)?;
+fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
+    let mut file = File::open(&opts.file)?;
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
     let token_tree = b_lexer::lex(&contents)?;
 
-    debug!("tt: {:#?}", token_tree);
+    print!("tt: {:#?}", token_tree);
     
     Ok(())
 }
@@ -66,13 +66,13 @@ struct Opts {
 
 #[derive(Debug, StructOpt)]
 enum Mode {
-    #[structopt(name = "dothing")]
-    DoThing(DoThingOpts),
+    #[structopt(name = "lex-dump")]
+    LexDump(LexDumpOpts),
 }
 
 #[derive(Debug, StructOpt)]
-struct DoThingOpts {
+struct LexDumpOpts {
     #[structopt(name = "file")]
-    root_path: PathBuf,
+    file: PathBuf,
 }
     
