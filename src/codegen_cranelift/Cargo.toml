@@ -8,6 +8,8 @@ authors = ["Brian Anderson <andersrb@gmail.com>"]
 path = "codegen_cranelift.rs"
 
 [dependencies]
+b_codegen_traits = { path = "../codegen_traits" }
+
 cranelift-codegen = "0.45.0"
 cranelift-entity = "0.45.0"
 cranelift-module = "0.45.0"

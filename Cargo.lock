@@ -33,6 +33,7 @@ version = "0.1.0"
 name = "b_codegen_cranelift"
 version = "0.1.0"
 dependencies = [
+ "b_codegen_traits 0.1.0",
  "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cranelift-entity 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cranelift-faerie 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
