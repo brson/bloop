@@ -53,8 +53,8 @@ impl Add<Rhs = Int128> for Int128 {
     fn add(DownRef<self>, other: DownRef<self>)
         -> Result<DownRef<self>, OverflowError>
     {
-	    i:add(self, other)
-	}
+        i:add(self, other)
+    }
 }
 ```
 

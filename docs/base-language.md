@@ -31,38 +31,38 @@ struct DataStructure<TFoo: Foo> {
     fields {
         field1: Int32,
         field2: TFoo,
-	}
-	variants {
-	    Variant1 { _0: Int32, },
-		Variant2 { _0: TFoo, },
-	}
+    }
+    variants {
+        Variant1 { _0: Int32, },
+        Variant2 { _0: TFoo, },
+    }
 }
 
 #[visibility(pub)]
 trait Foo: Ord {
     // Provided method. Cannot be overridden.
     fn is_group(Ref<self>,
-	            other1: Ref<self>,
-				other2: Ref<self>) -> Bool
-	{
-	    let cmp1 = self.cmp(other1);
-		let cmp2 = self.cmp(other2);
-		let cool1 = cmp1.is_cool();
-		let cool2 = cmp2.is_cool();
+                other1: Ref<self>,
+                other2: Ref<self>) -> Bool
+    {
+        let cmp1 = self.cmp(other1);
+        let cmp2 = self.cmp(other2);
+        let cool1 = cmp1.is_cool();
+        let cool2 = cmp2.is_cool();
 
-		// Method chaining
-		let res = cmp1.eq(cmp2).and(cool1).and(cool2);
+        // Method chaining
+        let res = cmp1.eq(cmp2).and(cool1).and(cool2);
 
-		// Again, with type ascription
-		let res: Bool = cmp1:Ordering.eq(cmp2:Ordering):Bool
-		                         .and(cool1:Bool):Bool
-								 .and(cool2:Bool):Bool;
+        // Again, with type ascription
+        let res: Bool = cmp1:Ordering.eq(cmp2:Ordering):Bool
+                                 .and(cool1:Bool):Bool
+                                 .and(cool2:Bool):Bool;
 
         return res;
-	}
+    }
 
     // Required method
-	fn is_cool(Ref<self>) -> Nil;
+    fn is_cool(Ref<self>) -> Nil;
 }
 
 // TODO: is it better for the trait name or the struct

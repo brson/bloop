@@ -145,9 +145,9 @@ Bloop design goals:
   - modules are types, functions are static methods on modules
     - modules can contain labeled fields - they can be 'struct-types'
     - modules without fields can't be instantiated
-	- each import is instantiated, but immediately deduplicated
+    - each import is instantiated, but immediately deduplicated
     - that means imports can be generic-instantiated
-	- two namespaces - type and value, no module namespace
+    - two namespaces - type and value, no module namespace
 
 - relative paths only - no absolute paths - just import again
   - this may be in tension with the disire for mods to be explicit dogs for refactoring
@@ -155,7 +155,7 @@ Bloop design goals:
   - import - dag-forming, package -resolved source code
   - mod - default module that can't read from its parents, dag-forming,
     like import but for internal modules
-	- mods are compiled exactly like imports
+    - mods are compiled exactly like imports
     - should there be a difference between `import` and `mod`? yeah, for explicitness and intent
   - depmod - mod that can import from parents, public and private, parent
     - imports must be explicit and relative there are no 'super::' paths?
@@ -171,7 +171,7 @@ Bloop design goals:
 - global build cache
   - trust ideas
     - we can have an official build cluster with trusted keys and security audits
-	  if people do their builds there they will be counted 
+      if people do their builds there they will be counted 
 
 * lexer lexes into token tree
 - tree is parsed in parallel, with block indexing
@@ -231,7 +231,7 @@ Bloop design goals:
   - incremental compilation
   - consider ecs _runtime_ model
     - maybe an ecs datatype, kind of like jai's auto-soa
-	- no global allocators - allocation is done via ecs
+    - no global allocators - allocation is done via ecs
   - synta choices: no <> ambiguity
   - :: as namespace separator
   - closures
@@ -280,45 +280,45 @@ ty Foo(TypeX, TypeY);
 // record type
 ty Bar {
     x: TypeX,
-	y: TypeY,
+    y: TypeY,
 };
 
 // enum type
 ty Blahz {
     A,
-	B,
+    B,
 };
 
 // nested structs
 ty Wut {
     // Wut::A
     a: ty A {
-	   x: TypeX
-	},
-	// Wut::B
-	b: ty B {
-	   y: TypeY
-	},
+       x: TypeX
+    },
+    // Wut::B
+    b: ty B {
+       y: TypeY
+    },
 }
 
 // union of tuple-structs
 ty Baz {
     // Baz::A
     A(TypeX),
-	// Baz::B
-	B(TypeY),
+    // Baz::B
+    B(TypeY),
 };
 
 // union of structs
 ty Qux {
     // Qux::A
     A {
-	    x: TypeX,
-	},
-	// Qux::B
-	B {
-	    y: TypeY,
-	},
+        x: TypeX,
+    },
+    // Qux::B
+    B {
+        y: TypeY,
+    },
 };
 
 // mixed struct / union
@@ -379,7 +379,7 @@ Interior types are namable subtypes:
 ```
 ty Foo {
     ty Bar,
-	ty Baz,
+    ty Baz,
 }
 
 let x: Foo::Bar = Foo::Bar;
@@ -469,7 +469,7 @@ All funtions are UCF traits
 mod Foo;
 
 trait Foo {
-	fn foo() { }
+    fn foo() { }
 }
 
 can be imported as Foo.foo and called as Foo.foo() or foo()
