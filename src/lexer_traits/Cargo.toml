@@ -1,0 +1,12 @@
+[package]
+name = "b_lexer_traits"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "lexer_traits.rs"
+
+[dependencies]
+b_error = { path = "../error" }
+b_token_tree = { path = "../token_tree" }

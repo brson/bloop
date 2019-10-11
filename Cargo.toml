@@ -11,6 +11,7 @@ members = [
     "src/error",
     "src/global_defs",
     "src/lexer",
+    "src/lexer_traits",
     "src/mir",
     "src/scratch_driver",
     "src/token_tree",

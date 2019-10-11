@@ -10,6 +10,7 @@ path = "lexer.rs"
 [dependencies]
 b_big_s = { path = "../big_s" }
 b_error = { path = "../error" }
+b_lexer_traits = { path = "../lexer_traits" }
 b_token_tree = { path = "../token_tree" }
 b_tree_walker = { path = "../tree_walker" }
 

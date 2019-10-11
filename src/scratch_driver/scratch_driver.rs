@@ -8,6 +8,8 @@ use b_base_parser::BaseParser;
 use b_base_parser_traits::BaseParse;
 use b_codegen_cranelift::CraneliftGenerator;
 use b_codegen_traits::Codegen;
+use b_lexer::Lexer;
+use b_lexer_traits::Lex;
 use b_error::BResult;
 
 use std::fs::File;
@@ -56,7 +58,8 @@ fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    let token_tree = b_lexer::lex(&contents)?;
+    let lexer = Box::new(Lexer) as Box<dyn Lex>;
+    let token_tree = lexer.lex(&contents)?;
 
     print!("tt: {:#?}", token_tree);
     
@@ -68,11 +71,12 @@ fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
+    let lexer = Box::new(Lexer) as Box<dyn Lex>;
     let base_parser = Box::new(BaseParser) as Box<dyn BaseParse>;
     let base_analyzer = Box::new(BaseAnalyzer) as Box<dyn BaseAnalyze>;
     let codegen = Box::new(CraneliftGenerator) as Box<dyn Codegen>;
     
-    let token_tree = b_lexer::lex(&contents)?;
+    let token_tree = lexer.lex(&contents)?;
     let ast = base_parser.parse(&token_tree)?;
     let mir = base_analyzer.lower(&ast)?;
 

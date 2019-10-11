@@ -111,10 +111,19 @@ version = "0.1.0"
 dependencies = [
  "b_big_s 0.1.0",
  "b_error 0.1.0",
+ "b_lexer_traits 0.1.0",
  "b_token_tree 0.1.0",
  "b_tree_walker 0.1.0",
  "pest 2.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "pest_derive 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "b_lexer_traits"
+version = "0.1.0"
+dependencies = [
+ "b_error 0.1.0",
+ "b_token_tree 0.1.0",
 ]
 
 [[package]]
@@ -133,6 +142,7 @@ dependencies = [
  "b_codegen_traits 0.1.0",
  "b_error 0.1.0",
  "b_lexer 0.1.0",
+ "b_lexer_traits 0.1.0",
  "env_logger 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "structopt 0.2.18 (registry+https://github.com/rust-lang/crates.io-index)",

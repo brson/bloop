@@ -1,17 +1,28 @@
 #[macro_use]
 extern crate pest_derive;
 
-use pest;
-
+use b_error::{BResult, ResultExt};
 use b_big_s::S;
-use std::marker::PhantomData;
-use b_tree_walker::Walk;
-use pest::Parser;
-use pest::iterators::Pair;
+use b_lexer_traits::Lex;
 use b_token_tree::{
     TokenTree, ThingOrTree, Tree, Thing, Ident, Number, Uint, Punctuation,
 };
-use b_error::{BResult, ResultExt};
+use b_tree_walker::Walk;
+use pest::Parser;
+use pest::iterators::Pair;
+use pest;
+use std::marker::PhantomData;
+
+pub struct Lexer;
+
+impl Lex for Lexer {
+    fn lex(&self, src: &str) -> BResult<TokenTree> {
+        let pairs = PestLexer::parse(Rule::buffer, src)
+            .context(format!("parsing source"))?;
+
+        Ok(TokenTree(LocalLexer::walk(pairs)?))
+    }
+}
 
 // FIXME: lexer.pest is located in src/ because pest expects it to be there. I
 // would rather it not.
@@ -21,16 +32,10 @@ use b_error::{BResult, ResultExt};
 #[grammar = "lexer.pest"]
 struct PestLexer;
 
-pub fn lex(src: &str) -> BResult<TokenTree> {
-    let pairs = PestLexer::parse(Rule::buffer, src)
-        .context(format!("parsing source"))?;
+// FIXME PhantomData is a limitation of not gaving generic associated types
+pub struct LocalLexer<'a>(PhantomData<&'a ()>);
 
-    Ok(TokenTree(Lexer::walk(pairs)?))
-}
-
-pub struct Lexer<'a>(PhantomData<&'a ()>);
-
-impl<'a> Walk for Lexer<'a> {
+impl<'a> Walk for LocalLexer<'a> {
     type Node = Pair<'a, Rule>;
     type FrameState = ThingOrTree;
     type FrameResult = ThingOrTree;
