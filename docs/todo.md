@@ -2,3 +2,5 @@
 - introduce test suite
 - auto-generate Cargo.tomls
 - create own error type
+- add lexer trait
+- add static assertions that traits are objects

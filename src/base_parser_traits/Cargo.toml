@@ -1,0 +1,13 @@
+[package]
+name = "b_base_parser_traits"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "base_parser_traits.rs"
+
+[dependencies]
+b_base_ast = { path = "../base_ast" }
+b_error = { path = "../error" }
+b_token_tree = { path = "../token_tree" }

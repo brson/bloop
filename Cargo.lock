@@ -26,8 +26,46 @@ dependencies = [
 ]
 
 [[package]]
+name = "b_base_analyzer"
+version = "0.1.0"
+dependencies = [
+ "b_base_analyzer_traits 0.1.0",
+ "b_base_ast 0.1.0",
+ "b_error 0.1.0",
+ "b_mir 0.1.0",
+]
+
+[[package]]
+name = "b_base_analyzer_traits"
+version = "0.1.0"
+dependencies = [
+ "b_base_ast 0.1.0",
+ "b_error 0.1.0",
+ "b_mir 0.1.0",
+]
+
+[[package]]
 name = "b_base_ast"
 version = "0.1.0"
+
+[[package]]
+name = "b_base_parser"
+version = "0.1.0"
+dependencies = [
+ "b_base_ast 0.1.0",
+ "b_base_parser_traits 0.1.0",
+ "b_error 0.1.0",
+ "b_token_tree 0.1.0",
+]
+
+[[package]]
+name = "b_base_parser_traits"
+version = "0.1.0"
+dependencies = [
+ "b_base_ast 0.1.0",
+ "b_error 0.1.0",
+ "b_token_tree 0.1.0",
+]
 
 [[package]]
 name = "b_big_s"
@@ -87,6 +125,12 @@ version = "0.1.0"
 name = "b_scratch_driver"
 version = "0.1.0"
 dependencies = [
+ "b_base_analyzer 0.1.0",
+ "b_base_analyzer_traits 0.1.0",
+ "b_base_parser 0.1.0",
+ "b_base_parser_traits 0.1.0",
+ "b_codegen_cranelift 0.1.0",
+ "b_codegen_traits 0.1.0",
  "b_error 0.1.0",
  "b_lexer 0.1.0",
  "env_logger 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)",

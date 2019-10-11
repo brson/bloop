@@ -2,7 +2,12 @@
 extern crate log;
 extern crate env_logger;
 
-use b_lexer;
+use b_base_analyzer::BaseAnalyzer;
+use b_base_analyzer_traits::BaseAnalyze;
+use b_base_parser::BaseParser;
+use b_base_parser_traits::BaseParse;
+use b_codegen_cranelift::CraneliftGenerator;
+use b_codegen_traits::Codegen;
 use b_error::BResult;
 
 use std::fs::File;
@@ -58,8 +63,22 @@ fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
     Ok(())
 }
 
-fn run_jit_baselang(_opts: JitBaseLangOpts) -> BResult<()> {
-    panic!()
+fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
+    let mut file = File::open(&opts.file)?;
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
+
+    let base_parser = Box::new(BaseParser);
+    let base_analyzer = Box::new(BaseAnalyzer);
+    let codegen = Box::new(CraneliftGenerator);
+    
+    let token_tree = b_lexer::lex(&contents)?;
+    let ast = base_parser.parse(&token_tree)?;
+    let mir = base_analyzer.lower(&ast)?;
+
+    codegen.jit(&mir)?;
+
+    Ok(())
 }
 
 #[derive(Debug, StructOpt)]

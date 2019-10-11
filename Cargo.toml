@@ -1,6 +1,10 @@
 [workspace]
 members = [
+    "src/base_analyzer",
+    "src/base_analyzer_traits",
     "src/base_ast",
+    "src/base_parser",
+    "src/base_parser_traits",
     "src/big_s",
     "src/codegen_cranelift",
     "src/codegen_traits",

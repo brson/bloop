@@ -9,6 +9,12 @@ name = "bloop-scratch"
 path = "scratch_driver.rs"
 
 [dependencies]
+b_base_analyzer = { path = "../base_analyzer" }
+b_base_analyzer_traits = { path = "../base_analyzer_traits" }
+b_base_parser = { path = "../base_parser" }
+b_base_parser_traits = { path = "../base_parser_traits" }
+b_codegen_cranelift = { path = "../codegen_cranelift" }
+b_codegen_traits = { path = "../codegen_traits" }
 b_error = { path = "../error" }
 b_lexer = { path = "../lexer" }
 

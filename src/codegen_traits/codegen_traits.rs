@@ -1,6 +1,6 @@
 use b_error::BResult;
 use b_mir::Mir;
 
-pub trait Gen {
-    fn jit(mir: &Mir) -> BResult<i32>;
+pub trait Codegen {
+    fn jit(&self, mir: &Mir) -> BResult<i32>;
 }

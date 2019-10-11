@@ -1,0 +1,14 @@
+[package]
+name = "b_base_analyzer"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "base_analyzer.rs"
+
+[dependencies]
+b_base_analyzer_traits = { path = "../base_analyzer_traits" }
+b_base_ast = { path = "../base_ast" }
+b_error = { path = "../error" }
+b_mir = { path = "../mir" }
