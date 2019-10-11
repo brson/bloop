@@ -6,7 +6,7 @@ use b_token_tree::TokenTree;
 pub struct BaseParser;
 
 impl BaseParse for BaseParser {
-    fn parse(&self, tt: &TokenTree) -> BResult<BaseAst> {
+    fn parse(&self, _tt: &TokenTree) -> BResult<BaseAst> {
         panic!()
     }
 }
