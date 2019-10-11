@@ -57,6 +57,17 @@ There is no GC, local heaps for non-Send kinds. Local ECS registries maybe.
 
 - Non-pointer size indexes
 
+### Error handling
+
+- Existential types only?
+- Default checked allocation
+- No automatic coercion with `?`?
+- Default checked arithmetic
+- No built-in numeric conversion operator
+- Automatic lossless numeric coercion
+- Return-unwind option
+- No unwinding + easy IPC?
+
 
 Bloop design goals:
 
