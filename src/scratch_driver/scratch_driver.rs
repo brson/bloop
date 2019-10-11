@@ -42,6 +42,7 @@ fn dispatch_command(opts: Opts) -> BResult<()> {
 
     match opts.mode {
         Mode::LexDump(m) => run_lex_dump(m),
+        Mode::JitBaseLang(m) => run_jit_baselang(m),
     }
 }
 
@@ -57,6 +58,10 @@ fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
     Ok(())
 }
 
+fn run_jit_baselang(_opts: JitBaseLangOpts) -> BResult<()> {
+    panic!()
+}
+
 #[derive(Debug, StructOpt)]
 #[structopt(name = "bloop-scratch")]
 struct Opts {
@@ -68,6 +73,8 @@ struct Opts {
 enum Mode {
     #[structopt(name = "lex-dump")]
     LexDump(LexDumpOpts),
+    #[structopt(name = "jit-baselang")]
+    JitBaseLang(JitBaseLangOpts),
 }
 
 #[derive(Debug, StructOpt)]
@@ -75,4 +82,10 @@ struct LexDumpOpts {
     #[structopt(name = "file")]
     file: PathBuf,
 }
-    
+
+#[derive(Debug, StructOpt)]
+struct JitBaseLangOpts {
+    #[structopt(name = "file")]
+    file: PathBuf,
+}
+
