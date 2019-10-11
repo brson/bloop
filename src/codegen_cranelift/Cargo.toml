@@ -6,3 +6,11 @@ authors = ["Brian Anderson <andersrb@gmail.com>"]
 
 [lib]
 path = "codegen_cranelift.rs"
+
+[dependencies]
+cranelift-codegen = "0.45.0"
+cranelift-entity = "0.45.0"
+cranelift-module = "0.45.0"
+cranelift-frontend = "0.45.0"
+cranelift-simplejit = "0.45.0"
+cranelift-faerie = "0.45.0"
