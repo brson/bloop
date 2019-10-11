@@ -58,7 +58,7 @@ fn run_do_thing(opts: DoThingOpts) -> BResult<()> {
 }
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "bloop")]
+#[structopt(name = "bloop-scratch")]
 struct Opts {
     #[structopt(subcommand)]
     mode: Mode,
