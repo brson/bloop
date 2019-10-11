@@ -9,6 +9,8 @@ path = "codegen_cranelift.rs"
 
 [dependencies]
 b_codegen_traits = { path = "../codegen_traits" }
+b_error = { path = "../error" }
+b_mir = { path = "../mir" }
 
 cranelift-codegen = "0.45.0"
 cranelift-entity = "0.45.0"
