@@ -1,11 +1,13 @@
 [workspace]
 members = [
+    "src/base_ast",
     "src/big_s",
     "src/codegen_cranelift",
     "src/codegen_traits",
     "src/error",
     "src/global_defs",
     "src/lexer",
+    "src/mir",
     "src/scratch-driver",
     "src/token_tree",
     "src/tree_walker",

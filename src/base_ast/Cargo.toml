@@ -1,0 +1,8 @@
+[package]
+name = "b_base_ast"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "base_ast.rs"
