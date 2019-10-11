@@ -8,11 +8,11 @@ members = [
     "src/global_defs",
     "src/lexer",
     "src/mir",
-    "src/scratch-driver",
+    "src/scratch_driver",
     "src/token_tree",
     "src/tree_walker",
 ]
 
 default-members = [
-    "src/scratch-driver"
+    "src/scratch_driver"
 ]
