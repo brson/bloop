@@ -2,3 +2,4 @@
 - Always add context to errors before returning
 - Always import symbols before using them
   - Never use absolute paths
+- Always prefer dynamic dispatch

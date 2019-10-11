@@ -30,6 +30,14 @@ name = "b_big_s"
 version = "0.1.0"
 
 [[package]]
+name = "b_codegen_cranelift"
+version = "0.1.0"
+
+[[package]]
+name = "b_codegen_traits"
+version = "0.1.0"
+
+[[package]]
 name = "b_error"
 version = "0.1.0"
 dependencies = [
