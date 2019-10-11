@@ -68,9 +68,9 @@ fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    let base_parser = Box::new(BaseParser);
-    let base_analyzer = Box::new(BaseAnalyzer);
-    let codegen = Box::new(CraneliftGenerator);
+    let base_parser = Box::new(BaseParser) as Box<dyn BaseParse>;
+    let base_analyzer = Box::new(BaseAnalyzer) as Box<dyn BaseAnalyze>;
+    let codegen = Box::new(CraneliftGenerator) as Box<dyn Codegen>;
     
     let token_tree = b_lexer::lex(&contents)?;
     let ast = base_parser.parse(&token_tree)?;
