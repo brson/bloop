@@ -97,9 +97,6 @@ dependencies = [
 [[package]]
 name = "b_error"
 version = "0.1.0"
-dependencies = [
- "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
-]
 
 [[package]]
 name = "b_global_defs"

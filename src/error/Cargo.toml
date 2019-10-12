@@ -6,6 +6,3 @@ authors = ["Brian Anderson <andersrb@gmail.com>"]
 
 [lib]
 path = "error.rs"
-
-[dependencies]
-failure = "0.1.5"

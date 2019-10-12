@@ -18,7 +18,7 @@ pub struct Lexer;
 impl Lex for Lexer {
     fn lex(&self, src: &str) -> BResult<TokenTree> {
         let pairs = PestLexer::parse(Rule::buffer, src)
-            .context(format!("parsing source"))?;
+            .ec(format!("parsing source"))?;
 
         Ok(TokenTree(LocalLexer::walk(pairs)?))
     }

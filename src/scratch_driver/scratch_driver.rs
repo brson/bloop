@@ -10,25 +10,24 @@ use b_codegen_cranelift::CraneliftGenerator;
 use b_codegen_traits::Codegen;
 use b_lexer::Lexer;
 use b_lexer_traits::Lex;
-use b_error::BResult;
+use b_error::{BResult, ResultExt};
 
+use std::error::Error;
 use std::fs::File;
 use std::io::Read;
-use std::path::PathBuf;
-use std::result::Result as StdResult;
+use std::path::{PathBuf, Path};
+use std::process;
 use structopt::StructOpt;
 
-fn main() -> StdResult<(), i32> {
+fn main() {
     if let Err(e) = run() {
         println!("error: {}", e);
-        println!("# {}", e);
-        for cause in e.iter_chain() {
-            println!("  caused by: {}. i.e. \n", cause);
-            println!("# {}", cause);
+        let mut e = e.source();
+        while let Some(cause) = e {
+            println!("  caused by: {}", cause);
+            e = cause.source();
         }
-        Err(1)
-    } else {
-        Ok(())
+        process::exit(1);
     }
 }
 
@@ -53,13 +52,21 @@ fn dispatch_command(opts: Opts) -> BResult<()> {
     }
 }
 
-fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
-    let mut file = File::open(&opts.file)?;
+fn read_source(file: &Path) -> BResult<String> {
     let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
+    let mut file = File::open(file)
+        .ec("opening source file")?;
+    file.read_to_string(&mut contents)
+        .ec("reading source as string")?;
 
+    Ok(contents)
+}
+
+fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
     let lexer = Box::new(Lexer) as Box<dyn Lex>;
-    let token_tree = lexer.lex(&contents)?;
+
+    let source = read_source(&opts.file)?;
+    let token_tree = lexer.lex(&source)?;
 
     print!("tt: {:#?}", token_tree);
     
@@ -67,16 +74,13 @@ fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
 }
 
 fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
-    let mut file = File::open(&opts.file)?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-
     let lexer = Box::new(Lexer) as Box<dyn Lex>;
     let base_parser = Box::new(BaseParser) as Box<dyn BaseParse>;
     let base_analyzer = Box::new(BaseAnalyzer) as Box<dyn BaseAnalyze>;
     let codegen = Box::new(CraneliftGenerator) as Box<dyn Codegen>;
     
-    let token_tree = lexer.lex(&contents)?;
+    let source = read_source(&opts.file)?;
+    let token_tree = lexer.lex(&source)?;
     let ast = base_parser.parse(&token_tree)?;
     let mir = base_analyzer.lower(&ast)?;
 
