@@ -1,6 +1,7 @@
 use std::error::Error as StdError;
 use std::result::Result as StdResult;
 use std::fmt::{self, Display, Debug, Formatter};
+use std::process;
 
 pub type BResult<T> = StdResult<T, BError>;
 
@@ -76,6 +77,18 @@ where E: StdError + Send + Sync + 'static
             Ok(v) => Ok(v),
             Err(e) => Err(BError::from_source(e, kind))
         }
+    }
+}
+
+pub fn main(run: impl FnOnce() -> BResult<()>) {
+    if let Err(e) = run() {
+        println!("error: {}", e);
+        let mut e = e.source();
+        while let Some(cause) = e {
+            println!("  caused by: {}", cause);
+            e = cause.source();
+        }
+        process::exit(1);
     }
 }
 

@@ -12,23 +12,13 @@ use b_lexer::Lexer;
 use b_lexer_traits::Lex;
 use b_error::{BResult, ResultExt};
 
-use std::error::Error;
 use std::fs::File;
 use std::io::Read;
 use std::path::{PathBuf, Path};
-use std::process;
 use structopt::StructOpt;
 
 fn main() {
-    if let Err(e) = run() {
-        println!("error: {}", e);
-        let mut e = e.source();
-        while let Some(cause) = e {
-            println!("  caused by: {}", cause);
-            e = cause.source();
-        }
-        process::exit(1);
-    }
+    b_error::main(run)
 }
 
 fn run() -> BResult<()> {
