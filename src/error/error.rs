@@ -1,3 +1,10 @@
+// FIXME: Make it possible to convert to BError from
+// any other StdError type, instead of using the e()
+// extension method.
+//
+// This can only be done by _not_ implementing StdError,
+// but using a new trait like Fail.
+
 use std::error::Error as StdError;
 use std::result::Result as StdResult;
 use std::fmt::{self, Display, Debug, Formatter};
@@ -62,9 +69,13 @@ impl Debug for BError {
     }
 }
 
-pub trait ResultExt<T> {
+pub trait ResultExt<T>: Sized {
     fn ec<K>(self, kind: K) -> StdResult<T, BError>
     where K: Display + Send + Sync + 'static;
+
+    fn e(self) -> StdResult<T, BError> {
+        self.ec("error")
+    }
 }
 
 impl<T, E> ResultExt<T> for StdResult<T, E>
