@@ -44,6 +44,8 @@ There is no GC, local heaps for non-Send kinds. Local ECS registries maybe.
 - Distributed by default
 - Built-in package management
 - Frictionless package creation
+- Integrated package management
+- Deterministic build-plans (Bazel-compatible)
 
 ### Runtime interface
 
