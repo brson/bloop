@@ -56,6 +56,7 @@ dependencies = [
  "b_base_parser_traits 0.1.0",
  "b_error 0.1.0",
  "b_token_tree 0.1.0",
+ "b_tree_walker 0.1.0",
 ]
 
 [[package]]
@@ -84,6 +85,7 @@ dependencies = [
  "cranelift-frontend 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cranelift-module 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cranelift-simplejit 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

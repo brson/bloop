@@ -69,7 +69,7 @@ impl Debug for BError {
     }
 }
 
-pub trait ResultExt<T>: Sized {
+pub trait StdResultExt<T>: Sized {
     fn ec<K>(self, kind: K) -> StdResult<T, BError>
     where K: Display + Send + Sync + 'static;
 
@@ -78,7 +78,7 @@ pub trait ResultExt<T>: Sized {
     }
 }
 
-impl<T, E> ResultExt<T> for StdResult<T, E>
+impl<T, E> StdResultExt<T> for StdResult<T, E>
 where E: StdError + Send + Sync + 'static
 {
     fn ec<K>(self, kind: K) -> StdResult<T, BError>

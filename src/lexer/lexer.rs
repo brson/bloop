@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate pest_derive;
 
-use b_error::{BResult, ResultExt};
+use b_error::{BResult, StdResultExt};
 use b_big_s::S;
 use b_lexer_traits::Lex;
 use b_token_tree::{
@@ -85,6 +85,12 @@ fn pair_to_tree_or_thing(p: &Pair<Rule>) -> Option<ThingOrTree> {
         }
         Rule::uint => {
             Some(ThingOrTree::Thing(Thing::Number(Number::Uint(Uint(S(s))))))
+        }
+        Rule::punct_right_arrow => {
+            Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::RightArrow)))
+        }
+        Rule::punct_semicolon => {
+            Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::Semicolon)))
         }
         Rule::punct_comma => {
             Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::Comma)))

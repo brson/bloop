@@ -10,12 +10,13 @@ use b_codegen_cranelift::CraneliftGenerator;
 use b_codegen_traits::Codegen;
 use b_lexer::Lexer;
 use b_lexer_traits::Lex;
-use b_error::{BResult, ResultExt};
+use b_error::{BResult, StdResultExt};
 
 use std::fs::File;
 use std::io::Read;
 use std::path::{PathBuf, Path};
 use structopt::StructOpt;
+use std::process;
 
 fn main() {
     b_error::main(run)
@@ -38,7 +39,9 @@ fn dispatch_command(opts: Opts) -> BResult<()> {
 
     match opts.mode {
         Mode::LexDump(m) => run_lex_dump(m),
+        Mode::ParseBaseLang(m) => run_parse_baselang(m),
         Mode::JitBaseLang(m) => run_jit_baselang(m),
+        Mode::JitCranelift(m) => run_jit_cranelift(m),
     }
 }
 
@@ -63,6 +66,20 @@ fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
     Ok(())
 }
 
+fn run_parse_baselang(opts: ParseBaseLangOpts) -> BResult<()> {
+    let lexer = Box::new(Lexer) as Box<dyn Lex>;
+    let base_parser = Box::new(BaseParser) as Box<dyn BaseParse>;
+    
+    let source = read_source(&opts.file)?;
+    debug!("src: {:?}", source);
+    let token_tree = lexer.lex(&source)?;
+    debug!("tt: {:#?}", token_tree);
+    let ast = base_parser.parse(&token_tree)?;
+    debug!("ast: {:#?}", ast);
+
+    Ok(())
+}
+
 fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
     let lexer = Box::new(Lexer) as Box<dyn Lex>;
     let base_parser = Box::new(BaseParser) as Box<dyn BaseParse>;
@@ -78,7 +95,18 @@ fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
     let mir = base_analyzer.lower(&ast)?;
     debug!("mir: {:#?}", mir);
 
-    codegen.jit(&mir)?;
+    let retcode = codegen.jit(&mir)?;
+
+    debug!("retcode: {}", retcode);
+
+    process::exit(retcode);
+}
+
+fn run_jit_cranelift(opts: JitCraneliftOpts) -> BResult<()> {
+    use b_codegen_cranelift as cl;
+
+    let ir = cl::load_ir(&opts.file)?;
+    cl::jit_ir(&ir)?;
 
     Ok(())
 }
@@ -94,12 +122,22 @@ struct Opts {
 enum Mode {
     #[structopt(name = "lex-dump")]
     LexDump(LexDumpOpts),
+    #[structopt(name = "parse-baselang")]
+    ParseBaseLang(ParseBaseLangOpts),
     #[structopt(name = "jit-baselang")]
     JitBaseLang(JitBaseLangOpts),
+    #[structopt(name = "jit-cranelift")]
+    JitCranelift(JitCraneliftOpts),
 }
 
 #[derive(Debug, StructOpt)]
 struct LexDumpOpts {
+    #[structopt(name = "file")]
+    file: PathBuf,
+}
+
+#[derive(Debug, StructOpt)]
+struct ParseBaseLangOpts {
     #[structopt(name = "file")]
     file: PathBuf,
 }
@@ -110,3 +148,8 @@ struct JitBaseLangOpts {
     file: PathBuf,
 }
 
+#[derive(Debug, StructOpt)]
+struct JitCraneliftOpts {
+    #[structopt(name = "file")]
+    file: PathBuf,
+}
