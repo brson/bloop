@@ -70,9 +70,13 @@ fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
     let codegen = Box::new(CraneliftGenerator) as Box<dyn Codegen>;
     
     let source = read_source(&opts.file)?;
+    debug!("src: {:?}", source);
     let token_tree = lexer.lex(&source)?;
+    debug!("tt: {:#?}", token_tree);
     let ast = base_parser.parse(&token_tree)?;
+    debug!("ast: {:#?}", ast);
     let mir = base_analyzer.lower(&ast)?;
+    debug!("mir: {:#?}", mir);
 
     codegen.jit(&mir)?;
 

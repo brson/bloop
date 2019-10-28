@@ -7,6 +7,6 @@ pub struct BaseAnalyzer;
 
 impl BaseAnalyze for BaseAnalyzer {
     fn lower(&self, _base_ast: &BaseAst) -> BResult<Mir> {
-        panic!()
+        Ok(Mir)
     }
 }

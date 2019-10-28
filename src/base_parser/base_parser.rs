@@ -7,6 +7,6 @@ pub struct BaseParser;
 
 impl BaseParse for BaseParser {
     fn parse(&self, _tt: &TokenTree) -> BResult<BaseAst> {
-        panic!()
+        Ok(BaseAst)
     }
 }
