@@ -43,12 +43,28 @@ struct FrameState;
 
 struct FrameResult(AstNode);
 
+
+// This is going to traverse the token tree, parsing each flat vector of
+// ThingOrTree's into a vector of AST items. It decends in parallel into
+// sub-trees.
+
 impl<'a> Walk for Node<'a> {
     type Node = Node<'a>;
     type FrameState = FrameState;
     type FrameResult = FrameResult;
 
-    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>> {
+    fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>> {
+        use b_token_tree::{ThingOrTree, Tree};
+
+        for n in &(node.0).0 {
+            match n {
+                ThingOrTree::Thing(_) => { },
+                ThingOrTree::Tree(Tree(_, ref t)) => {
+                    push_child(Node(t));
+                },
+            }
+        }
+
         panic!()
     }
 

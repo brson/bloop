@@ -5,12 +5,15 @@ pub struct TokenTree(pub Vec<ThingOrTree>);
 
 #[derive(Debug)]
 pub enum ThingOrTree {
-    Tree(Tree, TokenTree),
     Thing(Thing),
+    Tree(Tree),
 }
 
 #[derive(Debug)]
-pub enum Tree {
+pub struct Tree(pub TreeType, pub TokenTree);
+
+#[derive(Debug)]
+pub enum TreeType {
     Paren,
     Brace,
     Square,

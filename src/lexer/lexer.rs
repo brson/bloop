@@ -5,7 +5,7 @@ use b_error::{BResult, StdResultExt};
 use b_big_s::S;
 use b_lexer_traits::Lex;
 use b_token_tree::{
-    TokenTree, ThingOrTree, Tree, Thing, Ident, Number, Uint, Punctuation,
+    TokenTree, ThingOrTree, Tree, TreeType, Thing, Ident, Number, Uint, Punctuation,
 };
 use b_tree_walker::Walk;
 use pest::Parser;
@@ -51,7 +51,7 @@ impl<'a> Walk for LocalLexer<'a> {
     }
 
     fn handle_child_result(mut frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState> {
-        if let ThingOrTree::Tree(_, ref mut tt) = frm {
+        if let ThingOrTree::Tree(Tree(_, ref mut tt)) = frm {
             tt.0.push(ch);
         } else {
             panic!("non-tree has children");
@@ -69,16 +69,16 @@ fn pair_to_tree_or_thing(p: &Pair<Rule>) -> Option<ThingOrTree> {
     let s = p.as_str();
     let tot = match p.as_rule() {
         Rule::paren_tree => {
-            Some(ThingOrTree::Tree(Tree::Paren, TokenTree(vec![])))
+            Some(ThingOrTree::Tree(Tree(TreeType::Paren, TokenTree(vec![]))))
         }
         Rule::brace_tree => {
-            Some(ThingOrTree::Tree(Tree::Brace, TokenTree(vec![])))
+            Some(ThingOrTree::Tree(Tree(TreeType::Brace, TokenTree(vec![]))))
         }
         Rule::square_tree => {
-            Some(ThingOrTree::Tree(Tree::Square, TokenTree(vec![])))
+            Some(ThingOrTree::Tree(Tree(TreeType::Square, TokenTree(vec![]))))
         }
         Rule::angle_tree => {
-            Some(ThingOrTree::Tree(Tree::Angle, TokenTree(vec![])))
+            Some(ThingOrTree::Tree(Tree(TreeType::Angle, TokenTree(vec![]))))
         }
         Rule::ident => {
             Some(ThingOrTree::Thing(Thing::Ident(Ident(S(s)))))
