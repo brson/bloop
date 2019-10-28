@@ -13,10 +13,11 @@ b_error = { path = "../error" }
 b_mir = { path = "../mir" }
 
 failure = "0.1.5"
+cranelift = "0.45.0"
 cranelift-codegen = { version = "0.45.0", features = ["all-arch"] }
 cranelift-entity = "0.45.0"
 cranelift-module = "0.45.0"
 cranelift-frontend = "0.45.0"
 cranelift-simplejit = "0.45.0"
 cranelift-faerie = "0.45.0"
-#cranelift-reader = "0.45.0"
+cranelift-reader = "0.45.0"
