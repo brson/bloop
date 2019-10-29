@@ -1,16 +1,19 @@
 [package]
-name = "b_base_parser"
+name = "b_base_parser_lalrpop"
 version = "0.1.0"
 edition = "2018"
 authors = ["Brian Anderson <andersrb@gmail.com>"]
 
+build = "build.rs"
+
 [lib]
-path = "base_parser.rs"
+path = "base_parser_lalrpop.rs"
 
 [dependencies]
 b_base_ast = { path = "../base_ast" }
-b_base_parser_lalrpop = { path = "../base_parser_lalrpop" }
-b_base_parser_traits = { path = "../base_parser_traits" }
 b_error = { path = "../error" }
 b_token_tree = { path = "../token_tree" }
-b_tree_walker = { path = "../tree_walker" }
+lalrpop-util = "0.17.2"
+
+[build-dependencies]
+lalrpop = "0.17.2"
