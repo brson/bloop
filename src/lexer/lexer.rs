@@ -89,11 +89,17 @@ fn pair_to_tree_or_thing(p: &Pair<Rule>) -> Option<ThingOrTree> {
         Rule::punct_right_arrow => {
             Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::RightArrow)))
         }
+        Rule::punct_colon => {
+            Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::Colon)))
+        }
         Rule::punct_semicolon => {
             Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::Semicolon)))
         }
         Rule::punct_comma => {
             Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::Comma)))
+        }
+        Rule::punct_equals => {
+            Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::Equals)))
         }
         Rule::EOI => {
             None
