@@ -8,12 +8,13 @@ use b_tree_walker::Walk;
 use b_base_ast::{
     Declaration,
 };
+use b_base_parser_lalrpop::parse_module;
 
 pub struct BaseParser;
 
 impl BaseParse for BaseParser {
     fn parse(&self, tt: &TokenTree) -> BResult<BaseAst> {
-        let node = Node(tt);
+        let node = Node(CurrentTarget::Module, tt);
         let mut parsed = Node::walk(Some(node))?;
 
         let ast = parsed.pop().expect("parse results");
@@ -37,12 +38,15 @@ pub enum AstNode {
     Declaration(Declaration),
 }
 
-struct Node<'a>(&'a TokenTree);
+struct Node<'a>(CurrentTarget, &'a TokenTree);
+
+enum CurrentTarget {
+    Module,
+}
 
 struct FrameState;
 
 struct FrameResult(AstNode);
-
 
 // This is going to traverse the token tree, parsing each flat vector of
 // ThingOrTree's into a vector of AST items. It decends in parallel into
@@ -54,17 +58,11 @@ impl<'a> Walk for Node<'a> {
     type FrameResult = FrameResult;
 
     fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>> {
-        use b_token_tree::{ThingOrTree, Tree};
-
-        for n in &(node.0).0 {
-            match n {
-                ThingOrTree::Thing(_) => { },
-                ThingOrTree::Tree(Tree(_, ref t)) => {
-                    push_child(Node(t));
-                },
-            }
+        match node.0 {
+            CurrentTarget::Module => {
+                let ast = parse_module(&node.1)?;
+            },
         }
-
         panic!()
     }
 

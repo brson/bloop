@@ -123,6 +123,7 @@ dependencies = [
  "b_base_ast 0.1.0",
  "b_base_parser_lalrpop 0.1.0",
  "b_base_parser_traits 0.1.0",
+ "b_base_partial_ast 0.1.0",
  "b_error 0.1.0",
  "b_token_tree 0.1.0",
  "b_tree_walker 0.1.0",
