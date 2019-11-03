@@ -1,0 +1,14 @@
+[package]
+name = "b_solve"
+description = "Constraint solving"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "solve.rs"
+
+[dependencies]
+b_error = { path = "../error" }
+
+chalk = { git = "https://github.com/rust-lang/chalk", rev = "50f9f636123bd88d0cc1b958749981d6702e4d05" }

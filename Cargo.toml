@@ -17,6 +17,7 @@ members = [
     "src/ecs_traits",
     "src/error",
     "src/global_defs",
+    "src/demand",
     "src/lang_server",
     "src/lang_server_client",
     "src/lexer",
@@ -25,6 +26,7 @@ members = [
     "src/plugin_host",
     "src/plugin_server",
     "src/scratch_driver",
+    "src/solve",
     "src/token_tree",
     "src/tree_walker",
 ]
