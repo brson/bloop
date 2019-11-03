@@ -12,9 +12,6 @@ pub enum Declaration {
 }
 
 #[derive(Debug)]
-pub struct Ident(String);
-
-#[derive(Debug)]
 pub struct Function {
     pub name: Ident,
     pub args: ArgList,
@@ -23,10 +20,13 @@ pub struct Function {
 }
 
 #[derive(Debug)]
-pub struct ArgList(Vec<Argument>);
+pub struct Ident(pub String);
 
 #[derive(Debug)]
-pub struct RetDecl(Type);
+pub struct ArgList(pub Vec<Argument>);
+
+#[derive(Debug)]
+pub struct RetDecl(pub Type);
 
 #[derive(Debug)]
 pub struct Argument {

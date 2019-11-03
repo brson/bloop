@@ -11,7 +11,7 @@ build = "build.rs"
 path = "base_parser_lalrpop.rs"
 
 [dependencies]
-b_base_ast = { path = "../base_ast" }
+b_base_partial_ast = { path = "../base_partial_ast" }
 b_error = { path = "../error" }
 b_token_tree = { path = "../token_tree" }
 

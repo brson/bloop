@@ -2,7 +2,7 @@
 
 use b_token_tree::TokenTree;
 use b_error::{BError, BResult, StdResultExt};
-use b_base_ast::Module;
+use b_base_partial_ast::Module;
 use crate::lexer::{Lexer, Spanned};
 use crate::parsers::module::ModuleParser;
 
@@ -27,7 +27,7 @@ mod parsers {
 }
 
 mod ast {
-    pub use b_base_ast::*;
+    pub use b_base_partial_ast::*;
 }
 
 mod lexer {
@@ -83,7 +83,7 @@ mod lexer {
     fn thing_or_tree_to_token(tot: &ThingOrTree) -> Token {
         use b_token_tree::ThingOrTree as ToT;
         use b_token_tree::{
-            Tree, Thing, Ident, TreeType
+            Tree, Thing, TreeType
         };
 
         match tot {
@@ -100,6 +100,15 @@ mod lexer {
             ToT::Tree(Tree(TreeType::Brace, _))
                 => Token::BraceTree,
             _ => panic!("unimplemented tt conversion: {:?}", tot)
+        }
+    }
+
+    impl Token {
+        pub fn ident_string(self) -> String {
+            match self {
+                Token::Ident(Ident(s)) => s,
+                _ => panic!("not an ident"),
+            }
         }
     }
 }

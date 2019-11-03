@@ -1,0 +1,13 @@
+[package]
+name = "b_base_partial_ast"
+description = "The bloop base language AST without subtrees"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "base_partial_ast.rs"
+
+[dependencies]
+b_base_ast = { path = "../base_ast" }
+b_token_tree = { path = "../token_tree" }

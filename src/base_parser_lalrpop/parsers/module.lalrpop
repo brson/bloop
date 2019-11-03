@@ -24,7 +24,7 @@ Function: ast::Declaration = {
 };
 
 Ident: ast::Ident = {
-    "<ident>" => panic!(),
+    <s:"<ident>"> => ast::Ident(s.ident_string()),
 };
 
 ArgList: ast::ArgList = {
@@ -50,14 +50,14 @@ extern {
     enum lexer::Token {
         "fn" => lexer::Token::IdentFn,
         "I32" => lexer::Token::IdentI32,
+        "<ident>" => (
+            lexer::Token::Ident(_)
+        ),
         "->" => (
             lexer::Token::Punctuation(
                 lexer::Punctuation::RightArrow
             )
         ),       
-        "<ident>" => (
-            lexer::Token::Ident(_)
-        ),
         "<arg-list>" => (
             lexer::Token::Unimplemented
         ),

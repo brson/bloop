@@ -133,7 +133,7 @@ dependencies = [
 name = "b_base_parser_lalrpop"
 version = "0.1.0"
 dependencies = [
- "b_base_ast 0.1.0",
+ "b_base_partial_ast 0.1.0",
  "b_error 0.1.0",
  "b_lexer 0.1.0",
  "b_lexer_traits 0.1.0",
@@ -149,6 +149,14 @@ version = "0.1.0"
 dependencies = [
  "b_base_ast 0.1.0",
  "b_error 0.1.0",
+ "b_token_tree 0.1.0",
+]
+
+[[package]]
+name = "b_base_partial_ast"
+version = "0.1.0"
+dependencies = [
+ "b_base_ast 0.1.0",
  "b_token_tree 0.1.0",
 ]
 
