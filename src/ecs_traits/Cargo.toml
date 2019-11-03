@@ -1,0 +1,12 @@
+[package]
+name = "b_ecs_traits"
+description = "Traits for the bloop entity component system"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "ecs_traits.rs"
+
+[dependencies]
+b_error = { path = "../error" }

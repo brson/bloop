@@ -211,6 +211,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "b_ecs"
+version = "0.1.0"
+dependencies = [
+ "b_error 0.1.0",
+]
+
+[[package]]
+name = "b_ecs_traits"
+version = "0.1.0"
+dependencies = [
+ "b_error 0.1.0",
+]
+
+[[package]]
 name = "b_error"
 version = "0.1.0"
 
