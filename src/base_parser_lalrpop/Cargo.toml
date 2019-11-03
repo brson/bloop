@@ -23,4 +23,4 @@ lalrpop = "0.17.2"
 
 [dev-dependencies]
 b_lexer = { path = "../lexer" }
-
+b_lexer_traits = { path = "../lexer_traits" }

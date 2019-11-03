@@ -35,8 +35,7 @@ mod lexer {
     use std::result::Result;
     use b_error::{BError, BResult};
     use std::slice::Iter;
-
-    pub use b_token_tree::*;
+    use b_token_tree::ThingOrTree;
 
     pub type Spanned<Tok, Loc, Error> = Result<(Loc, Tok, Loc), Error>;
 
@@ -53,24 +52,69 @@ mod lexer {
     }
 
     impl<'a> Iterator for Lexer<'a> {
-        type Item = Spanned<ThingOrTree, usize, BError>;
+        type Item = Spanned<Token, usize, BError>;
 
         fn next(&mut self) -> Option<Self::Item> {
             if let Some(next) = self.tokens.next() {
-                // FIXME clone
-                let next = (0, next.clone(), 0);
+                let token = thing_or_tree_to_token(&next);
+                let next = (0, token, 0);
                 Some(Ok(next))
             } else {
                 None
             }
         }
     }
+
+    pub use b_token_tree::{
+        Punctuation, Ident,
+    };
+
+    #[derive(Debug, Clone)]
+    pub enum Token {
+        IdentFn,
+        IdentI32,
+        Punctuation(Punctuation),
+        Ident(Ident),
+        ParenTree,
+        BraceTree,
+        Unimplemented,
+    }
+
+    fn thing_or_tree_to_token(tot: &ThingOrTree) -> Token {
+        use b_token_tree::ThingOrTree as ToT;
+        use b_token_tree::{
+            Tree, Thing, Ident, TreeType
+        };
+
+        match tot {
+            ToT::Thing(Thing::Ident(Ident(s)))
+                if s == "fn" => Token::IdentFn,
+            ToT::Thing(Thing::Ident(Ident(s)))
+                if s == "I32" => Token::IdentI32,
+            ToT::Thing(Thing::Ident(i))
+                => Token::Ident(i.clone()), // FIXME clone
+            ToT::Thing(Thing::Punctuation(p))
+                => Token::Punctuation(*p),
+            ToT::Tree(Tree(TreeType::Paren, _))
+                => Token::ParenTree,
+            ToT::Tree(Tree(TreeType::Brace, _))
+                => Token::BraceTree,
+            _ => panic!("unimplemented tt conversion: {:?}", tot)
+        }
+    }
 }
 
-#[cfg(tests)]
+#[cfg(test)]
 mod tests {
+    use b_lexer::Lexer;
+    use b_lexer_traits::Lex;
+    use crate::parse_module;
+
     #[test]
     fn test() {
         let src = include_str!("../../examples/main.bloop-bl");
+        let lexer = Lexer;
+        let tt = lexer.lex(src).unwrap();
+        let _ast = parse_module(&tt).unwrap();
     }
 }

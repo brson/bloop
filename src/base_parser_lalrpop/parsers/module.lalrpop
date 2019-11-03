@@ -47,44 +47,22 @@ extern {
     type Location = usize;
     type Error = BError;
 
-    enum lexer::ThingOrTree {
-        "fn" => (
-            lexer::ThingOrTree::Thing(
-                lexer::Thing::Ident(_)
-            )
-        ),
-        "I32" => (
-            lexer::ThingOrTree::Thing(
-                lexer::Thing::Ident(_)
-            )
-        ),
+    enum lexer::Token {
+        "fn" => lexer::Token::IdentFn,
+        "I32" => lexer::Token::IdentI32,
         "->" => (
-            lexer::ThingOrTree::Thing(
-                lexer::Thing::Punctuation(
-                    lexer::Punctuation::RightArrow
-                )
+            lexer::Token::Punctuation(
+                lexer::Punctuation::RightArrow
             )
         ),       
         "<ident>" => (
-            lexer::ThingOrTree::Thing(
-                lexer::Thing::Ident(_)
-            )
+            lexer::Token::Ident(_)
         ),
         "<arg-list>" => (
-            lexer::ThingOrTree::Tree(
-                lexer::Tree(
-                    lexer::TreeType::Paren,
-                    _
-                )
-            )
+            lexer::Token::Unimplemented
         ),
         "<body>" => (
-            lexer::ThingOrTree::Tree(
-                lexer::Tree(
-                    lexer::TreeType::Brace,
-                    _
-                )
-            )
+            lexer::Token::Unimplemented
         ),
     }
 }
