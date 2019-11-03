@@ -14,3 +14,5 @@ b_base_parser_traits = { path = "../base_parser_traits" }
 b_error = { path = "../error" }
 b_token_tree = { path = "../token_tree" }
 b_tree_walker = { path = "../tree_walker" }
+
+rayon = "1.2.0"
