@@ -117,17 +117,18 @@ dependencies = [
  "b_codegen_traits 0.1.0",
  "b_error 0.1.0",
  "b_mir 0.1.0",
- "cranelift 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-codegen-meta 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-entity 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-faerie 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-frontend 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-module 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-native 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-reader 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-simplejit 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-wasm 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-bforest 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen-meta 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-entity 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-faerie 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-frontend 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-module 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-native 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-reader 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-simplejit 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-wasm 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "faerie 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "goblin 0.0.24 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -329,30 +330,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "cranelift"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-frontend 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-frontend 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "cranelift-bforest"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-entity 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-entity 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "cranelift-codegen"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-bforest 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-codegen-meta 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-codegen-shared 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-entity 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-bforest 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen-meta 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen-shared 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-entity 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure_derive 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -362,30 +363,30 @@ dependencies = [
 
 [[package]]
 name = "cranelift-codegen-meta"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen-shared 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-entity 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen-shared 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-entity 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "cranelift-codegen-shared"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "cranelift-entity"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "cranelift-faerie"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-module 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-module 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "faerie 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "goblin 0.0.24 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -394,10 +395,10 @@ dependencies = [
 
 [[package]]
 name = "cranelift-frontend"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "smallvec 0.6.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "target-lexicon 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -405,42 +406,42 @@ dependencies = [
 
 [[package]]
 name = "cranelift-module"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-entity 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-entity 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "cranelift-native"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "raw-cpuid 6.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "target-lexicon 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "cranelift-reader"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "target-lexicon 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "cranelift-simplejit"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-module 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-native 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-module 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-native 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "errno 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.65 (registry+https://github.com/rust-lang/crates.io-index)",
  "region 2.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -450,12 +451,12 @@ dependencies = [
 
 [[package]]
 name = "cranelift-wasm"
-version = "0.45.0"
+version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-entity 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "cranelift-frontend 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-entity 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cranelift-frontend 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure_derive 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1376,19 +1377,19 @@ dependencies = [
 "checksum clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5067f5bb2d80ef5d68b4c87db81601f0b75bca627bc2ef76b141d7b846a3c6d9"
 "checksum cloudabi 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "ddfc5b9aa5d4507acaf872de71051dfd0e309860e88966e1051e462a077aac4f"
 "checksum constant_time_eq 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)" = "995a44c877f9212528ccc74b21a232f66ad69001e40ede5bcee2ac9ef2657120"
-"checksum cranelift 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "8c6d0fddc96cc2276ac80e74fde306c853658bcf6dcc22ad60a1e18347045292"
-"checksum cranelift-bforest 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "c4d76b82a444a913d1c7b7d936864cc5597c57aab629977520ce87db846e1a99"
-"checksum cranelift-codegen 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "a09bc2a8e42cfb3e4d744a52032c82367a8e39ba1dfb44e6a135f47acca2f6ca"
-"checksum cranelift-codegen-meta 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "1bfd616001a41760850704fd7cacf1520d914445998a35a737a6e9b8cec00367"
-"checksum cranelift-codegen-shared 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f372b021c0f03dba222c10d084c36cc57d11e48a3b28d330cde37e04d67c764a"
-"checksum cranelift-entity 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "cc90f6da23b066a2286f1e0a2d313bc20c0f50228d3d5e63898d0185e462872c"
-"checksum cranelift-faerie 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f5c23dae65fd4f530348ad43381021ff8ff1a4ac1da3c73603d0e85920042ddd"
-"checksum cranelift-frontend 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ee0d565769e307978c4413f1b86f7e7bc6f065040aebbe526466122a39147126"
-"checksum cranelift-module 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7b7f46a35d6b02afe5fa0000d6649619b96077f3dc1e142dc3a3e6c9f2fa2fd1"
-"checksum cranelift-native 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "b11608ab39e08378d0be16c661ed207f7a551009e07ee5584bb789895721b5e4"
-"checksum cranelift-reader 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "015abc77ffc753c58d72e68bb71a77b17b7d4b4cad009b947bdb5b0566418719"
-"checksum cranelift-simplejit 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d1c238228d48ccbd22442eca52d80039429b5342367b8a45b0e5122b31fa674f"
-"checksum cranelift-wasm 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d24a057ba3d999abcb26832fc3f5770c48a8390eb937286beba2e36dd37e5895"
+"checksum cranelift 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "9b464586cd113e72a87b56ccc3be0c088d0ffb413dd6ab7d1e0becad2379899e"
+"checksum cranelift-bforest 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "18c97588946d3e5fe11f8e34ebf8cc65fd3fda50f3ffa2e80c98b2748058f00f"
+"checksum cranelift-codegen 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3255935da50302bcb0f7109f2fef27f44b46f1c797dfa7db971379261023adcd"
+"checksum cranelift-codegen-meta 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "fd57265ef5e6ff253c378b6261ed8c2e6cb1b15e91624540dbd09b1e5a40e9ca"
+"checksum cranelift-codegen-shared 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "c093398d21f9493ab29445191362592ef621f497e56a8efb15bdf80471978b7a"
+"checksum cranelift-entity 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "e915fa58d2a75e3c4b768b7e4760282889915c3fcd9ccb2ad2b3ebec99654a78"
+"checksum cranelift-faerie 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "fa02ccb8e85292c9b41ce763a57c754e23fc09318ba6187f21112b9f7dcc556d"
+"checksum cranelift-frontend 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "46963952cda267bd0177b3f036e50038cd56e7b4c5b09a455b02df727e0f2a16"
+"checksum cranelift-module 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "5780beffc1c5c3b6feede52a47324d5483825bd33fbe3a9ace288725a76a9e42"
+"checksum cranelift-native 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "7ba8a2d69ddd4729199a321bc2f4020e1969a088b468ed6a29dc7a69350be76e"
+"checksum cranelift-reader 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "518823267f97dae53df48a6b299af88230a252ab36fcca1bf08533fedef68304"
+"checksum cranelift-simplejit 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f4e6e1b822479b8595182bc7a52026642bcef6a64eada481018f1618be57be9a"
+"checksum cranelift-wasm 0.46.1 (registry+https://github.com/rust-lang/crates.io-index)" = "5a802357a6a016bf4c1dcdc6d73a650640eb3b613cc098a1a044a6c3731ca264"
 "checksum crossbeam-utils 0.6.6 (registry+https://github.com/rust-lang/crates.io-index)" = "04973fa96e96579258a5091af6003abde64af786b860f18622b82e026cca60e6"
 "checksum diff 0.1.11 (registry+https://github.com/rust-lang/crates.io-index)" = "3c2b69f912779fbb121ceb775d74d51e915af17aaebc38d28a592843a2dd0a3a"
 "checksum digest 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f3d0c8c8752312f9713efd397ff63acb9f85585afbf179282e720e7704954dd5"
