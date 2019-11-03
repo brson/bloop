@@ -135,9 +135,11 @@ version = "0.1.0"
 dependencies = [
  "b_base_ast 0.1.0",
  "b_error 0.1.0",
+ "b_lexer 0.1.0",
  "b_token_tree 0.1.0",
  "lalrpop 0.17.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "lalrpop-util 0.17.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "regex 1.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

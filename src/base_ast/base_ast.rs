@@ -17,10 +17,16 @@ pub struct Ident(String);
 #[derive(Debug)]
 pub struct Function {
     pub name: Ident,
-    pub args: Vec<Argument>,
-    pub ret: Type,
+    pub args: ArgList,
+    pub ret: RetDecl,
     pub body: Body,
 }
+
+#[derive(Debug)]
+pub struct ArgList(Vec<Argument>);
+
+#[derive(Debug)]
+pub struct RetDecl(Type);
 
 #[derive(Debug)]
 pub struct Argument {

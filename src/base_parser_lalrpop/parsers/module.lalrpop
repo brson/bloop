@@ -1,0 +1,39 @@
+use crate::lexer;
+use crate::ast;
+
+grammar;
+
+pub Module = <Declaration*>;
+
+Declaration: ast::Declaration = {
+    "fn" <Function>,
+};
+
+Function: ast::Declaration = {
+    <a:Ident> <b:ArgList> <c:RetDecl> <d:Body> => {
+        ast::Declaration::Function(
+            ast::Function {
+                name: a,
+                args: b,
+                ret: c,
+                body: d,
+            }
+        )
+    },
+};
+
+Ident: ast::Ident = {
+    "<ident>" => panic!(),
+};
+
+ArgList: ast::ArgList = {
+    "<arg-list>" => panic!(),
+};
+
+RetDecl: ast::RetDecl = {
+    "<ret-decl>" => panic!(),
+};
+
+Body: ast::Body = {
+    "<body>" => panic!(),
+}
