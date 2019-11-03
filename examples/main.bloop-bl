@@ -1,4 +1,4 @@
-fn main() -> i32 {
-    const i: i32 = 12;
+fn main() -> I32 {
+    const i: I32 = 12;
     return i;
 }

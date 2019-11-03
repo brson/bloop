@@ -1,3 +1,4 @@
+use b_error::BError;
 use crate::lexer;
 use crate::ast;
 
@@ -31,9 +32,59 @@ ArgList: ast::ArgList = {
 };
 
 RetDecl: ast::RetDecl = {
-    "<ret-decl>" => panic!(),
+    "->" Type => panic!(),
 };
 
 Body: ast::Body = {
     "<body>" => panic!(),
+}
+
+Type: ast::Type = {
+    "I32" => panic!(),
+};
+
+extern {
+    type Location = usize;
+    type Error = BError;
+
+    enum lexer::ThingOrTree {
+        "fn" => (
+            lexer::ThingOrTree::Thing(
+                lexer::Thing::Ident(_)
+            )
+        ),
+        "I32" => (
+            lexer::ThingOrTree::Thing(
+                lexer::Thing::Ident(_)
+            )
+        ),
+        "->" => (
+            lexer::ThingOrTree::Thing(
+                lexer::Thing::Punctuation(
+                    lexer::Punctuation::RightArrow
+                )
+            )
+        ),       
+        "<ident>" => (
+            lexer::ThingOrTree::Thing(
+                lexer::Thing::Ident(_)
+            )
+        ),
+        "<arg-list>" => (
+            lexer::ThingOrTree::Tree(
+                lexer::Tree(
+                    lexer::TreeType::Paren,
+                    _
+                )
+            )
+        ),
+        "<body>" => (
+            lexer::ThingOrTree::Tree(
+                lexer::Tree(
+                    lexer::TreeType::Brace,
+                    _
+                )
+            )
+        ),
+    }
 }
