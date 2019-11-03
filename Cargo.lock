@@ -125,7 +125,10 @@ dependencies = [
  "cranelift-module 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cranelift-reader 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cranelift-simplejit 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "faerie 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "goblin 0.0.24 (registry+https://github.com/rust-lang/crates.io-index)",
+ "target-lexicon 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
