@@ -10,3 +10,5 @@ path = "ecs.rs"
 
 [dependencies]
 b_error = { path = "../error" }
+
+specs = "0.15.1"
