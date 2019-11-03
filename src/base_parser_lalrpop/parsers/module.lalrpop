@@ -24,23 +24,23 @@ Function: ast::Declaration = {
 };
 
 Ident: ast::Ident = {
-    <s:"<ident>"> => ast::Ident(s.ident_string()),
+    "<ident>" => ast::Ident(<>.ident_string()),
 };
 
 ArgList: ast::ArgList = {
-    "<arg-list>" => panic!(),
+    "<paren-tree>" => ast::ArgList(ast::ParenTree(<>.tree())),
 };
 
 RetDecl: ast::RetDecl = {
-    "->" Type => panic!(),
+    "->" <Type> => ast::RetDecl(<>),
 };
 
 Body: ast::Body = {
-    "<body>" => panic!(),
+    "<brace-tree>" => ast::Body(ast::BraceTree(<>.tree())),
 }
 
 Type: ast::Type = {
-    "I32" => panic!(),
+    "I32" => ast::Type::I32,
 };
 
 extern {
@@ -58,11 +58,7 @@ extern {
                 lexer::Punctuation::RightArrow
             )
         ),       
-        "<arg-list>" => (
-            lexer::Token::Unimplemented
-        ),
-        "<body>" => (
-            lexer::Token::Unimplemented
-        ),
+        "<paren-tree>" => lexer::Token::ParenTree(_),
+        "<brace-tree>" => lexer::Token::BraceTree(_),
     }
 }

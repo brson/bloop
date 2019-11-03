@@ -1,18 +1,24 @@
 // NB: Keep the ordering here the same as in lexer.pest
 
+// FIXME expensive clones
+
 #[derive(Debug)]
+#[derive(Clone)]
 pub struct TokenTree(pub Vec<ThingOrTree>);
 
 #[derive(Debug)]
+#[derive(Clone)]
 pub enum ThingOrTree {
     Thing(Thing),
     Tree(Tree),
 }
 
 #[derive(Debug)]
+#[derive(Clone)]
 pub struct Tree(pub TreeType, pub TokenTree);
 
 #[derive(Debug)]
+#[derive(Clone)]
 pub enum TreeType {
     Paren,
     Brace,
@@ -21,6 +27,7 @@ pub enum TreeType {
 }
 
 #[derive(Debug)]
+#[derive(Clone)]
 pub enum Thing {
     Ident(Ident),
     Number(Number),
@@ -28,19 +35,22 @@ pub enum Thing {
 }
 
 #[derive(Debug)]
-#[derive(Clone)] // FIXME expensive clone
+#[derive(Clone)]
 pub struct Ident(pub String);
 
 #[derive(Debug)]
+#[derive(Clone)]
 pub enum Number {
     Float(Float),
     Uint(Uint),
 }
 
 #[derive(Debug)]
+#[derive(Clone)]
 pub struct Float(pub String);
 
 #[derive(Debug)]
+#[derive(Clone)]
 pub struct Uint(pub String);
 
 #[derive(Debug)]

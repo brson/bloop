@@ -341,6 +341,7 @@ dependencies = [
  "b_base_analyzer 0.1.0",
  "b_base_analyzer_traits 0.1.0",
  "b_base_parser 0.1.0",
+ "b_base_parser_lalrpop 0.1.0",
  "b_base_parser_traits 0.1.0",
  "b_codegen_cranelift 0.1.0",
  "b_codegen_traits 0.1.0",

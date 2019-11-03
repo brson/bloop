@@ -40,6 +40,7 @@ fn dispatch_command(opts: Opts) -> BResult<()> {
     match opts.mode {
         Mode::LexDump(m) => run_lex_dump(m),
         Mode::ParseBaseLang(m) => run_parse_baselang(m),
+        Mode::ParseBaseLangPartial(m) => run_parse_baselang_partial(m),
         Mode::JitBaseLang(m) => run_jit_baselang(m),
         Mode::JitCranelift(m) => run_jit_cranelift(m),
     }
@@ -75,6 +76,21 @@ fn run_parse_baselang(opts: ParseBaseLangOpts) -> BResult<()> {
     let token_tree = lexer.lex(&source)?;
     debug!("tt: {:#?}", token_tree);
     let ast = base_parser.parse(&token_tree)?;
+    debug!("ast: {:#?}", ast);
+
+    Ok(())
+}
+
+fn run_parse_baselang_partial(opts: ParseBaseLangPartialOpts) -> BResult<()> {
+    use b_base_parser_lalrpop::parse_module;
+    
+    let lexer = Box::new(Lexer) as Box<dyn Lex>;
+    
+    let source = read_source(&opts.file)?;
+    debug!("src: {:?}", source);
+    let token_tree = lexer.lex(&source)?;
+    debug!("tt: {:#?}", token_tree);
+    let ast = parse_module(&token_tree)?;
     debug!("ast: {:#?}", ast);
 
     Ok(())
@@ -124,6 +140,8 @@ enum Mode {
     LexDump(LexDumpOpts),
     #[structopt(name = "parse-baselang")]
     ParseBaseLang(ParseBaseLangOpts),
+    #[structopt(name = "parse-baselang-partial")]
+    ParseBaseLangPartial(ParseBaseLangPartialOpts),
     #[structopt(name = "jit-baselang")]
     JitBaseLang(JitBaseLangOpts),
     #[structopt(name = "jit-cranelift")]
@@ -138,6 +156,12 @@ struct LexDumpOpts {
 
 #[derive(Debug, StructOpt)]
 struct ParseBaseLangOpts {
+    #[structopt(name = "file")]
+    file: PathBuf,
+}
+
+#[derive(Debug, StructOpt)]
+struct ParseBaseLangPartialOpts {
     #[structopt(name = "file")]
     file: PathBuf,
 }

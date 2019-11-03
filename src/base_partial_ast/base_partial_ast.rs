@@ -6,22 +6,32 @@
 mod trees {
     use b_token_tree::TokenTree;
 
+    #[derive(Debug)]
     pub struct ParenTree(pub TokenTree);
+
+    #[derive(Debug)]
     pub struct BraceTree(pub TokenTree);
+
+    #[derive(Debug)]
     pub struct SquareTree(pub TokenTree);
+
+    #[derive(Debug)]
     pub struct AngleTree(pub TokenTree);
 }
 
-use trees::*;
+pub use trees::*;
 
+#[derive(Debug)]
 pub struct Module {
     pub decls: Vec<Declaration>,
 }
 
+#[derive(Debug)]
 pub enum Declaration {
     Function(Function),
 }
 
+#[derive(Debug)]
 pub struct Function {
     pub name: Ident,
     pub args: ArgList,
@@ -31,13 +41,15 @@ pub struct Function {
 
 pub use b_base_ast::Ident;
 
-pub struct ArgList(ParenTree);
+#[derive(Debug)]
+pub struct ArgList(pub ParenTree);
 
 pub use b_base_ast::RetDecl;
 
 pub use b_base_ast::Argument;
 
-pub struct Body(BraceTree);
+#[derive(Debug)]
+pub struct Body(pub BraceTree);
 
 pub use b_base_ast::Const;
 

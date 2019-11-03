@@ -67,6 +67,7 @@ mod lexer {
 
     pub use b_token_tree::{
         Punctuation, Ident,
+        TokenTree,
     };
 
     #[derive(Debug, Clone)]
@@ -75,8 +76,8 @@ mod lexer {
         IdentI32,
         Punctuation(Punctuation),
         Ident(Ident),
-        ParenTree,
-        BraceTree,
+        ParenTree(TokenTree),
+        BraceTree(TokenTree),
         Unimplemented,
     }
 
@@ -86,19 +87,20 @@ mod lexer {
             Tree, Thing, TreeType
         };
 
+        // FIXME expensive clones
         match tot {
             ToT::Thing(Thing::Ident(Ident(s)))
                 if s == "fn" => Token::IdentFn,
             ToT::Thing(Thing::Ident(Ident(s)))
                 if s == "I32" => Token::IdentI32,
             ToT::Thing(Thing::Ident(i))
-                => Token::Ident(i.clone()), // FIXME clone
+                => Token::Ident(i.clone()),
             ToT::Thing(Thing::Punctuation(p))
                 => Token::Punctuation(*p),
-            ToT::Tree(Tree(TreeType::Paren, _))
-                => Token::ParenTree,
-            ToT::Tree(Tree(TreeType::Brace, _))
-                => Token::BraceTree,
+            ToT::Tree(Tree(TreeType::Paren, t))
+                => Token::ParenTree(t.clone()),
+            ToT::Tree(Tree(TreeType::Brace, t))
+                => Token::BraceTree(t.clone()),
             _ => panic!("unimplemented tt conversion: {:?}", tot)
         }
     }
@@ -108,6 +110,14 @@ mod lexer {
             match self {
                 Token::Ident(Ident(s)) => s,
                 _ => panic!("not an ident"),
+            }
+        }
+
+        pub fn tree(self) -> TokenTree {
+            match self {
+                Token::ParenTree(t) => t,
+                Token::BraceTree(t) => t,
+                _ => panic!("not a tree"),
             }
         }
     }
