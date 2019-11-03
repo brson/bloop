@@ -9,6 +9,7 @@ members = [
     "src/big_s",
     "src/codegen_cranelift",
     "src/codegen_traits",
+    "src/db",
     "src/error",
     "src/global_defs",
     "src/lexer",

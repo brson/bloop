@@ -1,0 +1,13 @@
+[package]
+name = "b_db"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "db.rs"
+
+[dependencies]
+b_error = { path = "../error" }
+
+sled = "0.29.2"
