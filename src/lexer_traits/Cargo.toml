@@ -1,5 +1,6 @@
 [package]
 name = "b_lexer_traits"
+description = "Traits for the bloop lexer"
 version = "0.1.0"
 edition = "2018"
 authors = ["Brian Anderson <andersrb@gmail.com>"]

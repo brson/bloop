@@ -1,13 +1,12 @@
 [package]
-name = "b_tree_walker"
-description = "Tree traversal without recursion"
+name = "b_db_traits"
+description = "Traits for bloop metadata storage"
 version = "0.1.0"
 edition = "2018"
 authors = ["Brian Anderson <andersrb@gmail.com>"]
 
 [lib]
-path = "tree_walker.rs"
+path = "db_traits.rs"
 
 [dependencies]
-b_global_defs = { path = "../global_defs" }
 b_error = { path = "../error" }

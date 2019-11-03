@@ -1,5 +1,6 @@
 [package]
 name = "b_base_parser"
+description = "The bloop base language parser"
 version = "0.1.0"
 edition = "2018"
 authors = ["Brian Anderson <andersrb@gmail.com>"]

@@ -1,12 +1,12 @@
 [package]
-name = "b_lang_server"
-description = "Manages the compilation pipeline of a bloop workspace"
+name = "b_lang_server_client"
+description = "Communicating with the lang server"
 version = "0.1.0"
 edition = "2018"
 authors = ["Brian Anderson <andersrb@gmail.com>"]
 
 [lib]
-path = "lang_server.rs"
+path = "lang_server_client.rs"
 
 [dependencies]
 bytes = "0.4.12"
