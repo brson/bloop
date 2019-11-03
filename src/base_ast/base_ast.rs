@@ -12,8 +12,11 @@ pub enum Declaration {
 }
 
 #[derive(Debug)]
+pub struct Ident(String);
+
+#[derive(Debug)]
 pub struct Function {
-    pub name: String,
+    pub name: Ident,
     pub args: Vec<Argument>,
     pub ret: Type,
     pub body: Body,
@@ -31,11 +34,12 @@ pub struct Body {
 #[derive(Debug)]
 pub enum Statement {
     Const(Const),
+    Return(Ident),
 }
 
 #[derive(Debug)]
 pub struct Const {
-    pub name: String,
+    pub name: Ident,
     pub type_: Type,
     pub lit: Literal,
 }
