@@ -9,6 +9,11 @@ use b_base_ast::{
     Declaration,
 };
 use b_base_parser_lalrpop::parse_module;
+use b_base_partial_ast::{
+    PartialModule,
+    PartialDeclaration,
+    PartialFunction
+};
 
 pub struct BaseParser;
 
@@ -36,7 +41,6 @@ impl BaseParse for BaseParser {
 
 pub enum AstNode {
     Module(Module),
-    Declaration(Declaration),
 }
 
 struct Node(CurrentTarget, TokenTree);
@@ -47,15 +51,16 @@ enum CurrentTarget {
     Body,
 }
 
-struct FrameState;
+enum FrameState {
+    Module(PartialModule),
+    ArgList,
+}
 
 struct FrameResult(AstNode);
 
 // This is going to traverse the token tree, parsing each flat vector of
 // ThingOrTree's into a vector of AST items. It decends in parallel into
 // sub-trees.
-
-use b_base_partial_ast::{PartialDeclaration, PartialFunction};
 
 impl Walk for Node {
     type Node = Node;
@@ -77,20 +82,22 @@ impl Walk for Node {
                                 ..
                             }
                         ) => {
-                            push_child(Node(CurrentTarget::ArgList, (args.0).0.clone()));
+                            let next_tt = (args.0).0.clone();
+                            push_child(Node(CurrentTarget::ArgList, next_tt.clone()));
+                            push_child(Node(CurrentTarget::Body, next_tt));
                         }
                     }
                 }
+
+                Ok(Some(FrameState::Module(ast)))
             },
             CurrentTarget::ArgList => {
-                panic!()
+                Ok(Some(FrameState::ArgList))
             }
             CurrentTarget::Body => {
                 panic!()
             }
         }
-
-        Ok(Some(FrameState))
     }
 
     fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState> {
