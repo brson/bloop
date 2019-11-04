@@ -22,34 +22,34 @@ mod trees {
 pub use trees::*;
 
 #[derive(Debug)]
-pub struct Module {
-    pub decls: Vec<Declaration>,
+pub struct PartialModule {
+    pub decls: Vec<PartialDeclaration>,
 }
 
 #[derive(Debug)]
-pub enum Declaration {
-    Function(Function),
+pub enum PartialDeclaration {
+    Function(PartialFunction),
 }
 
 #[derive(Debug)]
-pub struct Function {
+pub struct PartialFunction {
     pub name: Ident,
-    pub args: ArgList,
+    pub args: PartialArgList,
     pub ret: RetDecl,
-    pub body: Body,
+    pub body: PartialBody,
 }
 
 pub use b_base_ast::Ident;
 
 #[derive(Debug)]
-pub struct ArgList(pub ParenTree);
+pub struct PartialArgList(pub ParenTree);
 
 pub use b_base_ast::RetDecl;
 
 pub use b_base_ast::Argument;
 
 #[derive(Debug)]
-pub struct Body(pub BraceTree);
+pub struct PartialBody(pub BraceTree);
 
 pub use b_base_ast::Const;
 

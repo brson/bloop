@@ -2,11 +2,11 @@
 
 use b_token_tree::TokenTree;
 use b_error::{BError, BResult, StdResultExt};
-use b_base_partial_ast::Module;
+use b_base_partial_ast::PartialModule;
 use crate::lexer::{Lexer, Spanned};
 use crate::parsers::module::ModuleParser;
 
-pub fn parse_module(tt: &TokenTree) -> BResult<Module> {
+pub fn parse_module(tt: &TokenTree) -> BResult<PartialModule> {
     let lexer = Lexer::new(&tt.0);
     let parser = ModuleParser::new();
     let ast = parser.parse(lexer);
@@ -18,7 +18,7 @@ pub fn parse_module(tt: &TokenTree) -> BResult<Module> {
         }
     };
     // FIXME put this in the parser
-    let ast = Module { decls: ast };
+    let ast = PartialModule { decls: ast };
     Ok(ast)
 }
 

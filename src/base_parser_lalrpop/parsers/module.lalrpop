@@ -6,14 +6,14 @@ grammar;
 
 pub Module = <Declaration*>;
 
-Declaration: ast::Declaration = {
+Declaration: ast::PartialDeclaration = {
     "fn" <Function>,
 };
 
-Function: ast::Declaration = {
+Function: ast::PartialDeclaration = {
     <a:Ident> <b:ArgList> <c:RetDecl> <d:Body> => {
-        ast::Declaration::Function(
-            ast::Function {
+        ast::PartialDeclaration::Function(
+            ast::PartialFunction {
                 name: a,
                 args: b,
                 ret: c,
@@ -27,16 +27,16 @@ Ident: ast::Ident = {
     "<ident>" => ast::Ident(<>.ident_string()),
 };
 
-ArgList: ast::ArgList = {
-    "<paren-tree>" => ast::ArgList(ast::ParenTree(<>.tree())),
+ArgList: ast::PartialArgList = {
+    "<paren-tree>" => ast::PartialArgList(ast::ParenTree(<>.tree())),
 };
 
 RetDecl: ast::RetDecl = {
     "->" <Type> => ast::RetDecl(<>),
 };
 
-Body: ast::Body = {
-    "<brace-tree>" => ast::Body(ast::BraceTree(<>.tree())),
+Body: ast::PartialBody = {
+    "<brace-tree>" => ast::PartialBody(ast::BraceTree(<>.tree())),
 }
 
 Type: ast::Type = {
