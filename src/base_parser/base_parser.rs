@@ -14,7 +14,8 @@ pub struct BaseParser;
 
 impl BaseParse for BaseParser {
     fn parse(&self, tt: &TokenTree) -> BResult<BaseAst> {
-        let node = Node(CurrentTarget::Module, tt);
+        // FIXME bad clone
+        let node = Node(CurrentTarget::Module, tt.clone());
         let mut parsed = Node::walk(Some(node))?;
 
         let ast = parsed.pop().expect("parse results");
@@ -38,10 +39,12 @@ pub enum AstNode {
     Declaration(Declaration),
 }
 
-struct Node<'a>(CurrentTarget, &'a TokenTree);
+struct Node(CurrentTarget, TokenTree);
 
 enum CurrentTarget {
     Module,
+    ArgList,
+    Body,
 }
 
 struct FrameState;
@@ -52,18 +55,42 @@ struct FrameResult(AstNode);
 // ThingOrTree's into a vector of AST items. It decends in parallel into
 // sub-trees.
 
-impl<'a> Walk for Node<'a> {
-    type Node = Node<'a>;
+use b_base_partial_ast::{PartialDeclaration, PartialFunction};
+
+impl Walk for Node {
+    type Node = Node;
     type FrameState = FrameState;
     type FrameResult = FrameResult;
 
+    // FIXME bad clones
     fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>> {
         match node.0 {
             CurrentTarget::Module => {
                 let ast = parse_module(&node.1)?;
+
+                for decl in &ast.decls {
+                    match decl {
+                        PartialDeclaration::Function(
+                            PartialFunction {
+                                ref args,
+                                ref body,
+                                ..
+                            }
+                        ) => {
+                            push_child(Node(CurrentTarget::ArgList, (args.0).0.clone()));
+                        }
+                    }
+                }
             },
+            CurrentTarget::ArgList => {
+                panic!()
+            }
+            CurrentTarget::Body => {
+                panic!()
+            }
         }
-        panic!()
+
+        Ok(Some(FrameState))
     }
 
     fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState> {
