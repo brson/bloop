@@ -4,7 +4,11 @@ use crate::ast;
 
 grammar;
 
-pub Module = <Declaration*>;
+pub Module: ast::PartialModule = {
+    <Declaration*> => ast::PartialModule {
+        decls: <>,
+    },
+};
 
 Declaration: ast::PartialDeclaration = {
     "fn" <Function>,

@@ -17,8 +17,6 @@ pub fn parse_module(tt: &TokenTree) -> BResult<PartialModule> {
             return Err(BError::new(format!("parse error: {:?}", e)));
         }
     };
-    // FIXME put this in the parser
-    let ast = PartialModule { decls: ast };
     Ok(ast)
 }
 
