@@ -1,1 +1,8 @@
-Use eBPF as the low-level representation - eBPF as a common minimal VM description
+- Use eBPF as the low-level representation - eBPF as a common minimal VM description
+- parser libraries
+  - nom
+  - pest
+  - lalrpop
+  - pom (peg)
+  - combine (ll(1))
+  - glue
