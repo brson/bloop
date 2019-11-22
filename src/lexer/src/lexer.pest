@@ -13,6 +13,16 @@ brace_tree = { "{" ~ token_tree ~ "}" }
 square_tree = { "[" ~ token_tree ~ "]" }
 angle_tree = { "<" ~ token_tree ~ ">" }
 
+// todo use these, etc?
+paren_star_tree = { "(*" ~ token_tree ~ "*)" }
+paren_slash_tree = { "(/" ~ token_tree ~ "/)" }
+paren_plus_tree = { "(+" ~ token_tree ~ "+)" }
+paren_minus_tree = { "(-" ~ token_tree ~ "-)" }
+brace_star_tree = { "{*" ~ token_tree ~ "*}" }
+brace_slash_tree = { "{/" ~ token_tree ~ "/}" }
+brace_plus_tree = { "{+" ~ token_tree ~ "+}" }
+brace_minus_tree = { "{-" ~ token_tree ~ "-}" }
+
 thing = _{ ident | number | punctuation }
 ident = @{ ident_leader ~ ident_remainder* }
 
