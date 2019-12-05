@@ -66,7 +66,7 @@ enum CurrentTarget {
 
 #[derive(Debug)]
 enum FrameState {
-    Module(PartialModule, Option<ArgList>),
+    Module(PartialModule, Option<ArgList>, Option<Body>),
     ArgList(PartialArgList),
     Body(PartialBody),
 }
@@ -106,7 +106,7 @@ impl Walk for Node {
                     }
                 }
 
-                Ok(Some(FrameState::Module(ast, None)))
+                Ok(Some(FrameState::Module(ast, None, None)))
             },
             CurrentTarget::ArgList => {
                 let ast = parse_arg_list(&node.1)?;
@@ -124,11 +124,15 @@ impl Walk for Node {
         debug!("frm: {:#?}", frm);
         debug!("ch: {:#?}", ch);
         match frm {
-            FrameState::Module(mut m, maybe_arg_list) => {
+            FrameState::Module(m, maybe_arg_list, maybe_body) => {
                 match ch.0 {
                     AstNode::ArgList(arg_list) => {
                         assert!(maybe_arg_list.is_none());
-                        Ok(FrameState::Module(m, Some(arg_list)))
+                        Ok(FrameState::Module(m, Some(arg_list), maybe_body))
+                    }
+                    AstNode::Body(body) => {
+                        assert!(maybe_body.is_none());
+                        Ok(FrameState::Module(m, maybe_arg_list, Some(body)))
                     }
                     _ => panic!()
                 }
