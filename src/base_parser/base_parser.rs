@@ -2,7 +2,7 @@
 
 use std::collections::VecDeque;
 use log::debug;
-use b_base_ast::{BaseAst, Module};
+use b_base_ast::{BaseAst, Module, Function};
 use b_base_parser_traits::BaseParse;
 use b_error::{BResult, BError};
 use b_token_tree::TokenTree;
@@ -150,7 +150,25 @@ impl Walk for Node {
 
     fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult> {
         match frm {
-            FrameState::Module(..) => panic!(),
+            FrameState::Module(partial_module, mut child_parts) => {
+                let mut decls = vec![];
+                for partial_decl in partial_module.decls {
+                    match partial_decl {
+                        PartialDeclaration::Function(f) => {
+                            let f = Function {
+                                name: f.name,
+                                args: child_parts.arg_lists.pop_front().expect(""),
+                                ret: f.ret,
+                                body: child_parts.bodies.pop_front().expect(""),
+                            };
+                            decls.push(Declaration::Function(f));
+                        }
+                    }
+                }
+                Ok(FrameResult(AstNode::Module(Module {
+                    decls: decls,
+                })))
+            }
             FrameState::ArgList(arg_list) => {
                 Ok(FrameResult(AstNode::ArgList(ArgList(arg_list.0))))
             }
