@@ -31,16 +31,16 @@ Ident: ast::Ident = {
     "<ident>" => ast::Ident(<>.ident_string()),
 };
 
-ArgList: ast::PartialArgList = {
-    "<paren-tree>" => ast::PartialArgList(ast::ParenTree(<>.tree())),
+ArgList: ast::ArgListTree = {
+    "<paren-tree>" => ast::ArgListTree(ast::ParenTree(<>.tree())),
 };
 
 RetDecl: ast::RetDecl = {
     "->" <Type> => ast::RetDecl(<>),
 };
 
-Body: ast::PartialBody = {
-    "<brace-tree>" => ast::PartialBody(ast::BraceTree(<>.tree())),
+Body: ast::BodyTree = {
+    "<brace-tree>" => ast::BodyTree(ast::BraceTree(<>.tree())),
 }
 
 Type: ast::Type = {

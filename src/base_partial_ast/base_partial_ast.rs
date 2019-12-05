@@ -34,22 +34,30 @@ pub enum PartialDeclaration {
 #[derive(Debug)]
 pub struct PartialFunction {
     pub name: Ident,
-    pub args: PartialArgList,
+    pub args: ArgListTree,
     pub ret: RetDecl,
-    pub body: PartialBody,
+    pub body: BodyTree,
 }
 
 pub use b_base_ast::Ident;
 
 #[derive(Debug)]
-pub struct PartialArgList(pub ParenTree);
+pub struct ArgListTree(pub ParenTree);
+
+#[derive(Debug)]
+pub struct PartialArgList {
+    args: Vec<Argument>,
+}
 
 pub use b_base_ast::RetDecl;
 
 pub use b_base_ast::Argument;
 
 #[derive(Debug)]
-pub struct PartialBody(pub BraceTree);
+pub struct BodyTree(pub BraceTree);
+
+#[derive(Debug)]
+pub struct PartialBody;
 
 pub use b_base_ast::Const;
 

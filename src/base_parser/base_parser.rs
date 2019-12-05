@@ -14,10 +14,11 @@ use b_base_parser_lalrpop::{
     parse_arg_list,
 };
 use b_base_partial_ast::{
-    PartialArgList,
+    ArgListTree,
     PartialModule,
     PartialDeclaration,
-    PartialFunction
+    PartialFunction,
+    PartialArgList,
 };
 
 pub struct BaseParser;
@@ -89,9 +90,10 @@ impl Walk for Node {
                                 ..
                             }
                         ) => {
-                            let next_tt = (args.0).0.clone();
-                            push_child(Node(CurrentTarget::ArgList, next_tt.clone()));
-                            push_child(Node(CurrentTarget::Body, next_tt));
+                            let args_tt = (args.0).0.clone();
+                            let body_tt = (body.0).0.clone();
+                            push_child(Node(CurrentTarget::ArgList, args_tt));
+                            push_child(Node(CurrentTarget::Body, body_tt));
                         }
                     }
                 }

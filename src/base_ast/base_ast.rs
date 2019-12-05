@@ -30,6 +30,8 @@ pub struct RetDecl(pub Type);
 
 #[derive(Debug)]
 pub struct Argument {
+    pub name: Ident,
+    pub type_: Type,
 }
 
 #[derive(Debug)]
