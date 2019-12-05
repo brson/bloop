@@ -12,6 +12,7 @@ use b_base_ast::{
 use b_base_parser_lalrpop::{
     parse_module,
     parse_arg_list,
+    parse_body,
 };
 use b_base_partial_ast::{
     ArgListTree,
@@ -19,6 +20,7 @@ use b_base_partial_ast::{
     PartialDeclaration,
     PartialFunction,
     PartialArgList,
+    PartialBody,
 };
 
 pub struct BaseParser;
@@ -62,6 +64,7 @@ enum CurrentTarget {
 enum FrameState {
     Module(PartialModule),
     ArgList(PartialArgList),
+    Body(PartialBody),
 }
 
 struct FrameResult(AstNode);
@@ -105,7 +108,8 @@ impl Walk for Node {
                 Ok(Some(FrameState::ArgList(ast)))
             }
             CurrentTarget::Body => {
-                panic!()
+                let ast = parse_body(&node.1)?;
+                Ok(Some(FrameState::Body(ast)))
             }
         }
     }
@@ -120,6 +124,7 @@ impl Walk for Node {
             FrameState::ArgList(arg_list) => {
                 Ok(FrameResult(AstNode::ArgList(ArgList(arg_list.0))))
             }
+            FrameState::Body(..) => panic!(),
         }
     }
 

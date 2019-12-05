@@ -2,7 +2,7 @@
 
 use b_token_tree::TokenTree;
 use b_error::{BError, BResult, StdResultExt};
-use b_base_partial_ast::{PartialModule, PartialArgList};
+use b_base_partial_ast::{PartialModule, PartialArgList, PartialBody};
 use crate::lexer::{Lexer, Spanned};
 use crate::parsers::module::ModuleParser;
 use crate::parsers::arg_list::ArgListParser;
@@ -33,6 +33,10 @@ pub fn parse_arg_list(tt: &TokenTree) -> BResult<PartialArgList> {
         }
     };
     Ok(ast)
+}
+
+pub fn parse_body(tt: &TokenTree) -> BResult<PartialBody> {
+    panic!()
 }
 
 mod parsers {
