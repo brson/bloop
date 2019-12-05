@@ -3,21 +3,23 @@
 use b_token_tree::TokenTree;
 use b_error::{BError, BResult, StdResultExt};
 use b_base_partial_ast::{PartialModule, PartialArgList, PartialBody};
-use crate::lexer::{Lexer, Spanned};
+use crate::lexer::{Lexer, Spanned, Token};
 use crate::parsers::module::ModuleParser;
 use crate::parsers::arg_list::ArgListParser;
+use lalrpop_util::ParseError;
+
+type BParseError = ParseError<usize, Token, BError>;
+
+fn lalrpop_err(e: BParseError) -> BError {
+    // FIXME encapsulate error better
+    BError::new(format!("parse error: {:?}", e))
+}
 
 pub fn parse_module(tt: &TokenTree) -> BResult<PartialModule> {
     let lexer = Lexer::new(&tt.0);
     let parser = ModuleParser::new();
     let ast = parser.parse(lexer);
-    let ast = match ast {
-        Ok(ast) => ast,
-        Err(e) => {
-            // FIXME encapsulate error better
-            return Err(BError::new(format!("parse error: {:?}", e)));
-        }
-    };
+    let ast = ast.map_err(lalrpop_err)?;
     Ok(ast)
 }
 
@@ -25,13 +27,7 @@ pub fn parse_arg_list(tt: &TokenTree) -> BResult<PartialArgList> {
     let lexer = Lexer::new(&tt.0);
     let parser = ArgListParser::new();
     let ast = parser.parse(lexer);
-    let ast = match ast {
-        Ok(ast) => ast,
-        Err(e) => {
-            // FIXME encapsulate error better
-            return Err(BError::new(format!("parse error: {:?}", e)));
-        }
-    };
+    let ast = ast.map_err(lalrpop_err)?;
     Ok(ast)
 }
 
