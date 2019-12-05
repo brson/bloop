@@ -1,5 +1,6 @@
 #![allow(unused)]
 
+use std::collections::VecDeque;
 use log::debug;
 use b_base_ast::{BaseAst, Module};
 use b_base_parser_traits::BaseParse;
@@ -66,13 +67,19 @@ enum CurrentTarget {
 
 #[derive(Debug)]
 enum FrameState {
-    Module(PartialModule, Option<ArgList>, Option<Body>),
+    Module(PartialModule, ChildParts),
     ArgList(PartialArgList),
     Body(PartialBody),
 }
 
 #[derive(Debug)]
 struct FrameResult(AstNode);
+
+#[derive(Debug, Default)]
+struct ChildParts {
+    arg_lists: VecDeque<ArgList>,
+    bodies: VecDeque<Body>,
+}
 
 // This is going to traverse the token tree, parsing each flat vector of
 // ThingOrTree's into a vector of AST items. It decends in parallel into
@@ -106,7 +113,7 @@ impl Walk for Node {
                     }
                 }
 
-                Ok(Some(FrameState::Module(ast, None, None)))
+                Ok(Some(FrameState::Module(ast, ChildParts::default())))
             },
             CurrentTarget::ArgList => {
                 let ast = parse_arg_list(&node.1)?;
@@ -124,15 +131,15 @@ impl Walk for Node {
         debug!("frm: {:#?}", frm);
         debug!("ch: {:#?}", ch);
         match frm {
-            FrameState::Module(m, maybe_arg_list, maybe_body) => {
+            FrameState::Module(m, mut child_parts) => {
                 match ch.0 {
                     AstNode::ArgList(arg_list) => {
-                        assert!(maybe_arg_list.is_none());
-                        Ok(FrameState::Module(m, Some(arg_list), maybe_body))
+                        child_parts.arg_lists.push_back(arg_list);
+                        Ok(FrameState::Module(m, child_parts))
                     }
                     AstNode::Body(body) => {
-                        assert!(maybe_body.is_none());
-                        Ok(FrameState::Module(m, maybe_arg_list, Some(body)))
+                        child_parts.bodies.push_back(body);
+                        Ok(FrameState::Module(m, child_parts))
                     }
                     _ => panic!()
                 }
