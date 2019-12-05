@@ -6,6 +6,7 @@ use b_base_partial_ast::{PartialModule, PartialArgList, PartialBody};
 use crate::lexer::{Lexer, Spanned, Token};
 use crate::parsers::module::ModuleParser;
 use crate::parsers::arg_list::ArgListParser;
+use crate::parsers::body::BodyParser;
 use lalrpop_util::ParseError;
 
 type BParseError = ParseError<usize, Token, BError>;
@@ -32,13 +33,17 @@ pub fn parse_arg_list(tt: &TokenTree) -> BResult<PartialArgList> {
 }
 
 pub fn parse_body(tt: &TokenTree) -> BResult<PartialBody> {
-    panic!()
+    let lexer = Lexer::new(&tt.0);
+    let parser = BodyParser::new();
+    let ast = parser.parse(lexer);
+    let ast = ast.map_err(lalrpop_err)?;
+    Ok(ast)
 }
 
 mod parsers {
     pub mod module;
     pub mod arg_list;
-    //pub mod body;
+    pub mod body;
 }
 
 mod ast {

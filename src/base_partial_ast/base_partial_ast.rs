@@ -56,7 +56,7 @@ pub struct BodyTree(pub BraceTree);
 
 #[derive(Debug)]
 pub struct PartialBody {
-    stmts: Vec<Statement>,
+    pub stmts: Vec<Statement>,
 }
 
 pub use b_base_ast::Statement;
