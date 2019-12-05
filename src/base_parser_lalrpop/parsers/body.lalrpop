@@ -1,0 +1,80 @@
+use b_error::BError;
+use crate::lexer;
+use crate::ast;
+
+grammar;
+
+pub Body: ast::PartialBody = {
+    <Statement*> => ast::PartialBody {
+        stmts: <>,
+    },
+};
+
+Statement: ast::Statement = {
+    "const" <i:Ident> ":" <t:Type> "=" <l:Literal> ";" => {
+        ast::Statement::Const(
+            ast::Const {
+                name: i,
+                type_: t,
+                lit: l,
+            }
+        )
+    },
+    "return" <i:Ident> ";" => {
+        ast::Statement::Return(i)
+    },
+};
+
+Ident: ast::Ident = {
+    "<ident>" => ast::Ident(<>.ident_string()),
+};
+
+Type: ast::Type = {
+    "I32" => ast::Type::I32,
+};
+
+Literal: ast::Literal = {
+    "<uint>" => ast::Literal::I32(<>.lit_string()),
+};
+
+extern {
+    type Location = usize;
+    type Error = BError;
+
+    enum lexer::Token {
+        "fn" => lexer::Token::IdentFn,
+        "const" => lexer::Token::IdentConst,
+        "return" => lexer::Token::IdentReturn,
+        "I32" => lexer::Token::IdentI32,
+        "<ident>" => (
+            lexer::Token::Ident(_)
+        ),
+        ":" => (
+            lexer::Token::Punctuation(
+                lexer::Punctuation::Colon
+            )
+        ),
+        ";" => (
+            lexer::Token::Punctuation(
+                lexer::Punctuation::Semicolon
+            )
+        ),
+        "=" => (
+            lexer::Token::Punctuation(
+                lexer::Punctuation::Equals
+            )
+        ),
+        "->" => (
+            lexer::Token::Punctuation(
+                lexer::Punctuation::RightArrow
+            )
+        ),
+        "<uint>" => (
+            lexer::Token::Uint(
+                lexer::Uint(_)
+            )
+        ),
+        "<paren-tree>" => lexer::Token::ParenTree(_),
+        "<brace-tree>" => lexer::Token::BraceTree(_),
+    }
+}

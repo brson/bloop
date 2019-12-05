@@ -8,6 +8,7 @@ use b_tree_walker::Walk;
 use b_base_ast::{
     ArgList,
     Declaration,
+    Body,
 };
 use b_base_parser_lalrpop::{
     parse_module,
@@ -47,9 +48,11 @@ impl BaseParse for BaseParser {
     }
 }
 
+#[derive(Debug)]
 pub enum AstNode {
     Module(Module),
     ArgList(ArgList),
+    Body(Body),
 }
 
 struct Node(CurrentTarget, TokenTree);
@@ -67,6 +70,7 @@ enum FrameState {
     Body(PartialBody),
 }
 
+#[derive(Debug)]
 struct FrameResult(AstNode);
 
 // This is going to traverse the token tree, parsing each flat vector of
@@ -115,7 +119,12 @@ impl Walk for Node {
     }
 
     fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState> {
-        panic!()
+        match frm {
+            FrameState::Module(m) => {
+                panic!()
+            }
+            _ => panic!()
+        }
     }
 
     fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult> {
@@ -124,7 +133,11 @@ impl Walk for Node {
             FrameState::ArgList(arg_list) => {
                 Ok(FrameResult(AstNode::ArgList(ArgList(arg_list.0))))
             }
-            FrameState::Body(..) => panic!(),
+            FrameState::Body(body) => {
+                Ok(FrameResult(AstNode::Body(Body {
+                    stmts: body.stmts,
+                })))
+            }
         }
     }
 
