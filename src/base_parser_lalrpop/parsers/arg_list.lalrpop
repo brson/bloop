@@ -5,9 +5,7 @@ use crate::ast;
 grammar;
 
 pub ArgList: ast::PartialArgList = {
-    <Argument*> => ast::PartialArgList {
-        args: <>,
-    },
+    <Argument*> => ast::PartialArgList(<>),
 };
 
 Argument: ast::Argument = {

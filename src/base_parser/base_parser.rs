@@ -118,7 +118,7 @@ impl Walk for Node {
         match frm {
             FrameState::Module(..) => panic!(),
             FrameState::ArgList(arg_list) => {
-                panic!()
+                Ok(FrameResult(AstNode::ArgList(ArgList(arg_list.0))))
             }
         }
     }

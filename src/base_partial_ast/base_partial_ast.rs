@@ -45,9 +45,7 @@ pub use b_base_ast::Ident;
 pub struct ArgListTree(pub ParenTree);
 
 #[derive(Debug)]
-pub struct PartialArgList {
-    pub args: Vec<Argument>,
-}
+pub struct PartialArgList(pub Vec<Argument>);
 
 pub use b_base_ast::RetDecl;
 
