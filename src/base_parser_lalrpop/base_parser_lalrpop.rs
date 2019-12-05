@@ -82,17 +82,19 @@ mod lexer {
 
     pub use b_token_tree::{
         Punctuation, Ident,
-        TokenTree,
+        TokenTree, Uint, Number,
     };
 
     #[derive(Debug, Clone)]
     pub enum Token {
+        IdentConst,
         IdentFn,
         IdentI32,
         Punctuation(Punctuation),
         Ident(Ident),
         ParenTree(TokenTree),
         BraceTree(TokenTree),
+        Uint(Uint),
         Unimplemented,
     }
 
@@ -105,6 +107,8 @@ mod lexer {
         // FIXME expensive clones
         match tot {
             ToT::Thing(Thing::Ident(Ident(s)))
+                if s == "const" => Token::IdentConst,
+            ToT::Thing(Thing::Ident(Ident(s)))
                 if s == "fn" => Token::IdentFn,
             ToT::Thing(Thing::Ident(Ident(s)))
                 if s == "I32" => Token::IdentI32,
@@ -112,6 +116,8 @@ mod lexer {
                 => Token::Ident(i.clone()),
             ToT::Thing(Thing::Punctuation(p))
                 => Token::Punctuation(*p),
+            ToT::Thing(Thing::Number(Number::Uint(u)))
+                => Token::Uint(u.clone()),
             ToT::Tree(Tree(TreeType::Paren, t))
                 => Token::ParenTree(t.clone()),
             ToT::Tree(Tree(TreeType::Brace, t))
@@ -125,6 +131,13 @@ mod lexer {
             match self {
                 Token::Ident(Ident(s)) => s,
                 _ => panic!("not an ident"),
+            }
+        }
+
+        pub fn lit_string(self) -> String {
+            match self {
+                Token::Uint(Uint(s)) => s,
+                _ => panic!("not a literal"),
             }
         }
 

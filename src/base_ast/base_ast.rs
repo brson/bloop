@@ -54,7 +54,7 @@ pub struct Const {
 
 #[derive(Debug)]
 pub enum Literal {
-    I32(i32),
+    I32(String),
 }
 
 #[derive(Debug)]
