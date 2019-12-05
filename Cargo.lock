@@ -127,6 +127,7 @@ dependencies = [
  "b_error 0.1.0",
  "b_token_tree 0.1.0",
  "b_tree_walker 0.1.0",
+ "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "rayon 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

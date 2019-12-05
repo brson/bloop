@@ -1,5 +1,6 @@
 #![allow(unused)]
 
+use log::debug;
 use b_base_ast::{BaseAst, Module};
 use b_base_parser_traits::BaseParse;
 use b_error::{BResult, BError};
@@ -65,7 +66,7 @@ enum CurrentTarget {
 
 #[derive(Debug)]
 enum FrameState {
-    Module(PartialModule),
+    Module(PartialModule, Option<ArgList>),
     ArgList(PartialArgList),
     Body(PartialBody),
 }
@@ -105,7 +106,7 @@ impl Walk for Node {
                     }
                 }
 
-                Ok(Some(FrameState::Module(ast)))
+                Ok(Some(FrameState::Module(ast, None)))
             },
             CurrentTarget::ArgList => {
                 let ast = parse_arg_list(&node.1)?;
@@ -119,9 +120,18 @@ impl Walk for Node {
     }
 
     fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState> {
+        debug!("handle_child_result");
+        debug!("frm: {:#?}", frm);
+        debug!("ch: {:#?}", ch);
         match frm {
-            FrameState::Module(m) => {
-                panic!()
+            FrameState::Module(mut m, maybe_arg_list) => {
+                match ch.0 {
+                    AstNode::ArgList(arg_list) => {
+                        assert!(maybe_arg_list.is_none());
+                        Ok(FrameState::Module(m, Some(arg_list)))
+                    }
+                    _ => panic!()
+                }
             }
             _ => panic!()
         }

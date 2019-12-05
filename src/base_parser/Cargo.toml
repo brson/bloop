@@ -16,5 +16,6 @@ b_base_partial_ast = { path = "../base_partial_ast" }
 b_error = { path = "../error" }
 b_token_tree = { path = "../token_tree" }
 b_tree_walker = { path = "../tree_walker" }
+log = "0.4.8"
 
 rayon = "1.2.0"
