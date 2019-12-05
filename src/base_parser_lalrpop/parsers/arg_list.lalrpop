@@ -1,3 +1,5 @@
+// FIXME this is all bogus
+
 use b_error::BError;
 use crate::lexer;
 use crate::ast;
@@ -31,7 +33,7 @@ Ident: ast::Ident = {
     "<ident>" => ast::Ident(<>.ident_string()),
 };
 
-ArgList: ast::PartialArgList = {
+pub ArgList: ast::PartialArgList = {
     "<paren-tree>" => ast::PartialArgList(ast::ParenTree(<>.tree())),
 };
 

@@ -2,9 +2,10 @@
 
 use b_token_tree::TokenTree;
 use b_error::{BError, BResult, StdResultExt};
-use b_base_partial_ast::PartialModule;
+use b_base_partial_ast::{PartialModule, PartialArgList};
 use crate::lexer::{Lexer, Spanned};
 use crate::parsers::module::ModuleParser;
+use crate::parsers::arg_list::ArgListParser;
 
 pub fn parse_module(tt: &TokenTree) -> BResult<PartialModule> {
     let lexer = Lexer::new(&tt.0);
@@ -20,8 +21,23 @@ pub fn parse_module(tt: &TokenTree) -> BResult<PartialModule> {
     Ok(ast)
 }
 
+pub fn parse_arg_list(tt: &TokenTree) -> BResult<PartialArgList> {
+    let lexer = Lexer::new(&tt.0);
+    let parser = ArgListParser::new();
+    let ast = parser.parse(lexer);
+    let ast = match ast {
+        Ok(ast) => ast,
+        Err(e) => {
+            // FIXME encapsulate error better
+            return Err(BError::new(format!("parse error: {:?}", e)));
+        }
+    };
+    Ok(ast)
+}
+
 mod parsers {
     pub mod module;
+    pub mod arg_list;
 }
 
 mod ast {

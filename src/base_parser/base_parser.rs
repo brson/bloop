@@ -6,10 +6,15 @@ use b_error::{BResult, BError};
 use b_token_tree::TokenTree;
 use b_tree_walker::Walk;
 use b_base_ast::{
+    ArgList,
     Declaration,
 };
-use b_base_parser_lalrpop::parse_module;
+use b_base_parser_lalrpop::{
+    parse_module,
+    parse_arg_list,
+};
 use b_base_partial_ast::{
+    PartialArgList,
     PartialModule,
     PartialDeclaration,
     PartialFunction
@@ -41,6 +46,7 @@ impl BaseParse for BaseParser {
 
 pub enum AstNode {
     Module(Module),
+    ArgList(ArgList),
 }
 
 struct Node(CurrentTarget, TokenTree);
@@ -51,9 +57,10 @@ enum CurrentTarget {
     Body,
 }
 
+#[derive(Debug)]
 enum FrameState {
     Module(PartialModule),
-    ArgList,
+    ArgList(PartialArgList),
 }
 
 struct FrameResult(AstNode);
@@ -92,7 +99,8 @@ impl Walk for Node {
                 Ok(Some(FrameState::Module(ast)))
             },
             CurrentTarget::ArgList => {
-                Ok(Some(FrameState::ArgList))
+                let ast = parse_arg_list(&node.1)?;
+                Ok(Some(FrameState::ArgList(ast)))
             }
             CurrentTarget::Body => {
                 panic!()
@@ -105,7 +113,7 @@ impl Walk for Node {
     }
 
     fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult> {
-        panic!()
+        panic!("{:?}", frm);
     }
 
 }
