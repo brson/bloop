@@ -115,7 +115,12 @@ impl Walk for Node {
     }
 
     fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult> {
-        panic!("{:?}", frm);
+        match frm {
+            FrameState::Module(..) => panic!(),
+            FrameState::ArgList(arg_list) => {
+                panic!()
+            }
+        }
     }
 
 }
