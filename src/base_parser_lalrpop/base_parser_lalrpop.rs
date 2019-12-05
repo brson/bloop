@@ -95,6 +95,7 @@ mod lexer {
         IdentConst,
         IdentFn,
         IdentI32,
+        IdentReturn,
         Punctuation(Punctuation),
         Ident(Ident),
         ParenTree(TokenTree),
@@ -117,6 +118,8 @@ mod lexer {
                 if s == "fn" => Token::IdentFn,
             ToT::Thing(Thing::Ident(Ident(s)))
                 if s == "I32" => Token::IdentI32,
+            ToT::Thing(Thing::Ident(Ident(s)))
+                if s == "return" => Token::IdentReturn,
             ToT::Thing(Thing::Ident(i))
                 => Token::Ident(i.clone()),
             ToT::Thing(Thing::Punctuation(p))
