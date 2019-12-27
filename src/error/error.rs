@@ -4,6 +4,11 @@
 //
 // This can only be done by _not_ implementing StdError,
 // but using a new trait like Fail.
+//
+// TODO:
+//
+// - main should return ! or perhaps should be split into
+//   a code-returning and non-returning version
 
 use std::error::Error as StdError;
 use std::result::Result as StdResult;
