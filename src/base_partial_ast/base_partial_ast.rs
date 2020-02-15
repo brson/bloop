@@ -61,6 +61,8 @@ pub struct PartialBody {
 
 pub use b_base_ast::Statement;
 
+pub use b_base_ast::Let;
+
 pub use b_base_ast::Const;
 
 pub use b_base_ast::Literal;

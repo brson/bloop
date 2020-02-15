@@ -11,6 +11,15 @@ pub Body: ast::PartialBody = {
 };
 
 Statement: ast::Statement = {
+    "let" <i:Ident> ":" <t:Type> "=" <l:Literal> ";" => {
+        ast::Statement::Let(
+            ast::Let {
+                name: i,
+                type_: t,
+                lit: l,
+            }
+        )
+    },
     "const" <i:Ident> ":" <t:Type> "=" <l:Literal> ";" => {
         ast::Statement::Const(
             ast::Const {
@@ -43,6 +52,7 @@ extern {
 
     enum lexer::Token {
         "fn" => lexer::Token::IdentFn,
+        "let" => lexer::Token::IdentLet,
         "const" => lexer::Token::IdentConst,
         "return" => lexer::Token::IdentReturn,
         "I32" => lexer::Token::IdentI32,

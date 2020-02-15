@@ -41,8 +41,16 @@ pub struct Body {
 
 #[derive(Debug)]
 pub enum Statement {
+    Let(Let),
     Const(Const),
     Return(Ident),
+}
+
+#[derive(Debug)]
+pub struct Let {
+    pub name: Ident,
+    pub type_: Type,
+    pub lit: Literal,
 }
 
 #[derive(Debug)]

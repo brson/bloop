@@ -92,6 +92,7 @@ mod lexer {
 
     #[derive(Debug, Clone)]
     pub enum Token {
+        IdentLet,
         IdentConst,
         IdentFn,
         IdentI32,
@@ -112,6 +113,8 @@ mod lexer {
 
         // FIXME expensive clones
         match tot {
+            ToT::Thing(Thing::Ident(Ident(s)))
+                if s == "let" => Token::IdentLet,
             ToT::Thing(Thing::Ident(Ident(s)))
                 if s == "const" => Token::IdentConst,
             ToT::Thing(Thing::Ident(Ident(s)))
