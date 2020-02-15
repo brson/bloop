@@ -6,7 +6,7 @@ use b_mir::Mir;
 pub struct BaseAnalyzer;
 
 impl BaseAnalyze for BaseAnalyzer {
-    fn lower(&self, _base_ast: &BaseAst) -> BResult<Mir> {
+    fn lower(&self, _base_ast: BaseAst) -> BResult<Mir> {
         Ok(Mir)
     }
 }

@@ -108,7 +108,7 @@ fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
     debug!("tt: {:#?}", token_tree);
     let ast = base_parser.parse(&token_tree)?;
     debug!("ast: {:#?}", ast);
-    let mir = base_analyzer.lower(&ast)?;
+    let mir = base_analyzer.lower(ast)?;
     debug!("mir: {:#?}", mir);
 
     let retcode = codegen.jit(&mir)?;
