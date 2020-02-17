@@ -5,7 +5,7 @@ use b_error::{BResult, StdResultExt};
 use b_big_s::S;
 use b_lexer_traits::Lex;
 use b_token_tree::{
-    TokenTree, ThingOrTree, Tree, TreeType, Thing, Ident, Number, Uint, Punctuation,
+    TokenTree, ThingOrTree, Tree, TreeType, Thing, Ident, Number, Int32, Punctuation,
 };
 use b_tree_walker::Walk;
 use pest::Parser;
@@ -83,8 +83,8 @@ fn pair_to_tree_or_thing(p: &Pair<Rule>) -> Option<ThingOrTree> {
         Rule::ident => {
             Some(ThingOrTree::Thing(Thing::Ident(Ident(S(s)))))
         }
-        Rule::uint => {
-            Some(ThingOrTree::Thing(Thing::Number(Number::Uint(Uint(S(s))))))
+        Rule::int32 => {
+            Some(ThingOrTree::Thing(Thing::Number(Number::Int32(Int32(S(s))))))
         }
         Rule::punct_right_arrow => {
             Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::RightArrow)))

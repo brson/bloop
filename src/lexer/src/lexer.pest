@@ -29,9 +29,9 @@ ident = @{ ident_leader ~ ident_remainder* }
 ident_leader = _{ ASCII_ALPHA | "_" }
 ident_remainder = _{ ASCII_ALPHANUMERIC | "_" }
 
-number = _{ uint }
+number = _{ int32 }
 
-uint = @{ digit_span }
+int32 = @{ digit_span }
 
 digit_span = _{ ASCII_DIGIT+ }
 

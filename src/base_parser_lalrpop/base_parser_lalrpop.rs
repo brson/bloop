@@ -87,7 +87,7 @@ mod lexer {
 
     pub use b_token_tree::{
         Punctuation, Ident,
-        TokenTree, Uint, Number,
+        TokenTree, Int32, Number,
     };
 
     #[derive(Debug, Clone)]
@@ -101,7 +101,7 @@ mod lexer {
         Ident(Ident),
         ParenTree(TokenTree),
         BraceTree(TokenTree),
-        Uint(Uint),
+        Int32(Int32),
         Unimplemented,
     }
 
@@ -127,8 +127,8 @@ mod lexer {
                 => Token::Ident(i.clone()),
             ToT::Thing(Thing::Punctuation(p))
                 => Token::Punctuation(*p),
-            ToT::Thing(Thing::Number(Number::Uint(u)))
-                => Token::Uint(u.clone()),
+            ToT::Thing(Thing::Number(Number::Int32(u)))
+                => Token::Int32(u.clone()),
             ToT::Tree(Tree(TreeType::Paren, t))
                 => Token::ParenTree(t.clone()),
             ToT::Tree(Tree(TreeType::Brace, t))
@@ -147,7 +147,7 @@ mod lexer {
 
         pub fn lit_string(self) -> String {
             match self {
-                Token::Uint(Uint(s)) => s,
+                Token::Int32(Int32(s)) => s,
                 _ => panic!("not a literal"),
             }
         }

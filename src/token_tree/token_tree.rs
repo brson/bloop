@@ -41,12 +41,12 @@ pub struct Ident(pub String);
 #[derive(Debug)]
 #[derive(Clone)]
 pub enum Number {
-    Uint(Uint),
+    Int32(Int32),
 }
 
 #[derive(Debug)]
 #[derive(Clone)]
-pub struct Uint(pub String);
+pub struct Int32(pub String);
 
 #[derive(Debug)]
 #[derive(Copy, Clone)]

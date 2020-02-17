@@ -43,7 +43,7 @@ Type: ast::Type = {
 };
 
 Literal: ast::Literal = {
-    "<uint>" => ast::Literal::I32(<>.lit_string()),
+    "<int32>" => ast::Literal::I32(<>.lit_string()),
 };
 
 extern {
@@ -79,9 +79,9 @@ extern {
                 lexer::Punctuation::RightArrow
             )
         ),
-        "<uint>" => (
-            lexer::Token::Uint(
-                lexer::Uint(_)
+        "<int32>" => (
+            lexer::Token::Int32(
+                lexer::Int32(_)
             )
         ),
         "<paren-tree>" => lexer::Token::ParenTree(_),
