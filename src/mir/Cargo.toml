@@ -7,3 +7,6 @@ authors = ["Brian Anderson <andersrb@gmail.com>"]
 
 [lib]
 path = "mir.rs"
+
+[dependencies]
+b_base_ast = { path = "../base_ast" }
