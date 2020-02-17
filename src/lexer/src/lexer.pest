@@ -29,13 +29,10 @@ ident = @{ ident_leader ~ ident_remainder* }
 ident_leader = _{ ASCII_ALPHA | "_" }
 ident_remainder = _{ ASCII_ALPHANUMERIC | "_" }
 
-number = _{ float | uint }
-
-float = @{ float_span }
+number = _{ uint }
 
 uint = @{ digit_span }
 
-float_span = _{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+) }
 digit_span = _{ ASCII_DIGIT+ }
 
 punctuation = _{

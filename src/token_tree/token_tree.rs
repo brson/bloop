@@ -41,13 +41,8 @@ pub struct Ident(pub String);
 #[derive(Debug)]
 #[derive(Clone)]
 pub enum Number {
-    Float(Float),
     Uint(Uint),
 }
-
-#[derive(Debug)]
-#[derive(Clone)]
-pub struct Float(pub String);
 
 #[derive(Debug)]
 #[derive(Clone)]
