@@ -19,7 +19,7 @@ pub struct Function {
     pub body: Body,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub struct Ident(pub String);
 
 #[derive(Debug)]

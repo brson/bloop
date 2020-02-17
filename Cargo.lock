@@ -192,6 +192,7 @@ dependencies = [
 name = "b_codegen_cranelift"
 version = "0.1.0"
 dependencies = [
+ "b_base_ast 0.1.0",
  "b_codegen_traits 0.1.0",
  "b_error 0.1.0",
  "b_mir 0.1.0",
