@@ -39,11 +39,11 @@ Ident: ast::Ident = {
 };
 
 Type: ast::Type = {
-    "I32" => ast::Type::I32,
+    "Int32" => ast::Type::Int32,
 };
 
 Literal: ast::Literal = {
-    "<int32>" => ast::Literal::I32(<>.lit_string()),
+    "<int32>" => ast::Literal::Int32(<>.lit_string()),
 };
 
 extern {
@@ -55,7 +55,7 @@ extern {
         "let" => lexer::Token::IdentLet,
         "const" => lexer::Token::IdentConst,
         "return" => lexer::Token::IdentReturn,
-        "I32" => lexer::Token::IdentI32,
+        "Int32" => lexer::Token::IdentInt32,
         "<ident>" => (
             lexer::Token::Ident(_)
         ),

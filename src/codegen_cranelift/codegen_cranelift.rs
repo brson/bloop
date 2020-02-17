@@ -90,8 +90,6 @@ fn do_jit(mir: &Mir) -> BResult<i32> {
                                 bcx.ins().return_(&[*value]);
                             }
                         }
-                        //let value = bcx.ins().iconst(types::I32, 37);
-                        //bcx.ins().return_(&[value]);
                     }
 
                     bcx.seal_all_blocks();
@@ -126,13 +124,13 @@ fn do_jit(mir: &Mir) -> BResult<i32> {
 
 fn ty_to_cl_ty(ty: &Type) -> types::Type {
     match ty {
-        Type::I32 => types::I32,
+        Type::Int32 => types::I32,
     }
 }
 
 fn lit_to_iconst(lit: &Literal) -> BResult<i64> {
     match lit {
-        Literal::I32(s) => {
+        Literal::Int32(s) => {
             s.parse().e()
         }
     }

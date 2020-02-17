@@ -62,10 +62,10 @@ pub struct Const {
 
 #[derive(Debug)]
 pub enum Literal {
-    I32(String),
+    Int32(String),
 }
 
 #[derive(Debug)]
 pub enum Type {
-    I32,
+    Int32,
 }

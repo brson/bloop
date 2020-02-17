@@ -20,7 +20,7 @@ Ident: ast::Ident = {
 };
 
 Type: ast::Type = {
-    "I32" => ast::Type::I32,
+    "Int32" => ast::Type::Int32,
 };
 
 extern {
@@ -28,7 +28,7 @@ extern {
     type Error = BError;
 
     enum lexer::Token {
-        "I32" => lexer::Token::IdentI32,
+        "Int32" => lexer::Token::IdentInt32,
         "<ident>" => (
             lexer::Token::Ident(_)
         ),

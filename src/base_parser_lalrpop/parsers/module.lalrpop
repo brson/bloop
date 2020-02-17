@@ -44,7 +44,7 @@ Body: ast::BodyTree = {
 }
 
 Type: ast::Type = {
-    "I32" => ast::Type::I32,
+    "Int32" => ast::Type::Int32,
 };
 
 extern {
@@ -53,7 +53,7 @@ extern {
 
     enum lexer::Token {
         "fn" => lexer::Token::IdentFn,
-        "I32" => lexer::Token::IdentI32,
+        "Int32" => lexer::Token::IdentInt32,
         "<ident>" => (
             lexer::Token::Ident(_)
         ),
