@@ -1,0 +1,7 @@
+#[intrinsic(primitive_i32)]
+type I32;
+
+fn main() -> I32 {
+    let i: I32 = 12_i32;
+    return i;
+}
