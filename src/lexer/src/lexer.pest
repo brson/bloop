@@ -31,7 +31,7 @@ ident_remainder = _{ ASCII_ALPHANUMERIC | "_" }
 
 number = _{ int32 }
 
-int32 = @{ digit_span }
+int32 = @{ digit_span ~ "_i32" }
 
 digit_span = _{ ASCII_DIGIT+ }
 

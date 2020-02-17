@@ -131,6 +131,9 @@ fn ty_to_cl_ty(ty: &Type) -> types::Type {
 fn lit_to_iconst(lit: &Literal) -> BResult<i64> {
     match lit {
         Literal::Int32(s) => {
+            // FIXME this is lame and belongs somewhere else
+            assert!(s.ends_with("_i32"));
+            let s = &s[..s.len()-4];
             s.parse().e()
         }
     }
