@@ -11,4 +11,4 @@ path = "solve.rs"
 [dependencies]
 b_error = { path = "../error" }
 
-chalk = { git = "https://github.com/rust-lang/chalk", rev = "50f9f636123bd88d0cc1b958749981d6702e4d05" }
+chalk = { git = "https://github.com/rust-lang/chalk", rev = "f85bb2ed57b78728bf14fc1f0101ac5415752e4d" }
