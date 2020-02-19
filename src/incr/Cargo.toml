@@ -1,0 +1,13 @@
+[package]
+name = "b_incr"
+description = "Incremental computation"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "incr.rs"
+
+[dependencies]
+b_error = { path = "../error" }
+salsa = { git = "https://github.com/salsa-rs/salsa", rev = "7c8b9e2304ebce607c102e51e16f4a03dc5bd166" }

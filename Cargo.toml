@@ -19,6 +19,7 @@ members = [
     "src/error",
     "src/global_defs",
     "src/demand",
+    "src/incr",
     "src/lang_server",
     "src/lang_server_client",
     "src/lexer",
