@@ -1,0 +1,12 @@
+[package]
+name = "b_deps"
+description = "External dependencies, in one place"
+version = "0.1.0"
+edition = "2018"
+authors = ["Brian Anderson <andersrb@gmail.com>"]
+
+[lib]
+path = "deps.rs"
+
+[dependencies]
+anyhow = "1.0.38"

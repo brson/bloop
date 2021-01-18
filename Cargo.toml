@@ -13,6 +13,7 @@ members = [
     "src/codegen_traits",
     "src/db",
     "src/db_traits",
+    "src/deps",
     "src/ecs",
     "src/ecs_traits",
     "src/error",
