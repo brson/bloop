@@ -16,10 +16,10 @@ b_deps = { path = "../deps" }
 b_token_tree = { path = "../token_tree" }
 
 regex = "1.4.3"
-lalrpop-util = "0.17.2"
+lalrpop-util = "=0.19.1"
 
 [build-dependencies]
-lalrpop = "0.17.2"
+lalrpop = "=0.19.1"
 
 [dev-dependencies]
 b_lexer = { path = "../lexer" }
