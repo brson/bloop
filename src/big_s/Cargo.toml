@@ -1,9 +1,0 @@
-[package]
-name = "b_big_s"
-description = "String constructors"
-version = "0.1.0"
-edition = "2018"
-authors = ["Brian Anderson <andersrb@gmail.com>"]
-
-[lib]
-path = "big_s.rs"

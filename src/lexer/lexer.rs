@@ -2,7 +2,6 @@
 extern crate pest_derive;
 
 use b_error::{BResult, StdResultExt};
-use b_big_s::S;
 use b_lexer_traits::Lex;
 use b_token_tree::{
     TokenTree, ThingOrTree, Tree, TreeType, Thing, Ident, Number, Int32, Punctuation,
@@ -81,10 +80,10 @@ fn pair_to_tree_or_thing(p: &Pair<Rule>) -> Option<ThingOrTree> {
             Some(ThingOrTree::Tree(Tree(TreeType::Angle, TokenTree(vec![]))))
         }
         Rule::ident => {
-            Some(ThingOrTree::Thing(Thing::Ident(Ident(S(s)))))
+            Some(ThingOrTree::Thing(Thing::Ident(Ident(s.to_string()))))
         }
         Rule::int32 => {
-            Some(ThingOrTree::Thing(Thing::Number(Number::Int32(Int32(S(s))))))
+            Some(ThingOrTree::Thing(Thing::Number(Number::Int32(Int32(s.to_string())))))
         }
         Rule::punct_right_arrow => {
             Some(ThingOrTree::Thing(Thing::Punctuation(Punctuation::RightArrow)))
