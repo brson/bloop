@@ -107,35 +107,3 @@ pub fn main(run: impl FnOnce() -> BResult<()>) {
         process::exit(1);
     }
 }
-
-#[test]
-fn test() {
-    #[derive(Debug)]
-    pub struct TestError;
-
-    impl StdError for TestError { }
-
-    impl Display for TestError {
-        fn fmt(&self, _f: &mut Formatter) -> fmt::Result {
-            panic!()
-        }
-    }
-
-    fn ret_s_t() -> StdResult<(), TestError> { panic!() }
-    fn ret_s_b() -> StdResult<(), BError> { panic!() }
-
-    fn try_s_t() -> StdResult<(), TestError> {
-        //ret_s_t().c("test")?;
-        //ret_s_t().c("test")?;
-
-        Ok(())
-    }
-
-    fn try_s_b() -> StdResult<(), BError> {
-        ret_s_t().c("test")?;
-        ret_s_b().c("test")?;
-
-        Ok(())
-    }
-
-}
