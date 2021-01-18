@@ -9,5 +9,4 @@ authors = ["Brian Anderson <andersrb@gmail.com>"]
 path = "tree_walker.rs"
 
 [dependencies]
-b_global_defs = { path = "../global_defs" }
 b_error = { path = "../error" }

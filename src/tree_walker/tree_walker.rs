@@ -1,4 +1,3 @@
-use b_global_defs::Usp;
 use std::iter::IntoIterator;
 use b_error::BResult;
 
@@ -73,11 +72,11 @@ pub trait Walk {
 }
 
 enum Phase<TNode, TFrameState> {
-    Enter(Usp, TNode),
-    Leave(Usp, TFrameState),
+    Enter(u32, TNode),
+    Leave(u32, TFrameState),
 }
 
-fn push_next_children<I, N, S>(state_stack: &mut Vec<Phase<N, S>>, next_nodes: I, lvl: Usp)
+fn push_next_children<I, N, S>(state_stack: &mut Vec<Phase<N, S>>, next_nodes: I, lvl: u32)
 where I: IntoIterator<Item = N>
 {
     // Collect next nodes in forward order

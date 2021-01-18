@@ -1,9 +1,0 @@
-[package]
-name = "b_global_defs"
-description = "Miscellanous global definitions"
-version = "0.1.0"
-edition = "2018"
-authors = ["Brian Anderson <andersrb@gmail.com>"]
-
-[lib]
-path = "global_defs.rs"
