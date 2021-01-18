@@ -1,0 +1,29 @@
+#![feature(lang/intrinsics)]
+#![feature(lang/method_attr)]
+
+#[cfg(target_feature(s32))]
+mod s32 {
+
+  use root|intrinsics as i;
+
+  pub struct S32 { inner: i|S32, }
+
+  #[method(S32)]
+  pub fn add(self: S32, other: S32) -> S32 {
+    let res: i|S32 = i|add_s32(self.inner, other.inner);
+    return new S32 {
+      inner: res,
+    };
+  }
+
+}
+
+mod intrinsics {
+
+  #[intrinsic(type(s32))]
+  struct S32 { }
+
+  #[intrinsic(fn(add_s32))]
+  extern fn add_s32(self: S32, other: S32) -> S32_i;
+
+}
