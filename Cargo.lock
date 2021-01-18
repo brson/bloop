@@ -144,22 +144,11 @@ dependencies = [
  "b_codegen_traits",
  "b_deps",
  "b_mir",
- "cranelift",
- "cranelift-bforest",
  "cranelift-codegen",
- "cranelift-codegen-meta",
- "cranelift-entity",
- "cranelift-faerie",
  "cranelift-frontend",
  "cranelift-module",
- "cranelift-native",
- "cranelift-reader",
  "cranelift-simplejit",
- "cranelift-wasm",
- "faerie",
  "failure",
- "goblin",
- "target-lexicon",
 ]
 
 [[package]]
@@ -361,16 +350,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
 
 [[package]]
-name = "cranelift"
-version = "0.46.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b464586cd113e72a87b56ccc3be0c088d0ffb413dd6ab7d1e0becad2379899e"
-dependencies = [
- "cranelift-codegen",
- "cranelift-frontend",
-]
-
-[[package]]
 name = "cranelift-bforest"
 version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -419,20 +398,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e915fa58d2a75e3c4b768b7e4760282889915c3fcd9ccb2ad2b3ebec99654a78"
 
 [[package]]
-name = "cranelift-faerie"
-version = "0.46.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa02ccb8e85292c9b41ce763a57c754e23fc09318ba6187f21112b9f7dcc556d"
-dependencies = [
- "cranelift-codegen",
- "cranelift-module",
- "faerie",
- "failure",
- "goblin",
- "target-lexicon",
-]
-
-[[package]]
 name = "cranelift-frontend"
 version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -468,16 +433,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cranelift-reader"
-version = "0.46.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "518823267f97dae53df48a6b299af88230a252ab36fcca1bf08533fedef68304"
-dependencies = [
- "cranelift-codegen",
- "target-lexicon",
-]
-
-[[package]]
 name = "cranelift-simplejit"
 version = "0.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -491,21 +446,6 @@ dependencies = [
  "region",
  "target-lexicon",
  "winapi",
-]
-
-[[package]]
-name = "cranelift-wasm"
-version = "0.46.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5a802357a6a016bf4c1dcdc6d73a650640eb3b613cc098a1a044a6c3731ca264"
-dependencies = [
- "cranelift-codegen",
- "cranelift-entity",
- "cranelift-frontend",
- "failure",
- "failure_derive",
- "log",
- "wasmparser",
 ]
 
 [[package]]
@@ -635,21 +575,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "faerie"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "875d78b92b2a4d9e1e2c7eeccfa30a327d2ee6434db3beb8fd6fd92f41898bc4"
-dependencies = [
- "failure",
- "goblin",
- "indexmap",
- "log",
- "scroll",
- "string-interner",
- "target-lexicon",
-]
-
-[[package]]
 name = "failure"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -707,17 +632,6 @@ dependencies = [
  "cfg-if",
  "libc",
  "wasi",
-]
-
-[[package]]
-name = "goblin"
-version = "0.0.24"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3fa261d919c1ae9d1e4533c4a2f99e10938603c4208d56c05bec7a872b661b0"
-dependencies = [
- "log",
- "plain",
- "scroll",
 ]
 
 [[package]]
@@ -951,12 +865,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "28b9b4df73455c861d7cbf8be42f01d3b373ed7f02e378d55fa84eafc6f638b1"
 
 [[package]]
-name = "plain"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b4596b6d070b27117e987119b4dac604f3c58cfb0b191112e24771b2faeac1a6"
-
-[[package]]
 name = "precomputed-hash"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1126,27 +1034,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 
 [[package]]
-name = "scroll"
-version = "0.9.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2f84d114ef17fd144153d608fba7c446b0145d038985e7a8cc5d08bb0ce20383"
-dependencies = [
- "rustc_version",
- "scroll_derive",
-]
-
-[[package]]
-name = "scroll_derive"
-version = "0.9.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f1aa96c45e7f5a91cb7fabe7b279f02fea7126239fc40b732316e8b6a2d0fcb"
-dependencies = [
- "proc-macro2 0.4.30",
- "quote 0.6.13",
- "syn 0.15.44",
-]
-
-[[package]]
 name = "semver"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1203,15 +1090,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7b0758c52e15a8b5e3691eae6cc559f08eee9406e548a4477ba4e67770a82b6"
 dependencies = [
  "maybe-uninit",
-]
-
-[[package]]
-name = "string-interner"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd710eadff449a1531351b0e43eb81ea404336fa2f56c777427ab0e32a4cf183"
-dependencies = [
- "serde",
 ]
 
 [[package]]
@@ -1393,12 +1271,6 @@ name = "wasi"
 version = "0.9.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
-
-[[package]]
-name = "wasmparser"
-version = "0.39.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c702914acda5feeeffbc29e4d953e5b9ce79d8b98da4dbf18a77086e116c5470"
 
 [[package]]
 name = "winapi"
