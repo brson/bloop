@@ -1,7 +1,7 @@
 #![allow(unused)]
 
 use std::collections::VecDeque;
-use log::debug;
+use b_deps::log::debug;
 use b_base_ast::{BaseAst, Module, Function};
 use b_base_parser_traits::BaseParse;
 use b_deps::anyhow::{Result, anyhow};

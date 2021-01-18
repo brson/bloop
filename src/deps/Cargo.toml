@@ -10,3 +10,4 @@ path = "deps.rs"
 
 [dependencies]
 anyhow = "1.0.38"
+log = "0.4.13"

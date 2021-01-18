@@ -1,7 +1,6 @@
-#[macro_use]
-extern crate log;
 extern crate env_logger;
 
+use b_deps::log::debug;
 use b_base_analyzer::BaseAnalyzer;
 use b_base_analyzer_traits::BaseAnalyze;
 use b_base_parser::BaseParser;
