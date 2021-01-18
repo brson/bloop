@@ -9,5 +9,5 @@ authors = ["Brian Anderson <andersrb@gmail.com>"]
 path = "lexer_traits.rs"
 
 [dependencies]
-b_error = { path = "../error" }
+b_deps = { path = "../deps" }
 b_token_tree = { path = "../token_tree" }

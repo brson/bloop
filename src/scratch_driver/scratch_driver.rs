@@ -10,7 +10,7 @@ use b_codegen_cranelift::CraneliftGenerator;
 use b_codegen_traits::Codegen;
 use b_lexer::Lexer;
 use b_lexer_traits::Lex;
-use b_error::{BResult, StdResultExt};
+use b_deps::anyhow::{Result, Context};
 
 use std::fs::File;
 use std::io::Read;
@@ -19,10 +19,22 @@ use structopt::StructOpt;
 use std::process;
 
 fn main() {
-    b_error::main(run)
+    main_error(run)
 }
 
-fn run() -> BResult<()> {
+pub fn main_error(run: impl FnOnce() -> Result<()>) {
+    if let Err(e) = run() {
+        println!("error: {}", e);
+        let mut e = e.source();
+        while let Some(cause) = e {
+            println!("  caused by: {}", cause);
+            e = cause.source();
+        }
+        process::exit(1);
+    }
+}
+
+fn run() -> Result<()> {
     use env_logger::Builder;
 
     Builder::from_default_env()
@@ -34,7 +46,7 @@ fn run() -> BResult<()> {
     Ok(())
 }
 
-fn dispatch_command(opts: Opts) -> BResult<()> {
+fn dispatch_command(opts: Opts) -> Result<()> {
     debug!("command line options: {:#?}", opts);
 
     match opts.mode {
@@ -46,17 +58,17 @@ fn dispatch_command(opts: Opts) -> BResult<()> {
     }
 }
 
-fn read_source(file: &Path) -> BResult<String> {
+fn read_source(file: &Path) -> Result<String> {
     let mut contents = String::new();
     let mut file = File::open(file)
-        .ec("opening source file")?;
+        .context("opening source file")?;
     file.read_to_string(&mut contents)
-        .ec("reading source as string")?;
+        .context("reading source as string")?;
 
     Ok(contents)
 }
 
-fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
+fn run_lex_dump(opts: LexDumpOpts) -> Result<()> {
     let lexer = Box::new(Lexer) as Box<dyn Lex>;
 
     let source = read_source(&opts.file)?;
@@ -67,7 +79,7 @@ fn run_lex_dump(opts: LexDumpOpts) -> BResult<()> {
     Ok(())
 }
 
-fn run_parse_baselang(opts: ParseBaseLangOpts) -> BResult<()> {
+fn run_parse_baselang(opts: ParseBaseLangOpts) -> Result<()> {
     let lexer = Box::new(Lexer) as Box<dyn Lex>;
     let base_parser = Box::new(BaseParser) as Box<dyn BaseParse>;
     
@@ -81,7 +93,7 @@ fn run_parse_baselang(opts: ParseBaseLangOpts) -> BResult<()> {
     Ok(())
 }
 
-fn run_parse_baselang_partial(opts: ParseBaseLangPartialOpts) -> BResult<()> {
+fn run_parse_baselang_partial(opts: ParseBaseLangPartialOpts) -> Result<()> {
     use b_base_parser_lalrpop::parse_module;
     
     let lexer = Box::new(Lexer) as Box<dyn Lex>;
@@ -96,7 +108,7 @@ fn run_parse_baselang_partial(opts: ParseBaseLangPartialOpts) -> BResult<()> {
     Ok(())
 }
 
-fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
+fn run_jit_baselang(opts: JitBaseLangOpts) -> Result<()> {
     let lexer = Box::new(Lexer) as Box<dyn Lex>;
     let base_parser = Box::new(BaseParser) as Box<dyn BaseParse>;
     let base_analyzer = Box::new(BaseAnalyzer) as Box<dyn BaseAnalyze>;
@@ -118,7 +130,7 @@ fn run_jit_baselang(opts: JitBaseLangOpts) -> BResult<()> {
     process::exit(retcode);
 }
 
-fn run_jit_cranelift(opts: JitCraneliftOpts) -> BResult<()> {
+fn run_jit_cranelift(opts: JitCraneliftOpts) -> Result<()> {
     use b_codegen_cranelift as cl;
 
     let ir = cl::load_ir(&opts.file)?;

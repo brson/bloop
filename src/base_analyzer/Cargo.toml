@@ -11,5 +11,5 @@ path = "base_analyzer.rs"
 [dependencies]
 b_base_analyzer_traits = { path = "../base_analyzer_traits" }
 b_base_ast = { path = "../base_ast" }
-b_error = { path = "../error" }
+b_deps = { path = "../deps" }
 b_mir = { path = "../mir" }

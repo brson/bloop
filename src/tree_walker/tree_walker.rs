@@ -1,5 +1,5 @@
 use std::iter::IntoIterator;
-use b_error::BResult;
+use b_deps::anyhow::Result;
 
 pub trait Walk {
     type Node;
@@ -8,13 +8,13 @@ pub trait Walk {
 
     // FIXME: this returns Option only because I can't figure out how to make
     // pest not visit EOI
-    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>>;
+    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>>;
 
-    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState>;
+    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
 
-    fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult>;
+    fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult>;
     
-    fn walk<I>(nodes: I) -> BResult<Vec<Self::FrameResult>>
+    fn walk<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>
     {
         let nodes = nodes.into_iter();

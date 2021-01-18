@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate pest_derive;
 
-use b_error::{BResult, StdResultExt};
+use b_deps::anyhow::{Result, Context};
 use b_lexer_traits::Lex;
 use b_token_tree::{
     TokenTree, ThingOrTree, Tree, TreeType, Thing, Ident, Number, Int32, Punctuation,
@@ -15,9 +15,9 @@ use std::marker::PhantomData;
 pub struct Lexer;
 
 impl Lex for Lexer {
-    fn lex(&self, src: &str) -> BResult<TokenTree> {
+    fn lex(&self, src: &str) -> Result<TokenTree> {
         let pairs = PestLexer::parse(Rule::buffer, src)
-            .ec(format!("parsing source"))?;
+            .context(format!("parsing source"))?;
 
         Ok(TokenTree(LocalLexer::walk(pairs)?))
     }
@@ -39,7 +39,7 @@ impl<'a> Walk for LocalLexer<'a> {
     type FrameState = ThingOrTree;
     type FrameResult = ThingOrTree;
     
-    fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>> {
+    fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>> {
         let state = pair_to_tree_or_thing(&node);
 
         for pair in node.into_inner() {
@@ -49,7 +49,7 @@ impl<'a> Walk for LocalLexer<'a> {
         Ok(state)
     }
 
-    fn handle_child_result(mut frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState> {
+    fn handle_child_result(mut frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState> {
         if let ThingOrTree::Tree(Tree(_, ref mut tt)) = frm {
             tt.0.push(ch);
         } else {
@@ -59,7 +59,7 @@ impl<'a> Walk for LocalLexer<'a> {
         Ok(frm)
     }
 
-    fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult> {
+    fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult> {
         Ok(frm)
     }
 }

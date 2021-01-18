@@ -4,7 +4,7 @@ use std::mem;
 use std::fs;
 use std::path::Path;
 use b_codegen_traits::Codegen;
-use b_error::{BResult, StdResultExt, BError};
+use b_deps::anyhow::{Result, anyhow};
 use failure::ResultExt;
 use b_mir::Mir;
 use cranelift_codegen::ir::types;
@@ -22,16 +22,16 @@ use std::collections::HashMap;
 pub struct CraneliftGenerator;
 
 impl Codegen for CraneliftGenerator {
-    fn emit_exe(&self, _mir: &Mir, _info: &ExeOut) -> BResult<()> {
+    fn emit_exe(&self, _mir: &Mir, _info: &ExeOut) -> Result<()> {
         panic!()
     }
 
-    fn jit(&self, mir: &Mir) -> BResult<i32> {
+    fn jit(&self, mir: &Mir) -> Result<i32> {
         do_jit(mir)
     }
 }
 
-fn do_jit(mir: &Mir) -> BResult<i32> {
+fn do_jit(mir: &Mir) -> Result<i32> {
     let builder = SimpleJITBuilder::new(default_libcall_names());
     let mut module: Module<SimpleJITBackend> =
         Module::new(builder);
@@ -58,7 +58,7 @@ fn do_jit(mir: &Mir) -> BResult<i32> {
 
                 let mut func_a = module
                     .declare_function(cl_fn_name, Linkage::Local, &sig_a)
-                    .compat().e()?;
+                    .compat()?;
 
                 {
                     ctx.func.signature = sig_a;
@@ -86,7 +86,7 @@ fn do_jit(mir: &Mir) -> BResult<i32> {
                             }
                             Statement::Return(ref ident) => {
                                 let value = iconsts.get(ident)
-                                    .ok_or_else(|| BError::new("undefined ident"))?;
+                                    .ok_or_else(|| anyhow!("undefined ident"))?;
                                 bcx.ins().return_(&[*value]);
                             }
                         }
@@ -96,7 +96,7 @@ fn do_jit(mir: &Mir) -> BResult<i32> {
                     bcx.finalize();
 
                     module.define_function(func_a, &mut ctx)
-                        .compat().e()?;
+                        .compat()?;
 
                     if cl_fn_name == "main" {
                         main = Some(func_a);
@@ -118,7 +118,7 @@ fn do_jit(mir: &Mir) -> BResult<i32> {
 
         Ok(res)
     } else {
-        return Err(BError::new("no main function declared"));
+        return Err(anyhow!("no main function declared"));
     }
 }
 
@@ -128,13 +128,13 @@ fn ty_to_cl_ty(ty: &Type) -> types::Type {
     }
 }
 
-fn lit_to_iconst(lit: &Literal) -> BResult<i64> {
+fn lit_to_iconst(lit: &Literal) -> Result<i64> {
     match lit {
         Literal::Int32(s) => {
             // FIXME this is lame and belongs somewhere else
             assert!(s.ends_with("_i32"));
             let s = &s[..s.len()-4];
-            s.parse().e()
+            Ok(s.parse()?)
         }
     }
 }
@@ -145,12 +145,12 @@ fn make_main() -> Function {
 
 pub struct ClifIR;
 
-pub fn load_ir(path: &Path) -> BResult<ClifIR> {
-    let irstr = fs::read_to_string(path).e()?;
+pub fn load_ir(path: &Path) -> Result<ClifIR> {
+    let irstr = fs::read_to_string(path)?;
     
     panic!()
 }
 
-pub fn jit_ir(ir: &ClifIR) -> BResult<()> {
+pub fn jit_ir(ir: &ClifIR) -> Result<()> {
     panic!()
 }

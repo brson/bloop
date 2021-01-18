@@ -1,7 +1,7 @@
 #![allow(unused)]
 
 use b_token_tree::TokenTree;
-use b_error::{BError, BResult, StdResultExt};
+use b_deps::anyhow::{Error, Result, anyhow};
 use b_base_partial_ast::{PartialModule, PartialArgList, PartialBody};
 use crate::lexer::{Lexer, Spanned, Token};
 use crate::parsers::module::ModuleParser;
@@ -9,14 +9,14 @@ use crate::parsers::arg_list::ArgListParser;
 use crate::parsers::body::BodyParser;
 use lalrpop_util::ParseError;
 
-type BParseError = ParseError<usize, Token, BError>;
+type BParseError = ParseError<usize, Token, Error>;
 
-fn lalrpop_err(e: BParseError) -> BError {
+fn lalrpop_err(e: BParseError) -> Error {
     // FIXME encapsulate error better
-    BError::new(format!("parse error: {:?}", e))
+    anyhow!("parse error: {:?}", e)
 }
 
-pub fn parse_module(tt: &TokenTree) -> BResult<PartialModule> {
+pub fn parse_module(tt: &TokenTree) -> Result<PartialModule> {
     let lexer = Lexer::new(&tt.0);
     let parser = ModuleParser::new();
     let ast = parser.parse(lexer);
@@ -24,7 +24,7 @@ pub fn parse_module(tt: &TokenTree) -> BResult<PartialModule> {
     Ok(ast)
 }
 
-pub fn parse_arg_list(tt: &TokenTree) -> BResult<PartialArgList> {
+pub fn parse_arg_list(tt: &TokenTree) -> Result<PartialArgList> {
     let lexer = Lexer::new(&tt.0);
     let parser = ArgListParser::new();
     let ast = parser.parse(lexer);
@@ -32,7 +32,7 @@ pub fn parse_arg_list(tt: &TokenTree) -> BResult<PartialArgList> {
     Ok(ast)
 }
 
-pub fn parse_body(tt: &TokenTree) -> BResult<PartialBody> {
+pub fn parse_body(tt: &TokenTree) -> Result<PartialBody> {
     let lexer = Lexer::new(&tt.0);
     let parser = BodyParser::new();
     let ast = parser.parse(lexer);
@@ -52,12 +52,11 @@ mod ast {
 
 mod lexer {
     use std::str::CharIndices;
-    use std::result::Result;
-    use b_error::{BError, BResult};
+    use b_deps::anyhow::{Error, Result};
     use std::slice::Iter;
     use b_token_tree::ThingOrTree;
 
-    pub type Spanned<Tok, Loc, Error> = Result<(Loc, Tok, Loc), Error>;
+    pub type Spanned<Tok, Loc> = Result<(Loc, Tok, Loc)>;
 
     pub struct Lexer<'a> {
         tokens: Iter<'a, ThingOrTree>,
@@ -72,7 +71,7 @@ mod lexer {
     }
 
     impl<'a> Iterator for Lexer<'a> {
-        type Item = Spanned<Token, usize, BError>;
+        type Item = Spanned<Token, usize>;
 
         fn next(&mut self) -> Option<Self::Item> {
             if let Some(next) = self.tokens.next() {

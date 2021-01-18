@@ -74,7 +74,7 @@ version = "0.1.0"
 dependencies = [
  "b_base_analyzer_traits",
  "b_base_ast",
- "b_error",
+ "b_deps",
  "b_mir",
 ]
 
@@ -83,7 +83,7 @@ name = "b_base_analyzer_traits"
 version = "0.1.0"
 dependencies = [
  "b_base_ast",
- "b_error",
+ "b_deps",
  "b_mir",
 ]
 
@@ -99,7 +99,7 @@ dependencies = [
  "b_base_parser_lalrpop",
  "b_base_parser_traits",
  "b_base_partial_ast",
- "b_error",
+ "b_deps",
  "b_token_tree",
  "b_tree_walker",
  "log",
@@ -111,7 +111,7 @@ name = "b_base_parser_lalrpop"
 version = "0.1.0"
 dependencies = [
  "b_base_partial_ast",
- "b_error",
+ "b_deps",
  "b_lexer",
  "b_lexer_traits",
  "b_token_tree",
@@ -125,7 +125,7 @@ name = "b_base_parser_traits"
 version = "0.1.0"
 dependencies = [
  "b_base_ast",
- "b_error",
+ "b_deps",
  "b_token_tree",
 ]
 
@@ -143,7 +143,7 @@ version = "0.1.0"
 dependencies = [
  "b_base_ast",
  "b_codegen_traits",
- "b_error",
+ "b_deps",
  "b_mir",
  "cranelift",
  "cranelift-bforest",
@@ -167,7 +167,7 @@ dependencies = [
 name = "b_codegen_traits"
 version = "0.1.0"
 dependencies = [
- "b_error",
+ "b_deps",
  "b_mir",
 ]
 
@@ -179,14 +179,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "b_error"
-version = "0.1.0"
-
-[[package]]
 name = "b_lexer"
 version = "0.1.0"
 dependencies = [
- "b_error",
+ "b_deps",
  "b_lexer_traits",
  "b_token_tree",
  "b_tree_walker",
@@ -198,7 +194,7 @@ dependencies = [
 name = "b_lexer_traits"
 version = "0.1.0"
 dependencies = [
- "b_error",
+ "b_deps",
  "b_token_tree",
 ]
 
@@ -220,7 +216,7 @@ dependencies = [
  "b_base_parser_traits",
  "b_codegen_cranelift",
  "b_codegen_traits",
- "b_error",
+ "b_deps",
  "b_lexer",
  "b_lexer_traits",
  "env_logger",
@@ -236,7 +232,7 @@ version = "0.1.0"
 name = "b_tree_walker"
 version = "0.1.0"
 dependencies = [
- "b_error",
+ "b_deps",
 ]
 
 [[package]]

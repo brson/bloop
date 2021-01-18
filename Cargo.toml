@@ -10,7 +10,6 @@ members = [
     "src/codegen_cranelift",
     "src/codegen_traits",
     "src/deps",
-    "src/error",
     "src/lexer",
     "src/lexer_traits",
     "src/mir",

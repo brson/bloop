@@ -17,7 +17,7 @@ b_base_parser_lalrpop = { path = "../base_parser_lalrpop" }
 b_base_parser_traits = { path = "../base_parser_traits" }
 b_codegen_cranelift = { path = "../codegen_cranelift" }
 b_codegen_traits = { path = "../codegen_traits" }
-b_error = { path = "../error" }
+b_deps = { path = "../deps" }
 b_lexer = { path = "../lexer" }
 b_lexer_traits = { path = "../lexer_traits" }
 

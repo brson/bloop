@@ -4,7 +4,7 @@ use std::collections::VecDeque;
 use log::debug;
 use b_base_ast::{BaseAst, Module, Function};
 use b_base_parser_traits::BaseParse;
-use b_error::{BResult, BError};
+use b_deps::anyhow::{Result, anyhow};
 use b_token_tree::TokenTree;
 use b_tree_walker::Walk;
 use b_base_ast::{
@@ -29,7 +29,7 @@ use b_base_partial_ast::{
 pub struct BaseParser;
 
 impl BaseParse for BaseParser {
-    fn parse(&self, tt: &TokenTree) -> BResult<BaseAst> {
+    fn parse(&self, tt: &TokenTree) -> Result<BaseAst> {
         // FIXME bad clone
         let node = Node(CurrentTarget::Module, tt.clone());
         let mut parsed = Node::walk(Some(node))?;
@@ -42,7 +42,7 @@ impl BaseParse for BaseParser {
                 return Ok(BaseAst(m));
             }
             _ => {
-                return Err(BError::new("wrong parse result"));
+                return Err(anyhow!("wrong parse result"));
             }
         }
 
@@ -91,7 +91,7 @@ impl Walk for Node {
     type FrameResult = FrameResult;
 
     // FIXME bad clones
-    fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> BResult<Option<Self::FrameState>> {
+    fn enter_frame(node: Self::Node, mut push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>> {
         match node.0 {
             CurrentTarget::Module => {
                 let ast = parse_module(&node.1)?;
@@ -126,7 +126,7 @@ impl Walk for Node {
         }
     }
 
-    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> BResult<Self::FrameState> {
+    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState> {
         debug!("handle_child_result");
         debug!("frm: {:#?}", frm);
         debug!("ch: {:#?}", ch);
@@ -148,7 +148,7 @@ impl Walk for Node {
         }
     }
 
-    fn leave_frame(frm: Self::FrameState) -> BResult<Self::FrameResult> {
+    fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult> {
         match frm {
             FrameState::Module(partial_module, mut child_parts) => {
                 let mut decls = vec![];

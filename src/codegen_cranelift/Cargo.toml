@@ -11,7 +11,7 @@ path = "codegen_cranelift.rs"
 [dependencies]
 b_base_ast = { path = "../base_ast" }
 b_codegen_traits = { path = "../codegen_traits" }
-b_error = { path = "../error" }
+b_deps = { path = "../deps" }
 b_mir = { path = "../mir" }
 
 failure = "0.1.6"

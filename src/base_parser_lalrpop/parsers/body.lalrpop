@@ -1,4 +1,4 @@
-use b_error::BError;
+use b_deps::anyhow::Error;
 use crate::lexer;
 use crate::ast;
 
@@ -48,7 +48,7 @@ Literal: ast::Literal = {
 
 extern {
     type Location = usize;
-    type Error = BError;
+    type Error = Error;
 
     enum lexer::Token {
         "fn" => lexer::Token::IdentFn,
