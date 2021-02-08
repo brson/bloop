@@ -57,8 +57,10 @@ pub enum AstNode {
     Body(Body),
 }
 
+#[derive(Debug)]
 struct Node(CurrentTarget, TokenTree);
 
+#[derive(Debug)]
 enum CurrentTarget {
     Module,
     ArgList,
