@@ -65,7 +65,7 @@ pub trait Walk {
 
         assert!(state_stack.is_empty());
         let result = result_stack.pop().expect("result stack empty");
-        assert!(state_stack.is_empty());
+        assert!(result_stack.is_empty());
 
         Ok(result)
     }
