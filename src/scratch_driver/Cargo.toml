@@ -9,6 +9,12 @@ authors = ["Brian Anderson <andersrb@gmail.com>"]
 name = "bloop-scratch"
 path = "scratch_driver.rs"
 
+[features]
+default = ["parallel-tree-walk"]
+parallel-tree-walk = ["b_tree_walker/parallel-tree-walk"]
+broad-seq-tree-walk = ["b_tree_walker/broad-seq-tree-walk"]
+deep-seq-tree-walk = ["b_tree_walker/deep-seq-tree-walk"]
+
 [dependencies]
 b_base_analyzer = { path = "../base_analyzer" }
 b_base_analyzer_traits = { path = "../base_analyzer_traits" }
@@ -20,6 +26,9 @@ b_codegen_traits = { path = "../codegen_traits" }
 b_deps = { path = "../deps" }
 b_lexer = { path = "../lexer" }
 b_lexer_traits = { path = "../lexer_traits" }
+
+# Only for managing features
+b_tree_walker = { path = "../tree_walker" }
 
 env_logger = "0.6.2"
 structopt = "0.2.18"

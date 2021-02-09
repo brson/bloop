@@ -207,6 +207,7 @@ dependencies = [
  "b_deps",
  "b_lexer",
  "b_lexer_traits",
+ "b_tree_walker",
  "env_logger",
  "structopt",
 ]

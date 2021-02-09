@@ -32,7 +32,7 @@ impl BaseParse for BaseParser {
     fn parse(&self, tt: &TokenTree) -> Result<BaseAst> {
         // FIXME bad clone
         let node = Node(CurrentTarget::Module, tt.clone());
-        let mut parsed = Node::walk_par(Some(node))?;
+        let mut parsed = Node::walk_maybe_par(Some(node))?;
 
         let ast = parsed.pop().expect("parse results");
         assert!(parsed.is_empty());

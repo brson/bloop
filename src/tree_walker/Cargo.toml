@@ -1,12 +1,17 @@
 [package]
 name = "b_tree_walker"
-description = "Tree traversal without recursion"
+description = "Parallel tree traversal without recursion"
 version = "0.1.0"
 edition = "2018"
 authors = ["Brian Anderson <andersrb@gmail.com>"]
 
 [lib]
 path = "tree_walker.rs"
+
+[features]
+parallel-tree-walk = []
+broad-seq-tree-walk = []
+deep-seq-tree-walk = []
 
 [dependencies]
 b_deps = { path = "../deps" }

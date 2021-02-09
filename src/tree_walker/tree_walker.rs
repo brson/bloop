@@ -5,6 +5,11 @@ use std::sync::mpsc::{self, Sender, Receiver};
 use rayon::prelude::*;
 use std::cmp::{Ord, Ordering};
 
+#[cfg(not(any(feature = "parallel-tree-walk",
+              feature = "broad-seq-tree-walk",
+              feature = "deep-seq-tree-walk")))]
+compile_error!("choose a tree-walk feature");
+
 macro_rules! walk_impl {
     ($nodes: ident, $enter_into_iter: ident, $leave_into_iter: ident, $sort: ident) => {{
         let nodes = $nodes.into_iter();
@@ -178,26 +183,55 @@ pub trait Walk {
 
     fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult>;
     
-    fn walk_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    fn walk_maybe_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    where I: IntoIterator<Item = Self::Node>,
+          Self::Node: Send
+    {
+        if cfg!(feature = "parallel-tree-walk") {
+            Self::_walk_broad_par(nodes)
+        } else if cfg!(feature = "broad-seq-tree-walk") {
+            Self::_walk_broad_seq(nodes)
+        } else if cfg!(feature = "deep-seq-tree-walk") {
+            Self::_walk_deep_seq(nodes)
+        } else {
+            panic!();
+        }
+    }
+
+    fn walk_maybe_part_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    where I: IntoIterator<Item = Self::Node>
+    {
+        if cfg!(feature = "parallel-tree-walk") {
+            Self::_walk_broad_part_par(nodes)
+        } else if cfg!(feature = "broad-seq-tree-walk") {
+            Self::_walk_broad_seq(nodes)
+        } else if cfg!(feature = "deep-seq-tree-walk") {
+            Self::_walk_deep_seq(nodes)
+        } else {
+            panic!();
+        }
+    }
+
+    fn _walk_broad_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>,
           Self::Node: Send
     {
         walk_impl!(nodes, into_par_iter, into_par_iter, par_sort)
     }
 
-    fn walk_part_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    fn _walk_broad_part_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>
     {
         walk_impl!(nodes, into_iter, into_par_iter, par_sort)
     }
 
-    fn walk_not_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    fn _walk_broad_seq<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>
     {
         walk_impl!(nodes, into_iter, into_iter, sort)
     }
 
-    fn walk_seq<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    fn _walk_deep_seq<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>
     {
         let nodes = nodes.into_iter();
