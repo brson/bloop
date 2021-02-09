@@ -5,23 +5,9 @@ use std::sync::mpsc::{self, Sender, Receiver};
 use rayon::prelude::*;
 use std::cmp::{Ord, Ordering};
 
-pub trait Walk {
-    type Node: Sized + Debug;
-    type FrameState: Send + Sized + Debug;
-    type FrameResult: Send + Sized + Debug;
-
-    // FIXME: this returns Option only because I can't figure out how to make
-    // pest not visit EOI
-    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>>;
-
-    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
-
-    fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult>;
-    
-    fn walk<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
-    where I: IntoIterator<Item = Self::Node>
-    {
-        let nodes = nodes.into_iter();
+macro_rules! walk_impl {
+    ($nodes: ident, $enter_into_iter: ident, $leave_into_iter: ident, $sort: ident) => {{
+        let nodes = $nodes.into_iter();
 
         #[derive(Debug)]
         struct Enter<Node, FrameResult> {
@@ -77,7 +63,7 @@ pub trait Walk {
         let mut leave_lists_stack: Vec<Vec<Leave<_, _>>> = vec![];
 
         while !current_enter_list.is_empty() {
-            let results = current_enter_list.into_iter().filter_map(|enter| {
+            let results = current_enter_list.$enter_into_iter().filter_map(|enter| {
                 let mut children = vec![];
                 let push_child = |child: Self::Node| children.push(child);
                 let frame_state = Self::enter_frame(enter.node, push_child);
@@ -125,11 +111,11 @@ pub trait Walk {
         }
 
         while let Some(leave_list) = leave_lists_stack.pop() {
-            let results = leave_list.into_par_iter().enumerate().map(|(index, leave)| {
+            let results = leave_list.$leave_into_iter().enumerate().map(|(index, leave)| {
                 let mut frame_state = leave.frame_state;
 
                 let mut results: Vec<_> = leave.child_results_rx.into_iter().collect();
-                results.par_sort();
+                results.$sort();
                 let results = results.into_iter().map(|fr| fr.frame_result);
 
                 for result in results {
@@ -173,12 +159,45 @@ pub trait Walk {
 
         drop(root_results_tx);
         let mut results: Vec<_> = root_results_rx.into_iter().collect();
-        results.par_sort();
+        results.$sort();
         let results = results.into_iter().map(|fr| fr.frame_result).collect();
         Ok(results)
+    }}
+}
+
+pub trait Walk {
+    type Node: Sized + Debug;
+    type FrameState: Send + Sized + Debug;
+    type FrameResult: Send + Sized + Debug;
+
+    // FIXME: this returns Option only because I can't figure out how to make
+    // pest not visit EOI
+    fn enter_frame(node: Self::Node, push_child: impl FnMut(Self::Node)) -> Result<Option<Self::FrameState>>;
+
+    fn handle_child_result(frm: Self::FrameState, ch: Self::FrameResult) -> Result<Self::FrameState>;
+
+    fn leave_frame(frm: Self::FrameState) -> Result<Self::FrameResult>;
+    
+    fn walk_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    where I: IntoIterator<Item = Self::Node>,
+          Self::Node: Send
+    {
+        walk_impl!(nodes, into_par_iter, into_par_iter, par_sort)
     }
 
-    fn walk2<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    fn walk_part_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    where I: IntoIterator<Item = Self::Node>
+    {
+        walk_impl!(nodes, into_iter, into_par_iter, par_sort)
+    }
+
+    fn walk_not_par<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
+    where I: IntoIterator<Item = Self::Node>
+    {
+        walk_impl!(nodes, into_iter, into_iter, sort)
+    }
+
+    fn walk_seq<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
     where I: IntoIterator<Item = Self::Node>
     {
         let nodes = nodes.into_iter();

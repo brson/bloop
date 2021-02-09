@@ -19,7 +19,7 @@ impl Lex for Lexer {
         let pairs = PestLexer::parse(Rule::buffer, src)
             .context(format!("parsing source"))?;
 
-        Ok(TokenTree(LocalLexer::walk(pairs)?))
+        Ok(TokenTree(LocalLexer::walk_part_par(pairs)?))
     }
 }
 
