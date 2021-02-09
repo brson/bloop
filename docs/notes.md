@@ -10,7 +10,7 @@
 generate a lexing stress test
 
 ```
-seq 1 100000 | xargs -Inone cat examples/big.bloop-tt | wc -l > examples/super-big.bloop.tt
+seq 1 5000 | xargs -Inone cat examples/big.bloop-tt | wc -l > examples/super-big.bloop.tt
 ```
 
 test it with
