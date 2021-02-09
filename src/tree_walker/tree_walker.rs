@@ -202,6 +202,26 @@ pub trait Walk {
     {
         let nodes = nodes.into_iter();
 
+        enum Phase<TNode, TFrameState> {
+            Enter(u32, TNode),
+            Leave(u32, TFrameState),
+        }
+
+        fn push_next_children<I, N, S>(state_stack: &mut Vec<Phase<N, S>>, next_nodes: I, lvl: u32)
+        where I: IntoIterator<Item = N>
+        {
+            // Collect next nodes in forward order
+            let mut next_states = vec![];
+            for next_node in next_nodes {
+                next_states.push(Phase::Enter(lvl, next_node))
+            }
+
+            // Push them on the stack in reverse order so they
+            // can be popped in forward order later
+            next_states.reverse();
+            state_stack.append(&mut next_states);
+        }
+
         let mut state_stack: Vec<Phase<Self::Node, Self::FrameState>> = vec![];
         let mut result_stack: Vec<Vec<Self::FrameResult>> = vec![];
 
@@ -252,24 +272,4 @@ pub trait Walk {
 
         Ok(result)
     }
-}
-
-enum Phase<TNode, TFrameState> {
-    Enter(u32, TNode),
-    Leave(u32, TFrameState),
-}
-
-fn push_next_children<I, N, S>(state_stack: &mut Vec<Phase<N, S>>, next_nodes: I, lvl: u32)
-where I: IntoIterator<Item = N>
-{
-    // Collect next nodes in forward order
-    let mut next_states = vec![];
-    for next_node in next_nodes {
-        next_states.push(Phase::Enter(lvl, next_node))
-    }
-
-    // Push them on the stack in reverse order so they
-    // can be popped in forward order later
-    next_states.reverse();
-    state_stack.append(&mut next_states);
 }
