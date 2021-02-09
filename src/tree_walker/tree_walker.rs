@@ -26,15 +26,15 @@ pub trait Walk {
         #[derive(Debug)]
         struct Enter<Node, FrameResult> {
             node: Node,
-            child_results_rx: Receiver<FrameResult>,
-            child_results_tx: Sender<FrameResult>,
-            parent_results_tx: Sender<FrameResult>,
+            child_results_rx: Receiver<Sortable<FrameResult>>,
+            child_results_tx: Sender<Sortable<FrameResult>>,
+            parent_results_tx: Sender<Sortable<FrameResult>>,
         }
 
         struct Leave<FrameState, FrameResult> {
             frame_state: FrameState,
-            child_results_rx: Receiver<FrameResult>,
-            parent_results_tx: Sender<FrameResult>,
+            child_results_rx: Receiver<Sortable<FrameResult>>,
+            parent_results_tx: Sender<Sortable<FrameResult>>,
         }
 
         struct Sortable<FrameResult> {
@@ -125,10 +125,14 @@ pub trait Walk {
         }
 
         while let Some(leave_list) = leave_lists_stack.pop() {
-            let results = leave_list.into_iter().map(|leave| {
+            let results = leave_list.into_par_iter().enumerate().map(|(index, leave)| {
                 let mut frame_state = leave.frame_state;
 
-                for result in leave.child_results_rx.into_iter() {
+                let mut results: Vec<_> = leave.child_results_rx.into_iter().collect();
+                results.par_sort();
+                let results = results.into_iter().map(|fr| fr.frame_result);
+
+                for result in results {
                     let res = Self::handle_child_result(frame_state, result);
                     match res {
                         Ok(fs) => {
@@ -148,6 +152,11 @@ pub trait Walk {
                     }
                 };
 
+                let new_result = Sortable {
+                    index,
+                    frame_result: new_result,
+                };
+
                 leave.parent_results_tx.send(new_result).expect("send");
 
                 Ok(())
@@ -163,8 +172,10 @@ pub trait Walk {
         }
 
         drop(root_results_tx);
-        let root_results: Vec<Self::FrameResult> = root_results_rx.into_iter().collect();
-        Ok(root_results)
+        let mut results: Vec<_> = root_results_rx.into_iter().collect();
+        results.par_sort();
+        let results = results.into_iter().map(|fr| fr.frame_result).collect();
+        Ok(results)
     }
 
     fn walk2<I>(nodes: I) -> Result<Vec<Self::FrameResult>>
