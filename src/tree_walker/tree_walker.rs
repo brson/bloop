@@ -3,6 +3,7 @@ use b_deps::anyhow::Result;
 use std::fmt::Debug;
 use std::sync::mpsc::{self, Sender, Receiver};
 use rayon::prelude::*;
+use std::cmp::{Ord, Ordering};
 
 pub trait Walk {
     type Node: Sized + Debug;
@@ -34,6 +35,32 @@ pub trait Walk {
             frame_state: FrameState,
             child_results_rx: Receiver<FrameResult>,
             parent_results_tx: Sender<FrameResult>,
+        }
+
+        struct SortableFrameResult<FrameResult> {
+            index: usize,
+            frame_result: FrameResult,
+        }
+
+        impl<FrameResult> Ord for SortableFrameResult<FrameResult> {
+            fn cmp(&self, other: &Self) -> Ordering {
+                self.index.cmp(&other.index)
+            }
+        }
+
+        impl<FrameResult> PartialOrd for SortableFrameResult<FrameResult> {
+            fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+                self.index.partial_cmp(&other.index)
+            }
+        }
+
+        impl<FrameResult> Eq for SortableFrameResult<FrameResult> {
+        }
+
+        impl<FrameResult> PartialEq for SortableFrameResult<FrameResult> {
+            fn eq(&self, other: &Self) -> bool {
+                self.index.eq(&other.index)
+            }
         }
 
         let (root_results_tx, root_results_rx) = mpsc::channel();
