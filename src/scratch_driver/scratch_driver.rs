@@ -50,7 +50,6 @@ fn dispatch_command(opts: Opts) -> Result<()> {
 
     match opts.mode {
         Mode::LexDump(m) => run_lex_dump(m),
-        Mode::BenchLex(m) => bench_lex(m),
         Mode::ParseBaseLang(m) => run_parse_baselang(m),
         Mode::ParseBaseLangPartial(m) => run_parse_baselang_partial(m),
         Mode::JitBaseLang(m) => run_jit_baselang(m),
@@ -74,16 +73,7 @@ fn run_lex_dump(opts: LexDumpOpts) -> Result<()> {
     let source = read_source(&opts.file)?;
     let token_tree = lexer.lex(&source)?;
 
-    print!("tt: {:#?}", token_tree);
-    
-    Ok(())
-}
-
-fn bench_lex(opts: BenchLexOpts) -> Result<()> {
-    let lexer = Box::new(Lexer) as Box<dyn Lex>;
-
-    let source = read_source(&opts.file)?;
-    lexer.lex(&source)?;
+    debug!("tt: {:#?}", token_tree);
     
     Ok(())
 }
@@ -159,8 +149,6 @@ struct Opts {
 enum Mode {
     #[structopt(name = "lex-dump")]
     LexDump(LexDumpOpts),
-    #[structopt(name = "bench-lex")]
-    BenchLex(BenchLexOpts),
     #[structopt(name = "parse-baselang")]
     ParseBaseLang(ParseBaseLangOpts),
     #[structopt(name = "parse-baselang-partial")]
@@ -173,12 +161,6 @@ enum Mode {
 
 #[derive(Debug, StructOpt)]
 struct LexDumpOpts {
-    #[structopt(name = "file")]
-    file: PathBuf,
-}
-
-#[derive(Debug, StructOpt)]
-struct BenchLexOpts {
     #[structopt(name = "file")]
     file: PathBuf,
 }
