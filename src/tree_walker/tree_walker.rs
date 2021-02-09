@@ -37,27 +37,27 @@ pub trait Walk {
             parent_results_tx: Sender<FrameResult>,
         }
 
-        struct SortableFrameResult<FrameResult> {
+        struct Sortable<FrameResult> {
             index: usize,
             frame_result: FrameResult,
         }
 
-        impl<FrameResult> Ord for SortableFrameResult<FrameResult> {
+        impl<FrameResult> Ord for Sortable<FrameResult> {
             fn cmp(&self, other: &Self) -> Ordering {
                 self.index.cmp(&other.index)
             }
         }
 
-        impl<FrameResult> PartialOrd for SortableFrameResult<FrameResult> {
+        impl<FrameResult> PartialOrd for Sortable<FrameResult> {
             fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
                 self.index.partial_cmp(&other.index)
             }
         }
 
-        impl<FrameResult> Eq for SortableFrameResult<FrameResult> {
+        impl<FrameResult> Eq for Sortable<FrameResult> {
         }
 
-        impl<FrameResult> PartialEq for SortableFrameResult<FrameResult> {
+        impl<FrameResult> PartialEq for Sortable<FrameResult> {
             fn eq(&self, other: &Self) -> bool {
                 self.index.eq(&other.index)
             }
