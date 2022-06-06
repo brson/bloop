@@ -15,7 +15,7 @@ b_base_partial_ast = { path = "../base_partial_ast" }
 b_deps = { path = "../deps" }
 b_token_tree = { path = "../token_tree" }
 
-regex = "1.4.3"
+regex = "1.5.5"
 lalrpop-util = "0.19.4"
 
 [build-dependencies]
