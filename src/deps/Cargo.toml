@@ -9,5 +9,5 @@ authors = ["Brian Anderson <andersrb@gmail.com>"]
 path = "deps.rs"
 
 [dependencies]
-anyhow = "1.0.38"
-log = "0.4.13"
+anyhow = "1.0.58"
+log = "0.4.17"

@@ -14,5 +14,5 @@ b_lexer_traits = { path = "../lexer_traits" }
 b_token_tree = { path = "../token_tree" }
 b_tree_walker = { path = "../tree_walker" }
 
-pest = "2.1.3"
-pest_derive = "2.1.0"
+pest = "2.2.1"
+pest_derive = "2.2.1"
